@@ -57,7 +57,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       backgroundImage: {
-        secondary: "url('../public/bg_icons.png')",
+        image: "url('../public/bg_icons.png')",
       },
       dropShadow: {
         card: "0 0 10px #000",

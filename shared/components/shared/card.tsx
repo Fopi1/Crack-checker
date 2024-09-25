@@ -1,5 +1,4 @@
 import { FC } from "react";
-import gameBackground from "@/public/game.jpg";
 import { cn } from "@/lib/utils";
 import { Bell, Calendar, Eye, ThumbsUp } from "lucide-react";
 import Link from "next/link";
@@ -7,22 +6,30 @@ import Link from "next/link";
 interface Props {
   isCracked: boolean;
   title: string;
+  imageUrl: URL | string;
   className?: string;
+  releaseDate: string;
 }
 
-export const Card: FC<Props> = ({ className, title, isCracked }) => {
+export const Card: FC<Props> = ({
+  className,
+  title,
+  isCracked,
+  imageUrl,
+  releaseDate,
+}) => {
   const crackBackgroundColor = isCracked ? "bg-green-600" : "bg-red-600";
   const crackTextColor = isCracked ? "text-green-600" : "text-red-600";
   return (
     <Link
       href="/"
       className={cn(
-        "transition-transform duration-300 ease-in-out hover:scale-105 hover:drop-shadow-card cursor-pointer h-[336px] flex flex-col flex-shrink w-[100%] lg:w-[31%] xl:w-[32%] rounded-2xl",
+        "transition-transform duration-300 ease-in-out hover:scale-105 hover:drop-shadow-card cursor-pointer h-[336px] flex flex-col flex-shrink w-[100%] rounded-2xl",
         className
       )}
     >
       <div
-        style={{ backgroundImage: `url(${gameBackground.src})` }}
+        style={{ backgroundImage: `url(${imageUrl})` }}
         className="overflow-hidden relative h-52 rounded-2xl bg-cover bg-center flex flex-col justify-between font-bold"
       >
         <div
@@ -53,7 +60,7 @@ export const Card: FC<Props> = ({ className, title, isCracked }) => {
             <p>Release Date:</p>
             <span className="flex gap-1 items-center text-orange-300 font-bold">
               <Calendar size={16} strokeWidth={2.7} />
-              2024-08-19
+              {releaseDate}
             </span>
           </div>
           <div className="flex gap-1">

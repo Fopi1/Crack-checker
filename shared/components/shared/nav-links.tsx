@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useElementWithProps } from "@/shared/hooks/use-element-with-props";
+import { useElementWithProps } from "@/shared/hooks";
 import {
   CalendarDays,
   Home,
@@ -39,19 +39,24 @@ export const NavLinks: FC<Props> = ({ className }) => {
     { name: "register", href: "/register", icon: <LockKeyhole /> },
   ];
 
-  const linksWithProps = useElementWithProps(links, iconProps);
   return (
     <>
-      {linksWithProps.map((link) => (
-        <Link
-          key={link.name}
-          href={link.href}
-          className={cn("flex items-center gap-2", className)}
-        >
-          {link.icon}
-          {link.name}
-        </Link>
-      ))}
+      {links.map((link) => {
+        return (
+          <Link
+            key={link.name}
+            href={link.href}
+            className={cn(
+              "flex items-center gap-2 font-semibold text-sm",
+              className
+            )}
+          >
+            {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
+            {useElementWithProps(link.icon, iconProps)}
+            {link.name}
+          </Link>
+        );
+      })}
     </>
   );
 };

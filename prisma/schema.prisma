@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  fullName String
+  email    String
+  password String
+}
+
+model Card {
+  id    Int @id @default(autoincrement())
+  apiId Int
+
+  name             String
+  released         String @default("2024-08-31")
+  background_image String
+  likes            Int      @default(0)
+  views            Int      @default(0)
+
+  isCracked      Boolean   @default(false)
+  crackedBy      String?
+  crackDate      DateTime?
+  crackedDaysAgo Int?
+  // // Дополнительные поля для фильтрации
+  // rating        Float
+  // platforms     String[]  // Массив строк с платформами
+  // metacritic    Int
+}
