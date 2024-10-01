@@ -2,24 +2,35 @@ import { FC } from "react";
 import { cn } from "@/lib/utils";
 import { Bell, Calendar, Eye, ThumbsUp } from "lucide-react";
 import Link from "next/link";
+import { GameFromDB } from "@/shared/types";
+import { useCrackStatus } from "@/shared/hooks";
 
-interface Props {
-  isCracked: boolean;
-  title: string;
-  imageUrl: URL | string;
+interface Props extends GameFromDB {
   className?: string;
-  releaseDate: string;
 }
 
-export const Card: FC<Props> = ({
-  className,
-  title,
-  isCracked,
-  imageUrl,
-  releaseDate,
-}) => {
-  const crackBackgroundColor = isCracked ? "bg-green-600" : "bg-red-600";
-  const crackTextColor = isCracked ? "text-green-600" : "text-red-600";
+export const Card: FC<Props> = (props) => {
+  const {
+    className,
+    title,
+    crackDate,
+    protections,
+    releaseDate,
+    shortImage,
+    hackedGroups,
+    likes,
+    views,
+  } = props;
+
+  const { crackedBy, crackStatus } = useCrackStatus({
+    releaseDate,
+    crackDate,
+    hackedGroups,
+  });
+
+  const crackBackgroundColor = crackDate ? "bg-green-600" : "bg-red-600";
+  const crackTextColor = crackDate ? "text-green-600" : "text-red-600";
+
   return (
     <Link
       href="/"
@@ -29,13 +40,13 @@ export const Card: FC<Props> = ({
       )}
     >
       <div
-        style={{ backgroundImage: `url(${imageUrl})` }}
+        style={{ backgroundImage: `url(${shortImage})` }}
         className="overflow-hidden relative h-52 rounded-2xl bg-cover bg-center flex flex-col justify-between font-bold"
       >
         <div
           className={`self-end float-right m-1 px-3 rounded-2xl text-sm ${crackBackgroundColor}`}
         >
-          <p>Not cracked 31day(s)</p>
+          <p>{crackStatus}</p>
         </div>
         <div className="bg-gray-950/70 backdrop-blur-sm w-full">
           <div className="px-4 py-3 flex justify-between">
@@ -48,7 +59,7 @@ export const Card: FC<Props> = ({
               </div>
               <div className="bg-blue-500 rounded-3xl px-3 py-1 flex gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
                 <ThumbsUp size={20} strokeWidth={3} />
-                <p>567</p>
+                <p>{likes}</p>
               </div>
             </div>
           </div>
@@ -65,27 +76,29 @@ export const Card: FC<Props> = ({
           </div>
           <div className="flex gap-1">
             <p>Protection</p>
-            <span className=" text-blue-500 font-bold uppercase">Denuvo</span>
+            <span className=" text-blue-500 font-bold uppercase">
+              {protections}
+            </span>
           </div>
           <div className="flex gap-1">
             <p>Cracked by:</p>
             <span className={`${crackTextColor} font-bold uppercase`}>
-              Not cracked yet
+              {crackedBy}
             </span>
           </div>
-          {isCracked && (
+          {crackDate && (
             <div className="flex gap-1">
               <p>Crack Date:</p>
               <span className="flex gap-1 items-center text-orange-300 font-bold">
                 <Calendar size={16} strokeWidth={2.7} />
-                2024-08-19
+                {crackDate}
               </span>
             </div>
           )}
         </div>
         <div className="flex items-center gap-1 text-orange-300 font-bold w-full justify-end">
           <Eye size={16} strokeWidth={3} />
-          83566
+          {views}
         </div>
       </div>
     </Link>

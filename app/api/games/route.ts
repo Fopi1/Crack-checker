@@ -1,8 +1,16 @@
-import { prisma } from "@/prisma/prisma-client";
+import { prisma } from "@/prisma/prismaClient";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const cards = prisma.card.findMany();
+  const games = await prisma.game.findMany({
+    where: {
+      categories: {
+        some: {
+          title: "Popular games",
+        },
+      },
+    },
+  });
 
-  return NextResponse.json(cards);
+  return NextResponse.json(games);
 }

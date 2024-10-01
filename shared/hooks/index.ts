@@ -1,1 +1,2 @@
-export { useElementWithProps } from "./use-element-with-props";
+export { useElementWithProps } from "./useElementWithProps";
+export { useCrackStatus } from "./useCrackStatus";

@@ -1,8 +1,9 @@
 export { Background } from "./background";
 export { Container } from "./container";
 export { Card } from "./card";
-export { CardsGroup } from "./cards-group";
+export { CardsGroup } from "./cardsGroup";
 export { Header } from "./header";
-export { NavLinks } from "./nav-links";
-export { SortOptions } from "./sort-options";
-export { GameFilterHeader } from "./game-filter-header";
+export { NavLinks } from "./navLinks";
+export { SortOptions } from "./sortOptions";
+export { GameFilterHeader } from "./gameFilterHeader";
+export { GamesByCategories } from "./gamesByCategories";

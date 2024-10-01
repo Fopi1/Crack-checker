@@ -12,6 +12,7 @@ export default function Home() {
           icon={<Users className="text-blue-500" />}
         />
         <CardsGroup className="lg:grid-cols-3" />
+        
       </div>
     </>
   );

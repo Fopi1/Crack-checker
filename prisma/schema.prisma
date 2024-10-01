@@ -16,22 +16,27 @@ model User {
   password String
 }
 
-model Card {
-  id    Int @id @default(autoincrement())
-  apiId Int
+model Game {
+  id    Int    @id @default(autoincrement())
+  apiId String
 
-  name             String
-  released         String @default("2024-08-31")
-  background_image String
-  likes            Int      @default(0)
-  views            Int      @default(0)
+  slug         String
+  title        String
+  isAAA        Boolean
+  protections  String
+  hackedGroups String
+  releaseDate  String
+  crackDate    String?
+  shortImage   String
 
-  isCracked      Boolean   @default(false)
-  crackedBy      String?
-  crackDate      DateTime?
-  crackedDaysAgo Int?
-  // // Дополнительные поля для фильтрации
-  // rating        Float
-  // platforms     String[]  // Массив строк с платформами
-  // metacritic    Int
+  likes Int? @default(0)
+  views Int? @default(0)
+
+  categories Category[]
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  title String @unique
+  game  Game[]
 }

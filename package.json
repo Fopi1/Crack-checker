@@ -11,7 +11,11 @@
     "host2": "next dev --hostname 192.168.1.105",
     "push": "prisma db push",
     "prisma:studio": "prisma studio",
-    "prisma:seed": "prisma db seed"
+    "prisma:seed": "prisma db seed",
+    "node:addGame": "npx tsx ./scripts/addGame.ts",
+    "node:deleteGame": "npx tsx ./scripts/deleteGame.ts",
+    "node:removeBrackets": "npx tsx ./scripts/removeBrackets.ts",
+    "node:alterTable": "npx tsx ./scripts/alterTable.ts"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

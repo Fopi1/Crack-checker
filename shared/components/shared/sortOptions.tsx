@@ -28,6 +28,7 @@ export const SortOptions: FC<Props> = ({ className }) => {
     },
   ];
 
+
   return (
     <div className={cn("flex gap-3", className)}>
       {sortOptions.map((option) => (

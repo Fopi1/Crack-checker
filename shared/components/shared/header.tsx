@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import { cn } from "@/lib/utils";
-import { NavLinks } from "./nav-links";
+import { NavLinks } from "./navLinks";
 import { AlignJustify } from "lucide-react";
 
 interface Props {
