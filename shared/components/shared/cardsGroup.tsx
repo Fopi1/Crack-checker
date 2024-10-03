@@ -5,14 +5,16 @@ import { Card } from "./card";
 import { cn } from "@/lib/utils";
 import { useAsyncEffect } from "@reactuses/core";
 import axios from "axios";
-import { GameFromDB } from "@/shared/types";
+import { Game } from "@prisma/client";
 
 interface Props {
+  category: string;
   className?: string;
 }
 
-export const CardsGroup: FC<Props> = ({ className }) => {
-  const [games, setGames] = useState<GameFromDB[]>([]);
+export const CardsGroup: FC<Props> = ({ category, className }) => {
+  const [games, setGames] = useState<Game[]>([]);
+
   useAsyncEffect(
     async () => {
       const games = await axios

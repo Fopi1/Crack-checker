@@ -11,10 +11,6 @@ async function checkIfGameExists(title: string) {
 
 async function addGame(title: string) {
   try {
-    if (await checkIfGameExists(title)) {
-      throw new Error("A game with the same title exists");
-    }
-
     const response = await axios.post(
       "https://gamestatus.info/back/api/gameinfo/game/search_title/",
       {
@@ -37,6 +33,10 @@ async function addGame(title: string) {
     const games = response.data;
     if (games.length) {
       const gameData = games[0];
+      if (await checkIfGameExists(gameData.title)) {
+        throw new Error();
+      }
+
       const game = await prisma.game.create({
         data: {
           apiId: gameData.id,
@@ -51,10 +51,12 @@ async function addGame(title: string) {
         },
       });
 
-      console.log("added Game", game.title);
+      console.log("The game:", game.title, "was added");
+    } else {
+      console.log("The game was not found");
     }
-  } catch (e) {
-    console.error(e);
+  } catch (_) {
+    throw new Error("An error was catched when trying to add a new game");
   } finally {
     await prisma.$disconnect();
   }

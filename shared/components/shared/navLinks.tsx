@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useElementWithProps } from "@/shared/hooks";
+import { useIcon } from "@/shared/hooks";
 import {
   CalendarDays,
   Home,
@@ -52,7 +52,7 @@ export const NavLinks: FC<Props> = ({ className }) => {
             )}
           >
             {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
-            {useElementWithProps(link.icon, iconProps)}
+            {useIcon(link.icon, iconProps)}
             {link.name}
           </Link>
         );

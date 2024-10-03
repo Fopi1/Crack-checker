@@ -2,10 +2,10 @@ import { FC } from "react";
 import { cn } from "@/lib/utils";
 import { Bell, Calendar, Eye, ThumbsUp } from "lucide-react";
 import Link from "next/link";
-import { GameFromDB } from "@/shared/types";
 import { useCrackStatus } from "@/shared/hooks";
+import { Game } from "@prisma/client";
 
-interface Props extends GameFromDB {
+interface Props extends Omit<Game, "id" | "slug" | "apiId"> {
   className?: string;
 }
 

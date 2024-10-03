@@ -1,21 +1,37 @@
 import { cn } from "@/lib/utils";
-import { FC } from "react";
+import React, { FC } from "react";
 import { SortOptions } from "./sortOptions";
-import { useElementWithProps } from "@/shared/hooks";
+import { Users, Flame, Clock, AlarmClockCheck } from "lucide-react";
+import { useIcon } from "@/shared/hooks";
 
 interface Props {
   className?: string;
   title: string;
-  icon?: React.ReactElement;
+  icon: string;
 }
 
 export const GameFilterHeader: FC<Props> = ({ className, title, icon }) => {
-  const iconProps = {
+  const iconMap: Record<string, React.ReactElement> = {
+    Users: <Users />,
+    Flame: <Flame />,
+    Clock: <Clock />,
+    AlarmClockCheck: <AlarmClockCheck />,
+  };
+
+  const colors: Record<string, string> = {
+    Users: "text-blue-500",
+    Flame: "text-yellow-500",
+    Clock: "text-green-500",
+    AlarmClockCheck: "text-red-500",
+  };
+
+  const categoryIconProps = {
     size: 16,
     strokeWidth: 3,
+    className: colors[icon],
   };
-  const iconWithProps = useElementWithProps(icon, iconProps);
 
+  const iconWithProps = useIcon(iconMap[icon], categoryIconProps);
   return (
     <div
       className={cn(

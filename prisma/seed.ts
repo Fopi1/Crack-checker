@@ -17,7 +17,7 @@ interface AllGameData extends ReleasedGamesData {
   crack_date: string | null;
 }
 
-export interface GameForBD {
+interface GameForBD {
   apiId: string;
   slug: string;
   title: string;
