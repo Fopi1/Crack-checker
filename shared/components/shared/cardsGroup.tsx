@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useAsyncEffect } from "@reactuses/core";
 import axios from "axios";
 import { Game } from "@prisma/client";
+import { Api } from "@/services/apiClient";
 
 interface Props {
   category: string;
@@ -17,9 +18,7 @@ export const CardsGroup: FC<Props> = ({ category, className }) => {
 
   useAsyncEffect(
     async () => {
-      const games = await axios
-        .get("/api/games")
-        .then((response) => response.data);
+      const games = await Api.games.getByCategory(category);
       setGames(games);
     },
 

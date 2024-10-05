@@ -24,7 +24,6 @@ export const GamesByCategories: FC<Props> = ({ className }) => {
     () => {},
     []
   );
-  console.log(categories);
   return (
     <div className={cn("", className)}>
       {categories.map((category) => (

@@ -1,12 +1,13 @@
 import { prisma } from "@/prisma/prismaClient";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const category = request.nextUrl.searchParams.get("category") || "";
   const games = await prisma.game.findMany({
     where: {
       categories: {
         some: {
-          title: "Popular games",
+          title: category,
         },
       },
     },
