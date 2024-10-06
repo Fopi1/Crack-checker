@@ -7,7 +7,7 @@ import Image from "next/image";
 import logo from "@/public/logo.png";
 import { cn } from "@/lib/utils";
 import { NavLinks } from "./navLinks";
-import { AlignJustify } from "lucide-react";
+import { AlignJustify, Search } from "lucide-react";
 
 interface Props {
   className?: string;
@@ -28,10 +28,27 @@ export const Header: FC<Props> = ({ className }) => {
     >
       <nav className="relative h-full">
         <Container className="flex justify-between items-center p-2 responsive">
-          <Link href="/" className="flex items-center">
-            <Image src={logo} alt="Logo" width={70} height={70}></Image>
-            <h1 className="font-black text-xl">CrackChecker</h1>
-          </Link>
+          <div className="flex items-center gap-6">
+            <Link href="/" className="flex items-center">
+              <Image src={logo} alt="Logo" width={70} height={70}></Image>
+              <h1 className="font-black text-xl">CrackChecker</h1>
+            </Link>
+            <form
+              role="search"
+              action="/search"
+              className="rounded-2xl bg-[#0b1320] flex items-center overflow-hidden w-[300px] h-[56px]"
+            >
+              <label htmlFor="search-input" className="py-3 px-4">
+                <Search size={20} strokeWidth={3} />
+              </label>
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Type game name to search"
+                className="bg-[#13162b] rounded-2xl w-full px-3 focus:outline-none h-10 mr-2 placeholder:text-sm placeholder:text-[#5b6271]"
+              />
+            </form>
+          </div>
           <div className="lg:hidden cursor-pointer">
             <button
               aria-label="Toggle Navigation"

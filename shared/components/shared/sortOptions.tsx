@@ -16,18 +16,17 @@ export const SortOptions: FC<Props> = ({ className }) => {
   const sortOptions = [
     {
       placeholder: "views",
-      values: ["views", "crack date", "likes", "release date", "name"],
+      values: ["views", "crack date", "likes", "release date"],
     },
     {
       placeholder: "descending",
       values: ["descending", "ascending"],
     },
     {
-      placeholder: "16",
-      values: ["4", "8", "16", "24", "30"],
+      placeholder: "25",
+      values: ["25", "50", "100"],
     },
   ];
-
 
   return (
     <div className={cn("flex gap-3", className)}>

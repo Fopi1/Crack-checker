@@ -33,7 +33,7 @@ export const CardsGroup: FC<Props> = ({ category, className }) => {
       ) : (
         <div
           className={cn(
-            "grid grid-cols-1 gap-6 w-full responsive px-2 lg:px-0",
+            "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full responsive px-2 lg:px-0",
             className
           )}
         >

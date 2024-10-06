@@ -61,6 +61,10 @@ const config: Config = {
       },
       dropShadow: {
         card: "0 0 10px #000",
+        status: "0 10px 20px #000",
+      },
+      maxWidth: {
+        "screen-3xl": "1920px",
       },
     },
   },

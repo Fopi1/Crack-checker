@@ -7,6 +7,6 @@ interface Props extends PropsWithChildren {
 
 export const Container: FC<Props> = ({ className, children }) => {
   return (
-    <div className={cn("mx-auto max-w-screen-2xl", className)}>{children}</div>
+    <div className={cn("mx-auto max-w-screen-3xl", className)}>{children}</div>
   );
 };

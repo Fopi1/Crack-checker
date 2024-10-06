@@ -33,10 +33,8 @@ export const NavLinks: FC<Props> = ({ className }) => {
       href: "/release-calendar",
       icon: <CalendarDays />,
     },
-    { name: "search", href: "/search", icon: <Search /> },
     { name: "articles", href: "/articles", icon: <ReceiptText /> },
     { name: "log in", href: "/login", icon: <LogIn /> },
-    { name: "register", href: "/register", icon: <LockKeyhole /> },
   ];
 
   return (

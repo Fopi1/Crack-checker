@@ -32,39 +32,46 @@ export const Card: FC<Props> = (props) => {
   const crackTextColor = crackDate ? "text-green-600" : "text-red-600";
 
   return (
-    <Link
-      href="/"
+    <div
       className={cn(
-        "transition-transform duration-300 ease-in-out hover:scale-105 hover:drop-shadow-card cursor-pointer h-[336px] flex flex-col flex-shrink w-[100%] rounded-2xl",
+        "transition-transform duration-300 ease-in-out hover:scale-105 hover:drop-shadow-card h-[336px]",
         className
       )}
     >
-      <div
-        style={{ backgroundImage: `url(${shortImage})` }}
-        className="overflow-hidden relative h-52 rounded-2xl bg-cover bg-center flex flex-col justify-between font-bold"
+      <Link
+        href="/"
+        className={cn(
+          "cursor-pointer flex flex-col flex-shrink w-[100%] rounded-2xl",
+          className
+        )}
       >
         <div
-          className={`self-end float-right m-1 px-3 rounded-2xl text-sm ${crackBackgroundColor}`}
+          style={{ backgroundImage: `url(${shortImage})` }}
+          className="overflow-hidden relative h-52 rounded-2xl bg-cover bg-center flex flex-col justify-between font-bold"
         >
-          <p>{crackStatus}</p>
-        </div>
-        <div className="bg-gray-950/70 backdrop-blur-sm w-full">
-          <div className="px-4 py-3 flex justify-between">
-            <h2 className="text-xl w-56 overflow-hidden text-nowrap text-ellipsis">
-              {title}
-            </h2>
-            <div className="flex gap-1">
-              <div className="bg-gray-950 rounded-xl px-4 py-1 flex items-center transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[15deg]">
-                <Bell size={20} strokeWidth={3} className="text-orange-400" />
-              </div>
-              <div className="bg-blue-500 rounded-3xl px-3 py-1 flex gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
-                <ThumbsUp size={20} strokeWidth={3} />
-                <p>{likes}</p>
+          <div
+            className={`self-end float-right m-1 px-3 py-[2px] rounded-2xl text-sm font-semibold ${crackBackgroundColor} drop-shadow-status`}
+          >
+            <p>{crackStatus}</p>
+          </div>
+          <div className="bg-gray-950/70 backdrop-blur-sm w-full">
+            <div className="px-4 py-3 flex justify-between">
+              <h2 className="text-xl w-56 overflow-hidden text-nowrap text-ellipsis">
+                {title}
+              </h2>
+              <div className="flex gap-1">
+                <div className="bg-gray-950 rounded-xl px-4 py-1 flex items-center transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[15deg]">
+                  <Bell size={20} strokeWidth={3} className="text-orange-400" />
+                </div>
+                <div className="bg-blue-500 rounded-3xl px-10 py-1 flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
+                  <ThumbsUp size={16} strokeWidth={3} />
+                  <p>{likes}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
       <div className="flex flex-col items-start">
         <div className="flex flex-col pt-2">
           <div className="flex gap-1">
@@ -101,6 +108,6 @@ export const Card: FC<Props> = (props) => {
           {views}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
