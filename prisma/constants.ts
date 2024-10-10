@@ -6,17 +6,22 @@ export const categories = [
   },
   {
     id: 2,
+    title: "Last cracked games",
+    icon: "AlarmClockCheck",
+  },
+  {
+    id: 3,
     title: "Hot games",
     icon: "Flame",
   },
   {
-    id: 3,
-    title: "Unreleased games",
-    icon: "Clock",
+    id: 4,
+    title: "Most liked",
+    icon: "ThumbsUp",
   },
   {
-    id: 4,
-    title: "Last cracked games",
-    icon: "AlarmClockCheck",
+    id: 5,
+    title: "Unreleased games",
+    icon: "Clock",
   },
 ];

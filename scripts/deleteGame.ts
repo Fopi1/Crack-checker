@@ -8,13 +8,9 @@ async function deleteGameById(gameId: number) {
     console.log(`Game by id ${gameId} was deleted`);
   } catch (e) {
     console.error(e);
+  } finally {
+    await prisma.$disconnect();
   }
-}
-
-async function deleteGame(gameId: number) {
-  await deleteGameById(gameId);
-
-  await prisma.$disconnect();
 }
 
 const gameId = process.argv[2];
@@ -24,4 +20,4 @@ if (!gameId || isNaN(Number(gameId))) {
   process.exit(1);
 }
 
-deleteGame(Number(gameId));
+deleteGameById(Number(gameId));

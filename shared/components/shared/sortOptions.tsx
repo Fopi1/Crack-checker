@@ -7,12 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { Checkbox } from "../ui/checkbox";
 
 interface Props {
+  title: string;
   className?: string;
 }
 
-export const SortOptions: FC<Props> = ({ className }) => {
+export const SortOptions: FC<Props> = ({ title, className }) => {
   const sortOptions = [
     {
       placeholder: "views",
@@ -44,6 +46,15 @@ export const SortOptions: FC<Props> = ({ className }) => {
           </SelectContent>
         </Select>
       ))}
+      <div className="flex items-center">
+        <Checkbox id={title} />
+        <label
+          className="pl-2 text-sm select-none cursor-pointer"
+          htmlFor={title}
+        >
+          Only AAA
+        </label>
+      </div>
     </div>
   );
 };

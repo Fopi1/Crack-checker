@@ -1,7 +1,9 @@
 import { prisma } from "@/prisma/prismaClient";
+import { ApiRoutes } from "@/services/externalApi/constants";
+import { AllGameData } from "@/types/api";
 import axios from "axios";
 
-async function checkIfGameExists(title: string) {
+async function checkIfGameExists(title: string): Promise<boolean> {
   const game = await prisma.game.findFirst({
     where: { title: title },
   });
@@ -11,28 +13,25 @@ async function checkIfGameExists(title: string) {
 
 async function addGame(title: string) {
   try {
-    const response = await axios.post(
-      "https://gamestatus.info/back/api/gameinfo/game/search_title/",
-      {
-        slug: "",
-        title: title,
-        is_AAA: false,
-        protections: "",
-        hacked_groups: "",
-        release_date: null,
-        crack_date: null,
-        teaser_link: "",
-        torrent_link: "",
-        mata_score: null,
-        user_score: null,
-        steam_media_id: null,
-        steam_prod_id: null,
-      }
-    );
+    const response = await axios.post(ApiRoutes.SEARCH, {
+      slug: "",
+      title: title,
+      is_AAA: false,
+      protections: "",
+      hacked_groups: "",
+      release_date: null,
+      crack_date: null,
+      teaser_link: "",
+      torrent_link: "",
+      mata_score: null,
+      user_score: null,
+      steam_media_id: null,
+      steam_prod_id: null,
+    });
 
-    const games = response.data;
+    const games: AllGameData[] = response.data;
     if (games.length) {
-      const gameData = games[0];
+      const gameData = games.filter((e: AllGameData) => e.title === title)[0];
       if (await checkIfGameExists(gameData.title)) {
         throw new Error();
       }

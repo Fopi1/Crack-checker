@@ -1,21 +1,7 @@
-import axios from "axios";
 import { prisma } from "./prismaClient";
 import { categories } from "./constants";
-
-interface ReleasedGamesData {
-  id: string;
-  slug: string;
-  title: string;
-  is_AAA: boolean;
-  release_date: string;
-  short_image: string;
-}
-
-interface AllGameData extends ReleasedGamesData {
-  protections: string;
-  hacked_groups: string;
-  crack_date: string | null;
-}
+import { GameStatusApi } from "../services/externalApi/apiClient";
+import { AllGameData, ReleasedGamesData } from "@/types/api";
 
 interface GameForBD {
   apiId: string;
@@ -29,56 +15,36 @@ interface GameForBD {
   crackDate: string | null;
 }
 
-async function fetchGameDetailsByTitle(title: string): Promise<AllGameData> {
-  try {
-    const response = await axios.post(
-      "https://gamestatus.info/back/api/gameinfo/game/search_title/",
-      { title }
-    );
-    return response.data[0] as AllGameData;
-  } catch (e) {
-    console.error(e);
-    throw new Error(`Failed to fetch game data for title: ${title}`);
-  }
-}
-
 async function fetchGameData(): Promise<GameForBD[]> {
   try {
-    const response = await axios.get(
-      "https://gamestatus.info/back/api/gameinfo/game/releasedgame/"
-    );
-
-    const releasedGames = Object.values(
-      response.data.data as ReleasedGamesData[]
-    )
-      .filter((game) => game !== null)
-      .flat(1);
-
+    const releasedGames = await GameStatusApi.games.getReleasedGames();
     const allGameData = await Promise.allSettled(
       releasedGames.map(
         async (game: ReleasedGamesData) =>
-          await fetchGameDetailsByTitle(game.title)
+          await GameStatusApi.games.getGameDetailsByTitle(game.title)
       )
     );
 
-    const succesfulData = allGameData
+    const successfulData = allGameData
       .filter(
         (result): result is PromiseFulfilledResult<AllGameData> =>
           result.status === "fulfilled"
       )
       .map((result) => result.value);
-    const GameForBDData: GameForBD[] = succesfulData.map(
-      (game: AllGameData) => ({
-        apiId: game.id,
-        slug: game.slug,
-        title: game.title,
-        isAAA: game.is_AAA,
-        protections: game.protections,
-        hackedGroups: game.hacked_groups,
-        releaseDate: game.release_date,
-        crackDate: game.crack_date,
-        shortImage: game.short_image,
-      })
+    const GameForBDData: GameForBD[] = successfulData.map(
+      (game: AllGameData) => {
+        return {
+          apiId: game.id,
+          slug: game.slug,
+          title: game.title,
+          isAAA: game.is_AAA,
+          protections: game.protections,
+          hackedGroups: game.hacked_groups,
+          releaseDate: game.release_date,
+          crackDate: game.crack_date,
+          shortImage: game.short_image,
+        };
+      }
     );
     return GameForBDData;
   } catch (e) {

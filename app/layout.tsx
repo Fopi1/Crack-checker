@@ -1,12 +1,26 @@
 import type { Metadata } from "next";
-import { Figtree } from "next/font/google";
+import scandia from "next/font/local";
 import { Background } from "@/shared/components/shared";
 import "./globals.css";
 
-const figtree = Figtree({
-  subsets: ["latin"],
-  variable: "--font-figtree",
-  weight: ["400", "500", "600", "700", "800", "900"],
+const Scandia = scandia({
+  src: [
+    {
+      path: "../public/fonts/Scandia-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Scandia-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Scandia-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -20,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={figtree.className}>
+    <html lang="en" className={Scandia.className}>
       <body className="text-figtree h-screen overflow-x-hidden selection:bg-red-500 ">
         <Background />
         <main>{children}</main>

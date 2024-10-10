@@ -1,5 +1,5 @@
 import * as games from "./games";
 
-export const Api = {
+export const SiteApi = {
   games,
 };

@@ -28,7 +28,7 @@ export const Card: FC<Props> = (props) => {
     hackedGroups,
   });
 
-  const crackBackgroundColor = crackDate ? "bg-green-600" : "bg-red-600";
+  const crackBackgroundColor = crackDate ? "bg-green-700" : "bg-red-600";
   const crackTextColor = crackDate ? "text-green-600" : "text-red-600";
 
   return (

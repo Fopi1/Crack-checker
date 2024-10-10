@@ -42,6 +42,9 @@ CREATE TABLE "_CategoryToGame" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Game_apiId_key" ON "Game"("apiId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Category_title_key" ON "Category"("title");
 
 -- CreateIndex
