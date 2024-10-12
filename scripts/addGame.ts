@@ -1,11 +1,10 @@
 import { prisma } from "@/prisma/prismaClient";
-import { ApiRoutes } from "@/services/externalApi/constants";
+import { GameStatusApi } from "@/shared/services/externalApi/apiClient";
 import { AllGameData } from "@/types/api";
-import axios from "axios";
 
 async function checkIfGameExists(title: string): Promise<boolean> {
   const game = await prisma.game.findFirst({
-    where: { title: title },
+    where: { title },
   });
   const isGameExist = game !== undefined && game !== null;
   return isGameExist;
@@ -13,40 +12,24 @@ async function checkIfGameExists(title: string): Promise<boolean> {
 
 async function addGame(title: string) {
   try {
-    const response = await axios.post(ApiRoutes.SEARCH, {
-      slug: "",
-      title: title,
-      is_AAA: false,
-      protections: "",
-      hacked_groups: "",
-      release_date: null,
-      crack_date: null,
-      teaser_link: "",
-      torrent_link: "",
-      mata_score: null,
-      user_score: null,
-      steam_media_id: null,
-      steam_prod_id: null,
-    });
-
-    const games: AllGameData[] = response.data;
-    if (games.length) {
-      const gameData = games.filter((e: AllGameData) => e.title === title)[0];
-      if (await checkIfGameExists(gameData.title)) {
-        throw new Error();
+    const game: AllGameData = await GameStatusApi.games.getGameDetailsByTitle(
+      title
+    );
+    if (game) {
+      if (await checkIfGameExists(game.title)) {
+        console.error("Game is exist");
       }
-
-      const game = await prisma.game.create({
+      await prisma.game.create({
         data: {
-          apiId: gameData.id,
-          slug: gameData.slug,
-          title: gameData.title,
-          isAAA: gameData.is_AAA,
-          protections: gameData.protections,
-          hackedGroups: gameData.hacked_groups,
-          releaseDate: gameData.release_date,
-          crackDate: gameData.crack_date,
-          shortImage: gameData.short_image,
+          apiId: game.id,
+          slug: game.slug,
+          title: game.title,
+          isAAA: game.is_AAA,
+          protections: game.protections,
+          hackedGroups: game.hacked_groups,
+          releaseDate: game.release_date,
+          crackDate: game.crack_date,
+          shortImage: game.short_image,
         },
       });
 
@@ -64,7 +47,7 @@ async function addGame(title: string) {
 const gameTitle = process.argv[2];
 
 if (!gameTitle) {
-  console.error("Название дай");
+  console.error("Give me a title");
   process.exit(1);
 }
 

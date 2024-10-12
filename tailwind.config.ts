@@ -66,7 +66,9 @@ const config: Config = {
       maxWidth: {
         "screen-3xl": "1920px",
       },
-      
+      boxShadow: {
+        padding: "inset 0 0 0 3px rgba(0,0,0,1)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

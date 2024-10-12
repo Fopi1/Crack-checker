@@ -1,12 +1,11 @@
 "use client";
 
 import { FC, useState } from "react";
-import { Card } from "./card";
 import { cn } from "@/lib/utils";
 import { useAsyncEffect } from "@reactuses/core";
-import axios from "axios";
 import { Game } from "@prisma/client";
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { Card } from "@/shared/components/ui";
+import { SiteApi } from "@/shared/services/siteApi/apiClient";
 
 interface Props {
   category: string;

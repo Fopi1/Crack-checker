@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "@/shared/components/ui";
 
 interface Props {
   title: string;
@@ -31,7 +31,8 @@ export const SortOptions: FC<Props> = ({ title, className }) => {
   ];
 
   return (
-    <div className={cn("flex gap-3", className)}>
+    <div className={cn("flex items-center gap-3", className)}>
+      <p className="text-sm">Sort by:</p>
       {sortOptions.map((option) => (
         <Select key={option.placeholder} defaultValue={option.placeholder}>
           <SelectTrigger className="w-auto gap-5 capitalize">

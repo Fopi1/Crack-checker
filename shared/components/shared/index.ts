@@ -1,6 +1,5 @@
 export { Background } from "./background";
 export { Container } from "./container";
-export { Card } from "./card";
 export { CardsGroup } from "./cardsGroup";
 export { Header } from "./header";
 export { NavLinks } from "./navLinks";

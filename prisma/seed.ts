@@ -1,7 +1,7 @@
 import { prisma } from "./prismaClient";
 import { categories } from "./constants";
-import { GameStatusApi } from "../services/externalApi/apiClient";
 import { AllGameData, ReleasedGamesData } from "@/types/api";
+import { GameStatusApi } from "@/shared/services/externalApi/apiClient";
 
 interface GameForBD {
   apiId: string;

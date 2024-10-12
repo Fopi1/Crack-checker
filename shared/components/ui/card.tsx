@@ -34,7 +34,7 @@ export const Card: FC<Props> = (props) => {
   return (
     <div
       className={cn(
-        "transition-transform duration-300 ease-in-out hover:scale-105 hover:drop-shadow-card h-[336px]",
+        "transition-transform duration-300 ease-in-out hover:scale-105 hover:drop-shadow-card h-[336px] text-[#fff]",
         className
       )}
     >
@@ -60,11 +60,15 @@ export const Card: FC<Props> = (props) => {
                 {title}
               </h2>
               <div className="flex gap-1">
-                <div className="bg-gray-950 rounded-xl px-4 py-1 flex items-center transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[15deg]">
+                <div className="h-full bg-gray-950 rounded-xl px-3 py-1 flex items-center transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[15deg]">
                   <Bell size={20} strokeWidth={3} className="text-orange-400" />
                 </div>
-                <div className="bg-blue-500 rounded-3xl px-10 py-1 flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
-                  <ThumbsUp size={16} strokeWidth={3} />
+                <div className="bg-blue-600 rounded-xl px-8 py-1 flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
+                  <ThumbsUp
+                    className="pointer-events-none mb-[2px]"
+                    size={16}
+                    strokeWidth={3}
+                  />
                   <p>{likes}</p>
                 </div>
               </div>
