@@ -48,7 +48,7 @@ export const GameFilterHeader: FC<Props> = ({ className, title, icon }) => {
         {iconWithProps}
       </div>
       <div className="flex items-center">
-        <SortOptions title={title} />
+        <SortOptions category={title} />
       </div>
     </div>
   );

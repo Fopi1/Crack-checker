@@ -6,23 +6,28 @@ import { useAsyncEffect } from "@reactuses/core";
 import { Game } from "@prisma/client";
 import { Card } from "@/shared/components/ui";
 import { SiteApi } from "@/shared/services/siteApi/apiClient";
+import { sortStore } from "@/shared/store/SortStore";
+import { observer } from "mobx-react-lite";
 
 interface Props {
   category: string;
   className?: string;
 }
 
-export const CardsGroup: FC<Props> = ({ category, className }) => {
+export const CardsGroup: FC<Props> = observer(({ category, className }) => {
   const [games, setGames] = useState<Game[]>([]);
-
   useAsyncEffect(
     async () => {
-      const games = await SiteApi.games.getByCategory(category);
-      setGames(games);
+      const games = await SiteApi.games.getByParams(
+        category,
+        sortStore.takeGames[category]
+      );
+      if (games.length) {
+        setGames(games);
+      }
     },
-
     () => {},
-    []
+    [sortStore.takeGames[category]]
   );
 
   return (
@@ -36,9 +41,9 @@ export const CardsGroup: FC<Props> = ({ category, className }) => {
             className
           )}
         >
-          {games.map((game, index) => (
+          {games.map((game) => (
             <Card
-              key={index}
+              key={game.apiId}
               isAAA={game.isAAA}
               likes={game.likes}
               views={game.views}
@@ -54,4 +59,4 @@ export const CardsGroup: FC<Props> = ({ category, className }) => {
       )}
     </>
   );
-};
+});

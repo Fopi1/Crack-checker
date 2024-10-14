@@ -1,13 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useIcon } from "@/shared/hooks";
-import {
-  CalendarDays,
-  Home,
-  LockKeyhole,
-  LogIn,
-  ReceiptText,
-  Search,
-} from "lucide-react";
+import { CalendarDays, Home, LogIn, ReceiptText } from "lucide-react";
 import Link from "next/link";
 import { FC } from "react";
 
