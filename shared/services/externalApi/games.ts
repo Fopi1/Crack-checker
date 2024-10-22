@@ -1,12 +1,12 @@
 import { AllGameData, ReleasedGamesData } from "@/types/api";
 import { ApiRoutes } from "./constants";
-import { axiosGamestatusInstance } from "./instance";
+import { axiosGameStatusInstance } from "../instance";
 
 export const getGameDetailsByTitle = async (
   title: string
 ): Promise<AllGameData> => {
   try {
-    const response = await axiosGamestatusInstance.post(ApiRoutes.SEARCH, {
+    const response = await axiosGameStatusInstance.post(ApiRoutes.SEARCH, {
       title,
     });
     const game: AllGameData[] = response.data.filter(
@@ -21,7 +21,7 @@ export const getGameDetailsByTitle = async (
 
 export const getReleasedGames = async (): Promise<ReleasedGamesData[]> => {
   try {
-    const response = await axiosGamestatusInstance.get(
+    const response = await axiosGameStatusInstance.get(
       ApiRoutes.RELEASED_GAMES
     );
 

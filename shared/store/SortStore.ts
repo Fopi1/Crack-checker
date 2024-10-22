@@ -1,25 +1,43 @@
 import { makeAutoObservable } from "mobx";
 import { categories } from "@/prisma/constants";
+import { SortBy, SortOrder, TakeGames } from "@/types/api";
+interface SortOptions {
+  sortBy: SortBy;
+  sortOrder: SortOrder;
+  takeGames: TakeGames;
+  isAAA: boolean;
+}
 
 class SortStore {
-  sortBy = "views";
-  sortOrder = "descending";
-  takeGames: Record<string, string> = {};
+  categoriesSortOptions: Record<string, SortOptions> = {};
+
   constructor() {
     makeAutoObservable(this);
-    categories.forEach((category) => (this.takeGames[category.title] = "2"));
+    categories.forEach(
+      (category) =>
+        (this.categoriesSortOptions[category.title] = {
+          sortBy: "views",
+          sortOrder: "descending",
+          takeGames: "25",
+          isAAA: false,
+        })
+    );
   }
 
-  setSortBy(option: string) {
-    this.sortBy = option;
+  setSortBy(category: string, sortBy: SortBy) {
+    this.categoriesSortOptions[category].sortBy = sortBy;
   }
 
-  setSortOrder(option: string) {
-    this.sortOrder = option;
+  setSortOrder(category: string, sortOrder: SortOrder) {
+    this.categoriesSortOptions[category].sortOrder = sortOrder;
   }
 
-  setTakeGames(category: string, value: string) {
-    this.takeGames[category] = value;
+  setTakeGames(category: string, value: TakeGames) {
+    this.categoriesSortOptions[category].takeGames = value;
+  }
+  toggleIsAAA(category: string) {
+    this.categoriesSortOptions[category].isAAA =
+      !this.categoriesSortOptions[category].isAAA;
   }
 }
 

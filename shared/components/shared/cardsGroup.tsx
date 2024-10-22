@@ -20,14 +20,22 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
     async () => {
       const games = await SiteApi.games.getByParams(
         category,
-        sortStore.takeGames[category]
+        sortStore.categoriesSortOptions[category].takeGames,
+        sortStore.categoriesSortOptions[category].sortBy,
+        sortStore.categoriesSortOptions[category].sortOrder,
+        sortStore.categoriesSortOptions[category].isAAA
       );
       if (games.length) {
         setGames(games);
       }
     },
     () => {},
-    [sortStore.takeGames[category]]
+    [
+      sortStore.categoriesSortOptions[category].takeGames,
+      sortStore.categoriesSortOptions[category].sortBy,
+      sortStore.categoriesSortOptions[category].sortOrder,
+      sortStore.categoriesSortOptions[category].isAAA
+    ]
   );
 
   return (
@@ -37,7 +45,7 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
       ) : (
         <div
           className={cn(
-            "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full responsive px-2 lg:px-0",
+            "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full responsive px-2 lg:px-0",
             className
           )}
         >

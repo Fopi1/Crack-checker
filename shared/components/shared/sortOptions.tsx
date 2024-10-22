@@ -12,6 +12,7 @@ import {
 import { Checkbox } from "@/shared/components/ui";
 import { sortStore } from "@/shared/store/SortStore";
 import { observer } from "mobx-react-lite";
+import { SortBy, SortOrder, TakeGames } from "@/types/api";
 
 interface Props {
   category: string;
@@ -21,21 +22,28 @@ interface Props {
 export const SortOptions: FC<Props> = observer(({ category, className }) => {
   const sortOptions = [
     {
-      placeholder: "views",
-      values: ["views", "crack date", "likes", "release date"],
-      onChange: (option: string) => sortStore.setSortBy(option),
+      placeholder: sortStore.categoriesSortOptions[category].sortBy,
+      values: ["views", "crack Date", "likes", "release Date"],
+      onChange: (sortBy: SortBy) => sortStore.setSortBy(category, sortBy),
     },
     {
-      placeholder: "descending",
+      placeholder: sortStore.categoriesSortOptions[category].sortOrder,
       values: ["descending", "ascending"],
-      onChange: (option: string) => sortStore.setSortOrder(option),
+      onChange: (sortOrder: SortOrder) =>
+        sortStore.setSortOrder(category, sortOrder),
     },
     {
-      placeholder: "2",
-      values: ["2", "5", "10"],
-      onChange: (value: string) => sortStore.setTakeGames(category, value),
+      placeholder: sortStore.categoriesSortOptions[category].takeGames,
+      values: ["5", "10", "25"],
+      onChange: (value: TakeGames) => sortStore.setTakeGames(category, value),
     },
   ];
+  const handleSetIsAAAOption = () => {
+    sortStore.toggleIsAAA(category);
+  };
+  const handleLableClick = (event) => {
+    event.stopPropagation();
+  };
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <p className="text-sm">Sort by:</p>
@@ -57,9 +65,10 @@ export const SortOptions: FC<Props> = observer(({ category, className }) => {
           </SelectContent>
         </Select>
       ))}
-      <div className="flex items-center">
+      <div onClick={handleSetIsAAAOption} className="flex items-center">
         <Checkbox id={category} />
         <label
+          onClick={handleLableClick}
           className="pl-2 text-sm select-none cursor-pointer"
           htmlFor={category}
         >

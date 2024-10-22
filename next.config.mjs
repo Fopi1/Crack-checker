@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  images: {
+    remotePatterns: [
+      {
+        hostname: "f000.backblazeb2.com",
+      },
+    ],
+  },
+  // reactStrictMode: true,
 };
 
 export default nextConfig;
