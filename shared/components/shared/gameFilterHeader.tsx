@@ -37,7 +37,7 @@ export const GameFilterHeader: FC<Props> = ({ className, title, icon }) => {
   return (
     <div
       className={cn(
-        "flex py-10 flex-wrap gap-3 justify-center lg:justify-between",
+        "w-full flex py-10 flex-wrap gap-3 justify-center lg:justify-between",
         {
           className,
         }

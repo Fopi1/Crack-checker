@@ -6,3 +6,4 @@ export { NavLinks } from "./navLinks";
 export { SortOptions } from "./sortOptions";
 export { GameFilterHeader } from "./gameFilterHeader";
 export { GamesByCategories } from "./gamesByCategories";
+export { Footer } from "./footer";

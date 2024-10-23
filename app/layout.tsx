@@ -35,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={Scandia.className}>
-      <body className="h-screen overflow-x-hidden selection:bg-red-500 ">
+      <body className="h-screen overflow-x-hidden selection:bg-red-500 text-white">
         <Background />
         <main>{children}</main>
       </body>

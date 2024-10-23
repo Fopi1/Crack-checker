@@ -14,13 +14,23 @@ interface Props {
 export const GamesByCategories: FC<Props> = ({ className }) => {
   const [gameCategories] = useState<Category[]>(categories);
   return (
-    <div className={cn("", className)}>
+    <>
       {gameCategories.map((category) => (
-        <div className="pb-16" key={category.id}>
-          <GameFilterHeader title={category.title} icon={category.icon} />
-          <CardsGroup category={category.title} />
+        <div
+          key={category.id}
+          className="flex justify-center [&:nth-child(even)]:bg-[--background-secondary]"
+        >
+          <div
+            className={cn(
+              "w-full flex flex-col items-center pb-16 responsive md:px-4",
+              className
+            )}
+          >
+            <GameFilterHeader title={category.title} icon={category.icon} />
+            <CardsGroup category={category.title} />
+          </div>
         </div>
       ))}
-    </div>
+    </>
   );
 };

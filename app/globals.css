@@ -12,8 +12,10 @@ html {
 
 :root {
   --background: #070c14;
+  --background-secondary: #0d1625;
   --text-primary: #e9e9e9;
   --text-secondary: #bb3af6;
+  --text-gamestatus: #006600;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,12 +29,6 @@ html {
 body {
   color: var(--text-primary);
   background: var(--background);
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }
 
 @layer base {
@@ -108,5 +104,8 @@ body {
   }
   .responsive {
     @apply max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-3xl;
+  }
+  .text-balance {
+    text-wrap: balance;
   }
 }
