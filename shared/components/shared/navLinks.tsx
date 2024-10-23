@@ -38,7 +38,7 @@ export const NavLinks: FC<Props> = ({ className }) => {
             key={link.name}
             href={link.href}
             className={cn(
-              "flex items-center gap-2 font-semibold text-sm",
+              "flex items-center gap-2 font-bold text-sm",
               className
             )}
           >

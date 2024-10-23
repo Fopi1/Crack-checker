@@ -22,16 +22,16 @@ export const Header: FC<Props> = ({ className }) => {
   return (
     <header
       className={cn(
-        "uppercase bg-slate-900 sticky top-0 shadow-2xl z-[1] text-wrap",
+        "uppercase bg-slate-900 sticky top-0 shadow-2xl z-10 text-wrap",
         className
       )}
     >
-      <nav className="relative h-full">
+      <nav className="relative">
         <Container className="flex justify-between items-center p-2 responsive">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center">
-              <Image src={logo} alt="Logo" width={70} height={70}></Image>
-              <h1 className="font-black text-xl">CrackChecker</h1>
+              <Image src={logo} alt="Logo" width={80} height={80}></Image>
+              <h1 className="font-black text-2xl">CrackChecker</h1>
             </Link>
             <form
               role="search"
@@ -66,7 +66,7 @@ export const Header: FC<Props> = ({ className }) => {
               </div>
             )}
           </div>
-          <div className="hidden lg:flex gap-10">
+          <div className="leading-[21px] pr-10 hidden lg:flex gap-10">
             <NavLinks />
           </div>
         </Container>

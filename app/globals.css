@@ -14,6 +14,7 @@ html {
   --background: #070c14;
   --text-primary: #e9e9e9;
   --text-secondary: #bb3af6;
+  --text-gamestatus: #006600;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,12 +28,6 @@ html {
 body {
   color: var(--text-primary);
   background: var(--background);
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }
 
 @layer base {
@@ -55,6 +50,7 @@ body {
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 91%;
     --input: 281, 33%, 25%;
+    --input-foreground: 233, 37%, 13%;
     --ring: 262.1 83.3% 57.8%;
     --radius: 1rem;
     --chart-1: 12 76% 61%;
@@ -104,9 +100,12 @@ body {
 
 @layer utilities {
   .max-w-screen-3xl {
-    max-width: 1820px;
+    max-width: 1920px;
   }
   .responsive {
     @apply max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-3xl;
+  }
+  .text-balance {
+    text-wrap: balance;
   }
 }
