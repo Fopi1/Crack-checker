@@ -12,6 +12,7 @@ html {
 
 :root {
   --background: #070c14;
+  --background-secondary: #0d1625;
   --text-primary: #e9e9e9;
   --text-secondary: #bb3af6;
   --text-gamestatus: #006600;
