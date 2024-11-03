@@ -59,12 +59,12 @@ export const LoginLinks = () => {
     },
   ];
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2">
       {loginLinks.map((link) => (
         <Link
           key={link.href}
           style={{ backgroundColor: link.backgroundColor }}
-          className="transition-colors duration-300 flex items-center justify-center gap-3 font-bold py-3 rounded-[15px] text-white z-[1] hover:text-blue-500"
+          className="transition-colors duration-300 flex items-center justify-center gap-3 font-bold py-3 rounded-[15px] text-white z-[1]"
           href={link.href}
           onMouseOver={(e) => (
             (e.currentTarget.style.backgroundColor = hoverColor),
@@ -80,6 +80,7 @@ export const LoginLinks = () => {
           <span>Login with {link.name}</span>
         </Link>
       ))}
+      <span className="inline-block uppercase mt-10 text-center">or</span>
     </div>
   );
 };

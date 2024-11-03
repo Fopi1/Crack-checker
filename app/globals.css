@@ -51,7 +51,7 @@ body {
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 91%;
     --input: 281, 33%, 25%;
-    --input-foreground: 233, 37%, 13%;
+    --input-background: #30204f3b;
     --ring: 262.1 83.3% 57.8%;
     --radius: 1rem;
     --chart-1: 12 76% 61%;

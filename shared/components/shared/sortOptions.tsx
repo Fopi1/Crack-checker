@@ -41,7 +41,9 @@ export const SortOptions: FC<Props> = observer(({ category, className }) => {
   const handleSetIsAAAOption = () => {
     sortStore.toggleIsAAA(category);
   };
-  const handleLableClick = (event) => {
+  const handleLableClick = (
+    event: React.MouseEvent<HTMLLabelElement, MouseEvent>
+  ) => {
     event.stopPropagation();
   };
   return (
@@ -66,7 +68,7 @@ export const SortOptions: FC<Props> = observer(({ category, className }) => {
         </Select>
       ))}
       <div onClick={handleSetIsAAAOption} className="flex items-center">
-        <Checkbox id={category} />
+        <Checkbox className="rounded-full" id={category} />
         <label
           onClick={handleLableClick}
           className="pl-2 text-sm select-none cursor-pointer"

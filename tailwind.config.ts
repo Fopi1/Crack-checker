@@ -43,7 +43,7 @@ const config: Config = {
         border: "hsl(var(--border))",
         input: {
           DEFAULT: "hsl(var(--input))",
-          foreground: "hsl(var(--input-foreground))",
+          background: "var(--input-background)",
         },
         ring: "hsl(var(--ring))",
         chart: {
