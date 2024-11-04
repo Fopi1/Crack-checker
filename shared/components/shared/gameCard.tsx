@@ -4,12 +4,17 @@ import { Bell, Calendar, Eye, ThumbsUp } from "lucide-react";
 import Link from "next/link";
 import { useCrackStatus } from "@/shared/hooks";
 import { Game } from "@prisma/client";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card";
 
 interface Props extends Omit<Game, "id" | "slug" | "apiId"> {
   className?: string;
 }
 
-export const Card: FC<Props> = (props) => {
+export const GameCard: FC<Props> = (props) => {
   const {
     className,
     title,
@@ -32,9 +37,9 @@ export const Card: FC<Props> = (props) => {
   const crackTextColor = crackDate ? "text-green-600" : "text-red-600";
 
   return (
-    <div
+    <article
       className={cn(
-        "transition-transform duration-300 ease-in-out hover:scale-105 hover:drop-shadow-card h-[336px] text-[#fff]",
+        "transition-transform duration-300 ease-in-out scale-95 hover:scale-100 hover:drop-shadow-card  text-[#fff]",
         className
       )}
     >
@@ -45,45 +50,59 @@ export const Card: FC<Props> = (props) => {
           className
         )}
       >
-        <div
+        <figure
           style={{ backgroundImage: `url(${shortImage})` }}
           className="overflow-hidden relative h-52 rounded-2xl bg-cover bg-center flex flex-col justify-between font-bold"
         >
-          <div
+          <figcaption
             className={`self-end float-right m-1 px-3 py-[2px] rounded-2xl text-sm font-semibold ${crackBackgroundColor} drop-shadow-status`}
           >
             <p>{crackStatus}</p>
-          </div>
+          </figcaption>
           <div className="bg-gray-950/70 backdrop-blur-sm w-full">
             <div className="px-4 py-3 flex justify-between">
-              <h2 className="text-xl w-56 overflow-hidden text-nowrap text-ellipsis">
+              <h2 className="text-xl w-64 overflow-hidden text-nowrap text-ellipsis">
                 {title}
               </h2>
               <div className="flex gap-1">
-                <div className="h-full bg-gray-950 rounded-xl px-3 py-1 flex items-center transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[15deg]">
-                  <Bell size={20} strokeWidth={3} className="text-orange-400" />
-                </div>
-                <div className="bg-blue-600 rounded-xl px-8 py-1 flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <button className="h-full bg-gray-950 rounded-xl px-3 py-1 flex items-center transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[15deg]">
+                      <Bell
+                        size={20}
+                        strokeWidth={3}
+                        className="text-orange-400"
+                      />
+                    </button>
+                  </HoverCardTrigger>
+                  <HoverCardContent
+                    className="bg-black text-center rounded-[6px] border-none w-auto"
+                    side="top"
+                  >
+                    <p className="font-normal px-1">Turn on notifications</p>
+                  </HoverCardContent>
+                </HoverCard>
+                <button className="bg-blue-600 rounded-xl px-8 py-1 flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
                   <ThumbsUp
                     className="pointer-events-none mb-[2px]"
                     size={16}
                     strokeWidth={3}
                   />
                   <p>{likes}</p>
-                </div>
+                </button>
               </div>
             </div>
           </div>
-        </div>
+        </figure>
       </Link>
-      <div className="flex flex-col items-start">
+      <section className="flex flex-col items-start">
         <div className="flex flex-col pt-2">
           <div className="flex gap-1">
             <p>Release Date:</p>
-            <span className="flex gap-1 items-center text-orange-300 font-bold">
+            <time className="flex gap-1 items-center text-orange-300 font-bold">
               <Calendar size={16} strokeWidth={2.7} />
               {releaseDate}
-            </span>
+            </time>
           </div>
           <div className="flex gap-1">
             <p>Protection</p>
@@ -100,10 +119,10 @@ export const Card: FC<Props> = (props) => {
           {crackDate && (
             <div className="flex gap-1">
               <p>Crack Date:</p>
-              <span className="flex gap-1 items-center text-orange-300 font-bold">
+              <time className="flex gap-1 items-center text-orange-300 font-bold">
                 <Calendar size={16} strokeWidth={2.7} />
                 {crackDate}
-              </span>
+              </time>
             </div>
           )}
         </div>
@@ -111,7 +130,7 @@ export const Card: FC<Props> = (props) => {
           <Eye size={16} strokeWidth={3} />
           {views}
         </div>
-      </div>
-    </div>
+      </section>
+    </article>
   );
 };

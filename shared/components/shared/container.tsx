@@ -6,5 +6,9 @@ interface Props extends PropsWithChildren {
 }
 
 export const Container: FC<Props> = ({ className, children }) => {
-  return <div className={cn("mx-auto relative", className)}>{children}</div>;
+  return (
+    <div className={cn("mx-auto relative responsive", className)}>
+      {children}
+    </div>
+  );
 };

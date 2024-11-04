@@ -31,7 +31,9 @@ export const Header: FC<Props> = ({ className }) => {
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center">
               <Image src={logo} alt="Logo" width={80} height={80}></Image>
-              <h1 className="font-black text-2xl">CrackChecker</h1>
+              <h1 className="hidden md:inline-block font-black text-2xl">
+                CrackChecker
+              </h1>
             </Link>
             <form
               role="search"

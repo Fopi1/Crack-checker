@@ -37,14 +37,14 @@ export const Footer = () => {
         provide any download links on our sites, we are fully compliant with
         DMCA law.
       </p>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-center justify-between">
         <div>
           <strong className="capitalize">
             <span className="text-[--text-secondary]">© </span>
             2024 CRACKCHECKER
           </strong>
         </div>
-        <div className="flex gap-5">
+        <div className="flex flex-col md:flex-row gap-5">
           <a
             className="flex items-center gap-2 font-medium text-lg"
             href="https://github.com/Fopi1"
