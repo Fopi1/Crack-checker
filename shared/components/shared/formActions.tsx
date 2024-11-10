@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import { Button, Checkbox, Label } from "../ui";
 import Link from "next/link";
@@ -30,7 +32,10 @@ export const FormActions: FC<Props> = ({
         <Link className="text-sm font-bold" href={linkHref}>
           {linkText}
         </Link>
-        <Button className="uppercase font-semibold text-xs bg-gray-800 tracking-widest px-6">
+        <Button
+          type="submit"
+          className="uppercase font-semibold text-xs bg-gray-800 tracking-widest px-6"
+        >
           {buttonText}
         </Button>
       </div>

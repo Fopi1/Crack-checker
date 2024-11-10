@@ -9,6 +9,6 @@ export { GamesByCategories } from "./gamesByCategories";
 export { GameFilterHeader } from "./gameFilterHeader";
 export { Footer } from "./footer";
 export { LoginLinks } from "./loginLinks";
-export { FormField } from "./formField";
 export { FormFields } from "./formFields";
+export { FormField } from "./formField";
 export { FormActions } from "./formActions";
