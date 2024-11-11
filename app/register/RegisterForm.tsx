@@ -75,7 +75,7 @@ export const RegisterForm: FC<Props> = ({ className }) => {
   const { register, handleSubmit, formState, watch } = useForm<Inputs>({
     mode: "onChange",
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
   };
   const password = watch("password");
