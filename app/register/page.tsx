@@ -1,14 +1,7 @@
 import { Container, LoginLinks } from "@/shared/components/shared";
 import { RegisterForm } from "./RegisterForm";
 
-export type Inputs = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
-export default function Page() {
+export default function Register() {
   return (
     <section className="w-full h-full bg-secondary-foreground">
       <Container className="py-14 w-3/4 lg:w-[900px]">

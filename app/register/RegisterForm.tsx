@@ -1,13 +1,22 @@
 "use client";
 
-import { FC, HTMLInputTypeAttribute } from "react";
-import { Inputs } from "./page";
+import { FC, HTMLInputTypeAttribute, useEffect } from "react";
 import { RegisterOptions, SubmitHandler, useForm } from "react-hook-form";
 import { FormActions, FormField, FormFields } from "@/shared/components/shared";
+import { SiteApi } from "@/shared/services/siteApi/apiClient";
+import { axiosSiteInstance } from "@/shared/services/instance";
+import { ApiRoutes } from "@/shared/services/siteApi/constants";
 
 interface Props {
   className?: string;
 }
+
+type Inputs = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 export const RegisterForm: FC<Props> = ({ className }) => {
   const registerFormFields: Array<{
@@ -68,17 +77,36 @@ export const RegisterForm: FC<Props> = ({ className }) => {
       label: "Confirm Password",
       registerValidate: {
         validate: (value: string) =>
-          value === password || "Password doesnt match",
+          value === password || "Password doesn't match",
       },
     },
   ];
-  const { register, handleSubmit, formState, watch } = useForm<Inputs>({
+  const { register, handleSubmit, formState, watch, reset } = useForm<Inputs>({
     mode: "onChange",
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
+    try {
+      const { confirmPassword: _, ...filteredData } = data;
+      const response = await axiosSiteInstance.post(
+        ApiRoutes.USERS,
+        filteredData
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
   const password = watch("password");
+  useEffect(() => {
+    const thisPassword = "dsdsdsds";
+    reset({
+      name: "ds",
+      email: "F@ds.ru",
+      password: thisPassword,
+      confirmPassword: thisPassword,
+    });
+  }, [reset]);
   return (
     <form
       role="register"

@@ -9,7 +9,6 @@ interface Props {
   title: string;
   icon: string;
 }
-
 export const GameFilterHeader: FC<Props> = ({ className, title, icon }) => {
   const iconMap: Record<string, React.ReactElement> = {
     Users: <Users />,
