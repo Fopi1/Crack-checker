@@ -2,22 +2,22 @@ import { prisma } from "@/prisma/prismaClient";
 import { GameStatusApi } from "@/shared/services/externalApi/apiClient";
 import { AllGameData } from "@/types/api";
 
-async function checkIfGameExists(title: string): Promise<boolean> {
+const checkIfGameExists = async (title: string): Promise<boolean> => {
   const game = await prisma.game.findFirst({
     where: { title },
   });
   const isGameExist = game !== undefined && game !== null;
   return isGameExist;
-}
+};
 
-async function addGame(title: string) {
+const addGame = async (title: string) => {
   try {
     const game: AllGameData = await GameStatusApi.games.getGameDetailsByTitle(
       title
     );
     if (game) {
       if (await checkIfGameExists(game.title)) {
-        console.error("Game is exist");
+        throw new Error("New game already exist");
       }
       await prisma.game.create({
         data: {
@@ -32,17 +32,16 @@ async function addGame(title: string) {
           shortImage: game.short_image,
         },
       });
-
       console.log("The game:", game.title, "was added");
     } else {
       console.log("The game was not found");
     }
-  } catch (_) {
-    throw new Error("An error was catched when trying to add a new game");
+  } catch (error) {
+    console.error("Catched error while adding new game", error);
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 const gameTitle = process.argv[2];
 

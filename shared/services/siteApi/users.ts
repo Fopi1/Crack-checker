@@ -1,19 +1,27 @@
 "use server";
 
 import { prisma } from "@/prisma/prismaClient";
-import { PublicUser } from "@/types/api";
 import bcrypt from "bcrypt";
 
 export const hashPassword = async (password: string) =>
   await bcrypt.hash(password, 10);
 
-export const checkIfUserExist = async (publicData: PublicUser) => {
-  const { name, email } = publicData;
-  const userByName = await prisma.user.findUnique({
+export const checkIfNameExist = async (name: string) => {
+  console.log("checking name");
+  return !!(await prisma.user.findUnique({
     where: { name },
-  });
-  const userByEmail = await prisma.user.findUnique({
+  }));
+};
+
+export const checkIfEmailExist = async (email: string) => {
+  console.log("checking email");
+  return !!(await prisma.user.findUnique({
     where: { email },
-  });
-  return { userByName: !!userByName, userByEmail: !!userByEmail };
+  }));
+};
+
+export const checkUserExistence = async (name: string, email: string) => {
+  const isEmailExist = await checkIfEmailExist(email);
+  const isNameExist = await checkIfNameExist(name);
+  return { name: isNameExist, email: isEmailExist };
 };

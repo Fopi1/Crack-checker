@@ -1,5 +1,3 @@
-import { User } from "@prisma/client";
-
 export type SortBy = "views" | "likes" | "releaseDate" | "crackDate";
 export type SortOrder = "ascending" | "descending";
 export type TakeGames = "25" | "5" | "10";
@@ -16,5 +14,3 @@ export interface AllGameData extends ReleasedGamesData {
   hacked_groups: string;
   crack_date: string | null;
 }
-
-export type PublicUser = Omit<User, "id" | "password">;

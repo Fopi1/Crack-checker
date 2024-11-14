@@ -16,7 +16,8 @@
     "node:addNewGames": "npx tsx ./scripts/addNewGames.ts",
     "node:deleteGame": "npx tsx ./scripts/deleteGame.ts",
     "node:removeBrackets": "npx tsx ./scripts/removeBrackets.ts",
-    "node:alterTable": "npx tsx ./scripts/alterTable.ts"
+    "node:alterTable": "npx tsx ./scripts/alterTable.ts",
+    "node:deleteUsers": "npx tsx ./scripts/deleteUsers.ts"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

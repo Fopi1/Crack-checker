@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma/prismaClient";
 
-async function removeBrackets() {
+const removeBrackets = async () => {
   try {
     const oldGames = await prisma.game.findMany();
     const newGames = oldGames.map((game) => {
@@ -24,6 +24,6 @@ async function removeBrackets() {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 removeBrackets();

@@ -2,7 +2,7 @@ import { prisma } from "@/prisma/prismaClient";
 import { GameStatusApi } from "@/shared/services/externalApi/apiClient";
 import { AllGameData } from "@/types/api";
 
-async function addNewGames() {
+const addNewGames = async () => {
   try {
     const releasedGames = await GameStatusApi.games.getReleasedGames();
     const existingGames: AllGameData[] = [];
@@ -40,6 +40,6 @@ async function addNewGames() {
   } finally {
     prisma.$disconnect();
   }
-}
+};
 
 addNewGames();

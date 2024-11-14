@@ -1,11 +1,12 @@
 "use client";
 
-import { FC, HTMLInputTypeAttribute, useEffect } from "react";
+import { FC, HTMLInputTypeAttribute, useEffect, useState } from "react";
 import { RegisterOptions, SubmitHandler, useForm } from "react-hook-form";
 import { FormActions, FormField, FormFields } from "@/shared/components/shared";
-import { SiteApi } from "@/shared/services/siteApi/apiClient";
 import { axiosSiteInstance } from "@/shared/services/instance";
 import { ApiRoutes } from "@/shared/services/siteApi/constants";
+import { useAsyncEffect, useDebounce } from "@reactuses/core";
+import { SiteApi } from "@/shared/services/siteApi/apiClient";
 
 interface Props {
   className?: string;
@@ -81,23 +82,76 @@ export const RegisterForm: FC<Props> = ({ className }) => {
       },
     },
   ];
-  const { register, handleSubmit, formState, watch, reset } = useForm<Inputs>({
-    mode: "onChange",
-  });
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      const { confirmPassword: _, ...filteredData } = data;
-      const response = await axiosSiteInstance.post(
-        ApiRoutes.USERS,
-        filteredData
-      );
+  const [checkingInputData, setCheckingInputData] = useState(true);
+  const { register, handleSubmit, formState, watch, reset, setError } =
+    useForm<Inputs>({
+      mode: "onChange",
+    });
+  const name = watch("name");
+  const password = watch("password");
 
-      console.log(response.data);
+  const debouncedName = useDebounce(name, 200);
+  useAsyncEffect(
+    async () => {
+      if (debouncedName) {
+        try {
+          const result = await SiteApi.users.checkIfNameExist(debouncedName);
+          if (result) {
+            setError("name", {
+              type: "custom",
+              message: "User with this name already exists",
+            });
+          }
+          setCheckingInputData(false);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
+    () => {},
+    [debouncedName]
+  );
+  useEffect(() => {
+    setCheckingInputData(true);
+  }, [name]);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (checkingInputData) {
+      console.log("error sent");
+      return 0;
+    }
+    try {
+      const isUserExist = await SiteApi.users.checkUserExistence(
+        data.name,
+        data.email
+      );
+      console.log(isUserExist);
+
+      if (isUserExist.name || isUserExist.email) {
+        Object.keys(isUserExist).forEach((name) => {
+          if (
+            isUserExist[
+              name as keyof Omit<Inputs, "password" | "confirmPassword">
+            ]
+          ) {
+            setError(name as keyof Inputs, {
+              type: "custom",
+              message: `User with this ${name} already exists`,
+            });
+          }
+        });
+        throw new Error("User exist");
+      } else {
+        const { confirmPassword: _, ...filteredData } = data;
+        const response = await axiosSiteInstance.post(
+          ApiRoutes.USERS,
+          filteredData
+        );
+        console.log(response.data);
+      }
     } catch (error) {
       console.error(error);
     }
   };
-  const password = watch("password");
   useEffect(() => {
     const thisPassword = "dsdsdsds";
     reset({

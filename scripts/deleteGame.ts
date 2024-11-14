@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma/prismaClient";
 
-async function deleteGameById(gameId: number) {
+const deleteGameById = async (gameId: number) => {
   try {
     await prisma.game.delete({
       where: { id: gameId },
@@ -11,7 +11,7 @@ async function deleteGameById(gameId: number) {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 const gameId = process.argv[2];
 
