@@ -1,5 +1,5 @@
 import { prisma } from "@/prisma/prismaClient";
-import { GameStatusApi } from "@/shared/services/externalApi/apiClient";
+import { GameStatusApi } from "@/services/externalApi/apiClient";
 import { AllGameData } from "@/types/api";
 
 const checkIfGameExists = async (title: string): Promise<boolean> => {

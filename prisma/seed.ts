@@ -1,7 +1,7 @@
 import { prisma } from "./prismaClient";
 import { categories } from "./constants";
 import { AllGameData, ReleasedGamesData } from "@/types/api";
-import { GameStatusApi } from "@/shared/services/externalApi/apiClient";
+import { GameStatusApi } from "@/services/externalApi/apiClient";
 
 interface GameForBD {
   apiId: string;
@@ -19,9 +19,8 @@ async function fetchGameData(): Promise<GameForBD[]> {
   try {
     const releasedGames = await GameStatusApi.games.getReleasedGames();
     const allGameData = await Promise.allSettled(
-      releasedGames.map(
-        async (game: ReleasedGamesData) =>
-          await GameStatusApi.games.getGameDetailsByTitle(game.title)
+      releasedGames.map(async (game: ReleasedGamesData) =>
+        GameStatusApi.games.getGameDetailsByTitle(game.title)
       )
     );
 

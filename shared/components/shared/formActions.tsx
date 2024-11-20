@@ -9,6 +9,7 @@ interface Props {
   linkText: string;
   linkHref: string;
   buttonText: string;
+  buttonDisabled?: boolean;
   loginForm?: boolean;
   className?: string;
 }
@@ -18,6 +19,7 @@ export const FormActions: FC<Props> = ({
   linkHref,
   buttonText,
   className,
+  buttonDisabled = false,
   loginForm = false,
 }) => {
   return (
@@ -33,6 +35,7 @@ export const FormActions: FC<Props> = ({
           {linkText}
         </Link>
         <Button
+          disabled={buttonDisabled}
           type="submit"
           className="uppercase font-semibold text-xs bg-gray-800 tracking-widest px-6"
         >

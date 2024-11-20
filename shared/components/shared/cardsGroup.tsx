@@ -4,8 +4,8 @@ import { FC, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAsyncEffect } from "@reactuses/core";
 import { Game } from "@prisma/client";
-import { SiteApi } from "@/shared/services/siteApi/apiClient";
-import { sortStore } from "@/shared/store/SortStore";
+import { SiteApi } from "@/services/siteApi/apiClient";
+import { sortStore } from "@/shared/store/sortStore";
 import { observer } from "mobx-react-lite";
 import { GameCard } from "./gameCard";
 

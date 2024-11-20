@@ -1,5 +1,5 @@
 import { prisma } from "@/prisma/prismaClient";
-import { SiteApi } from "@/shared/services/siteApi/apiClient";
+import { SiteApi } from "@/services/siteApi/apiClient";
 import { SortBy, SortOrder } from "@/types/api";
 import { NextRequest, NextResponse } from "next/server";
 

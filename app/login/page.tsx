@@ -1,11 +1,6 @@
-import {
-  Container,
-  FormActions,
-  FormField,
-  FormFields,
-  LoginLinks,
-} from "@/shared/components/shared";
+import { Container, LoginLinks } from "@/shared/components/shared";
 import Link from "next/link";
+import { LoginForm } from "./LoginForm";
 
 export default function Login() {
   return (
@@ -23,33 +18,7 @@ export default function Login() {
         <h2 className="text-[28px] font-medium text-center">Log in</h2>
         <div className="pt-14">
           <LoginLinks />
-          <form
-            role="login"
-            action="/login"
-            autoComplete="off"
-            className="flex flex-col gap-6"
-          >
-            <FormFields>
-              <FormField
-                id="loginEmail"
-                placeholder="Type your email"
-                type="email"
-                label="Email"
-              />
-              <FormField
-                id="loginPassword"
-                placeholder="Type your password"
-                type="password"
-                label="Password"
-              />
-            </FormFields>
-            <FormActions
-              loginForm
-              linkText="Forgot your password?"
-              linkHref="/forgot-password"
-              buttonText="Log in"
-            />
-          </form>
+          <LoginForm />
         </div>
       </Container>
     </section>

@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { Checkbox } from "@/shared/components/ui";
-import { sortStore } from "@/shared/store/SortStore";
+import { sortStore } from "@/shared/store/sortStore";
 import { observer } from "mobx-react-lite";
 import { SortBy, SortOrder, TakeGames } from "@/types/api";
 

@@ -1,4 +1,5 @@
 export enum ApiRoutes {
   GAMES = "games",
-  USERS = "users",
+  REGISTER = "register",
+  LOGIN = "login",
 }
