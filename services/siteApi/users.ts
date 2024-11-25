@@ -8,6 +8,8 @@ export const hashPassword = async (password: string) =>
 
 export const checkIfEmailExist = async (email: string) => {
   return !!(await prisma.user.findUnique({
-    where: { email },
+    where: {
+      email: email,
+    },
   }));
 };

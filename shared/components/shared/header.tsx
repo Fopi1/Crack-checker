@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Container } from "./container";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,13 +8,21 @@ import logo from "@/public/logo.png";
 import { cn } from "@/lib/utils";
 import { NavLinks } from "./navLinks";
 import { AlignJustify, Search } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface Props {
   className?: string;
 }
 
 export const Header: FC<Props> = ({ className }) => {
+  const pathname = usePathname();
   const [isOpened, setIsOpened] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsOpened(false);
+  }, [pathname]);
+
   const handleSetIsOpened = () => {
     setIsOpened((prevState) => !prevState);
   };
@@ -30,7 +38,13 @@ export const Header: FC<Props> = ({ className }) => {
         <Container className="flex justify-between items-center p-2 responsive">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center">
-              <Image src={logo} alt="Logo" width={80} height={80}></Image>
+              <Image
+                priority
+                src={logo}
+                alt="Logo"
+                width={80}
+                height={80}
+              ></Image>
               <h1 className="hidden md:inline-block font-black text-2xl">
                 CrackChecker
               </h1>
@@ -53,15 +67,16 @@ export const Header: FC<Props> = ({ className }) => {
           </div>
           <div className="lg:hidden cursor-pointer">
             <button
-              aria-label="Toggle Navigation"
-              aria-expanded={isOpened}
               onClick={handleSetIsOpened}
               className="text-[color:--text-secondary]"
             >
               <AlignJustify />
             </button>
             {isOpened && (
-              <div className="absolute bg-gray-900 left-0 top-[100%] w-full">
+              <div
+                ref={menuRef}
+                className="absolute bg-gray-900 left-0 top-[100%] w-full"
+              >
                 <div className="flex flex-col">
                   <NavLinks className="p-6 transition-transform duration-300 ease-in-out hover:bg-violet-950" />
                 </div>

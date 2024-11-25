@@ -6,5 +6,7 @@ interface Props extends PropsWithChildren {
 }
 
 export const FormFields: FC<Props> = ({ className, children }) => {
-  return <div className={cn("flex flex-col gap-7", className)}>{children}</div>;
+  return (
+    <div className={cn("flex flex-col gap-7 z-[2]", className)}>{children}</div>
+  );
 };

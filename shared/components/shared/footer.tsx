@@ -58,7 +58,7 @@ export const Footer = () => {
           </a>
           <a
             className="flex items-center gap-2 font-medium text-lg"
-            href="https://github.com/Fopi1"
+            href="https://t.me/fopipopi1"
             rel="noopener noreferrer"
             target="_blank"
           >

@@ -1,106 +1,145 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FormActions, FormField, FormFields } from "@/shared/components/shared";
+import { FormActions, FormFields } from "@/shared/components/shared";
 import { axiosSiteInstance } from "@/services/instance";
 import { ApiRoutes } from "@/services/siteApi/constants";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { useRouter } from "next/navigation";
 import { registerFormFields } from "./constant";
-
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui";
 interface Props {
   className?: string;
 }
 
-export type Inputs = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+const formSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, { message: "Username must be at least 2 characters" })
+      .max(20, { message: "Username must be less than 20 characters long" })
+      .regex(/^[a-zA-Z0-9_]+$/, {
+        message: "Username must contain only Latin letters and numbers",
+      }),
+    email: z.string().email("Invalid email address"),
+    password: z
+      .string()
+      .min(8, { message: "The password field must be at least 8 characters." }),
+    confirmPassword: z.string(),
+  })
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
+export type registerFormSchema = z.infer<typeof formSchema>;
 
 export const RegisterForm: FC<Props> = ({ className }) => {
+  const [isCheckingData, setIsCheckingData] = useState(false);
   const { replace } = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-    watch,
-    setError,
-  } = useForm<Inputs>({
+  const form = useForm<registerFormSchema>({
     mode: "onChange",
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
-  const password = watch("password");
+  const { setError, clearErrors } = form;
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    if (!isValid) {
-      return;
+  const password = form.watch("password");
+  const confirmPassword = form.watch("confirmPassword");
+
+  useEffect(() => {
+    if (password === confirmPassword) {
+      clearErrors("confirmPassword");
+    } else {
+      setError("confirmPassword", {
+        type: "custom",
+        message: "Passwords don't match",
+      });
     }
-    try {
-      const isEmailExist = await SiteApi.users.checkIfEmailExist(data.email);
+  }, [password, confirmPassword, setError, clearErrors]);
 
+  const onSubmit: SubmitHandler<registerFormSchema> = async (data) => {
+    try {
+      setIsCheckingData(true);
+      const isEmailExist = await SiteApi.users.checkIfEmailExist(data.email);
       if (isEmailExist) {
         setError("email", {
           type: "custom",
-          message: `User with this email already exists`,
+          message: "User with this email already exists",
         });
         return;
       }
       const { confirmPassword: _, ...filteredData } = data;
+      console.debug("Registering");
       await axiosSiteInstance.post(ApiRoutes.REGISTER, filteredData);
-      const { name: __, ...loginData } = filteredData;
-      await axiosSiteInstance.post(ApiRoutes.LOGIN, loginData);
+      console.debug("Logining");
+      await axiosSiteInstance.post(ApiRoutes.LOGIN, {
+        email: filteredData.email,
+        password: filteredData.password,
+      });
       replace("/");
       console.debug("The user has been successfully registered");
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsCheckingData(false);
     }
   };
   return (
-    <form
-      role="register"
-      action="/register"
-      autoComplete="on"
-      className="flex flex-col gap-6"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <FormFields className={className}>
-        {registerFormFields.map((field) => (
-          <FormField
-            key={field.name}
-            id={field.name}
-            placeholder={field.placeholder}
-            type={field.type}
-            label={field.label}
-            autoComplete="on"
-            error={errors[field.name]?.message}
-            {...register(field.name, {
-              required: true,
-              ...field.registerValidate,
-            })}
-          />
-        ))}
-        <FormField
-          id="confirmPassword"
-          placeholder="Confirm your password"
-          type="password"
-          label="Confirm password"
-          autoComplete="on"
-          error={errors.confirmPassword?.message}
-          {...register("confirmPassword", {
-            required: true,
-            validate: (value: string) =>
-              value === password || "Password doesn't match",
-          })}
+    <Form {...form}>
+      <form
+        role="register"
+        action="/register"
+        autoComplete="on"
+        className="flex flex-col gap-6"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <FormFields className={className}>
+          {registerFormFields.map((registerField) => (
+            <FormField
+              key={registerField.name}
+              control={form.control}
+              name={registerField.name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{registerField.label}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={registerField.placeholder}
+                      type={registerField.type}
+                      autoComplete="on"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+        </FormFields>
+        <FormActions
+          buttonText="Register"
+          linkHref="/"
+          linkText="Already registered?"
+          buttonDisabled={isCheckingData}
         />
-      </FormFields>
-      <FormActions
-        linkText="Already registered?"
-        linkHref="/login"
-        buttonText="Register"
-        buttonDisabled={!isValid}
-      />
-    </form>
+      </form>
+    </Form>
   );
 };

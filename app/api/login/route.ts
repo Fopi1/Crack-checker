@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
 
-    const user = await prisma.user.findUnique({ where: email });
+    const user = await prisma.user.findUnique({ where: { email: email } });
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
+      expires: Date.now(),
     });
     return response;
   } catch (error) {

@@ -32,22 +32,17 @@ export const NavLinks: FC<Props> = ({ className }) => {
 
   return (
     <>
-      {links.map((link) => {
-        return (
-          <Link
-            key={link.name}
-            href={link.href}
-            className={cn(
-              "flex items-center gap-2 font-bold text-sm",
-              className
-            )}
-          >
-            {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
-            {useIcon(link.icon, iconProps)}
-            {link.name}
-          </Link>
-        );
-      })}
+      {links.map((link) => (
+        <Link
+          key={link.name}
+          href={link.href}
+          className={cn("flex items-center gap-2 font-bold text-sm", className)}
+        >
+          {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
+          {useIcon(link.icon, iconProps)}
+          {link.name}
+        </Link>
+      ))}
     </>
   );
 };

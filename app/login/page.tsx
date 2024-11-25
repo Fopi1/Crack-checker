@@ -18,7 +18,7 @@ export default function Login() {
         <h2 className="text-[28px] font-medium text-center">Log in</h2>
         <div className="pt-14">
           <LoginLinks />
-          <LoginForm />
+          {/* <LoginForm /> */}
         </div>
       </Container>
     </section>

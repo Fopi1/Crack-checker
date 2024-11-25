@@ -82,7 +82,7 @@ export const GameCard: FC<Props> = (props) => {
                     <p className="font-normal px-1">Turn on notifications</p>
                   </HoverCardContent>
                 </HoverCard>
-                <button className="bg-blue-600 rounded-xl px-8 py-1 flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
+                <button className="bg-blue-600 rounded-2xl px-10 py-[6px] flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
                   <ThumbsUp
                     className="pointer-events-none mb-[2px]"
                     size={16}
