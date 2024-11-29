@@ -35,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={Scandia.className}>
-      <body className="flex flex-col h-screen overflow-x-hidden selection:bg-red-500 text-white">
+      <body className="flex flex-col overflow-x-hidden selection:bg-red-500 text-white">
         <Background />
         <Header />
         <main className="flex-1">{children}</main>

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -9,10 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { Checkbox } from "@/shared/components/ui";
+import { Checkbox, Label } from "@/shared/components/ui";
 import { sortStore } from "@/shared/store/sortStore";
 import { observer } from "mobx-react-lite";
 import { SortBy, SortOrder, TakeGames } from "@/types/api";
+import { usePathname } from "next/navigation";
 
 interface Props {
   category: string;
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export const SortOptions: FC<Props> = observer(({ category, className }) => {
+  const pathname = usePathname();
   const sortOptions = [
     {
       placeholder: sortStore.categoriesSortOptions[category].sortBy,
@@ -41,41 +43,49 @@ export const SortOptions: FC<Props> = observer(({ category, className }) => {
   const handleSetIsAAAOption = () => {
     sortStore.toggleIsAAA(category);
   };
-  const handleLableClick = (
-    event: React.MouseEvent<HTMLLabelElement, MouseEvent>
-  ) => {
-    event.stopPropagation();
-  };
+  useEffect(() => {
+    sortStore.disableAllIsAAA(category);
+  }, [pathname, category]);
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div
+      className={cn(
+        "flex items-center justify-center gap-3 flex-wrap",
+        className
+      )}
+    >
       <p className="text-sm">Sort by:</p>
-      {sortOptions.map((option) => (
-        <Select
-          key={option.placeholder}
-          defaultValue={option.placeholder}
-          onValueChange={option.onChange}
-        >
-          <SelectTrigger className="w-auto gap-5 capitalize">
-            <SelectValue placeholder={option.placeholder} />
-          </SelectTrigger>
-          <SelectContent>
-            {option.values.map((value) => (
-              <SelectItem key={value} className="capitalize" value={value}>
-                {value}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      ))}
-      <div onClick={handleSetIsAAAOption} className="flex items-center">
-        <Checkbox className="rounded-full" id={category} />
-        <label
-          onClick={handleLableClick}
+      <div className="flex items-center gap-0 md:gap-3">
+        {sortOptions.map((option) => (
+          <Select
+            key={option.placeholder}
+            defaultValue={option.placeholder}
+            onValueChange={option.onChange}
+          >
+            <SelectTrigger className="w-auto gap-5 capitalize">
+              <SelectValue placeholder={option.placeholder} />
+            </SelectTrigger>
+            <SelectContent>
+              {option.values.map((value) => (
+                <SelectItem key={value} className="capitalize" value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ))}
+      </div>
+      <div className="flex items-center">
+        <Checkbox
+          onClick={handleSetIsAAAOption}
+          className="rounded-full"
+          id={category}
+        />
+        <Label
           className="pl-2 text-sm select-none cursor-pointer"
           htmlFor={category}
         >
           Only AAA
-        </label>
+        </Label>
       </div>
     </div>
   );

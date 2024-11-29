@@ -1,39 +1,75 @@
-import { FormActions, FormField, FormFields } from "@/shared/components/shared";
+"use client";
+
+import {
+  FormActions,
+  FormFields,
+  RememberMeCheckbox,
+} from "@/shared/components/shared";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FC } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Form } from "@/shared/components/ui/form";
+import { z } from "zod";
+import { loginFormFields } from "./constant";
+import { axiosSiteInstance } from "@/services/instance";
+import { ApiRoutes } from "@/services/siteApi/constants";
+import { useRouter } from "next/navigation";
+import { authStore } from "@/shared/store/authStore";
+import { observer } from "mobx-react-lite";
 
 interface Props {
   className?: string;
 }
 
-export const LoginForm: FC<Props> = ({ className }) => {
+const formSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string(),
+});
+export type LoginFormSchema = z.infer<typeof formSchema>;
+
+export const LoginForm: FC<Props> = observer(({ className }) => {
+  const { replace } = useRouter();
+  const form = useForm<LoginFormSchema>({
+    mode: "onChange",
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<LoginFormSchema> = async (data) => {
+    try {
+      await axiosSiteInstance.post(ApiRoutes.LOGIN, {
+        ...data,
+        isRememberMe: authStore.isRememberMe,
+      });
+      replace("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
-    <form
-      role="login"
-      action="/login"
-      autoComplete="on"
-      className="flex flex-col gap-6"
-    >
-      <FormFields className={className}>
-        <FormField
-          id="email"
-          placeholder="Type your email"
-          type="email"
-          label="Email"
+    <Form {...form}>
+      <form
+        role="login"
+        action="/login"
+        autoComplete="on"
+        className="flex flex-col gap-6"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <FormFields
+          fields={loginFormFields}
+          form={form}
+          className={className}
         />
-        <FormField
-          id="password"
-          placeholder="Type your password"
-          type="password"
-          label="Password"
-          autoComplete="on"
+        <RememberMeCheckbox />
+        <FormActions
+          buttonText="Log in"
+          linkHref="/forgot-password"
+          linkText="Forgot your password?"
         />
-      </FormFields>
-      <FormActions
-        loginForm
-        linkText="Forgot your password?"
-        linkHref="/forgot-password"
-        buttonText="Log in"
-      />
-    </form>
+      </form>
+    </Form>
   );
-};
+});

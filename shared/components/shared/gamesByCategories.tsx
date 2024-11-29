@@ -6,6 +6,7 @@ import { GameFilterHeader } from "./gameFilterHeader";
 import { CardsGroup } from "./cardsGroup";
 import { Category } from "@prisma/client";
 import { categories } from "@/prisma/constants";
+import { Container } from "./container";
 
 interface Props {
   className?: string;
@@ -20,7 +21,7 @@ export const GamesByCategories: FC<Props> = ({ className }) => {
           key={category.id}
           className="flex justify-center [&:nth-child(even)]:bg-secondary-foreground"
         >
-          <div
+          <Container
             className={cn(
               "w-full flex flex-col items-center pb-16 responsive md:px-4",
               className
@@ -28,7 +29,7 @@ export const GamesByCategories: FC<Props> = ({ className }) => {
           >
             <GameFilterHeader title={category.title} icon={category.icon} />
             <CardsGroup category={category.title} />
-          </div>
+          </Container>
         </div>
       ))}
     </>

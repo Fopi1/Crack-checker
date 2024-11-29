@@ -39,6 +39,9 @@ class SortStore {
     this.categoriesSortOptions[category].isAAA =
       !this.categoriesSortOptions[category].isAAA;
   }
+  disableAllIsAAA(category: string) {
+    this.categoriesSortOptions[category].isAAA = false;
+  }
 }
 
 export const sortStore = new SortStore();

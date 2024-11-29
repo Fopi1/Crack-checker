@@ -1,93 +1,58 @@
 "use client";
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect } from "react";
 import { Container } from "./container";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import { cn } from "@/lib/utils";
 import { NavLinks } from "./navLinks";
-import { AlignJustify, Search } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { SearchForm } from "./searchForm";
+import { HeaderMenu } from "./headerMenu";
+import { componentStore } from "@/shared/store/componentsStore";
+import { observer } from "mobx-react-lite";
 
 interface Props {
   className?: string;
 }
 
-export const Header: FC<Props> = ({ className }) => {
+export const Header: FC<Props> = observer(({ className }) => {
   const pathname = usePathname();
-  const [isOpened, setIsOpened] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setIsOpened(false);
+    componentStore.setIsOpened(false);
   }, [pathname]);
-
-  const handleSetIsOpened = () => {
-    setIsOpened((prevState) => !prevState);
-  };
 
   return (
     <header
       className={cn(
-        "uppercase bg-slate-900 sticky top-0 shadow-2xl z-10 text-wrap",
+        "uppercase bg-slate-900 sticky top-0 shadow-2xl z-30 text-wrap",
         className
       )}
     >
-      <nav className="relative">
-        <Container className="flex justify-between items-center p-2 responsive">
-          <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center">
-              <Image
-                priority
-                src={logo}
-                alt="Logo"
-                width={80}
-                height={80}
-              ></Image>
-              <h1 className="hidden md:inline-block font-black text-2xl">
-                CrackChecker
-              </h1>
-            </Link>
-            <form
-              role="search"
-              action="/search"
-              className="rounded-2xl bg-[#0b1320] flex items-center overflow-hidden w-[300px] h-[56px]"
-            >
-              <label htmlFor="search-input" className="py-3 px-4">
-                <Search size={20} strokeWidth={3} />
-              </label>
-              <input
-                type="text"
-                id="search-input"
-                placeholder="Type game name to search"
-                className="bg-[#13162b] rounded-2xl w-full px-3 focus:outline-none h-10 mr-2 placeholder:text-sm placeholder:text-[#5b6271]"
-              />
-            </form>
-          </div>
-          <div className="lg:hidden cursor-pointer">
-            <button
-              onClick={handleSetIsOpened}
-              className="text-[color:--text-secondary]"
-            >
-              <AlignJustify />
-            </button>
-            {isOpened && (
-              <div
-                ref={menuRef}
-                className="absolute bg-gray-900 left-0 top-[100%] w-full"
-              >
-                <div className="flex flex-col">
-                  <NavLinks className="p-6 transition-transform duration-300 ease-in-out hover:bg-violet-950" />
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="leading-[21px] pr-10 hidden lg:flex gap-10">
-            <NavLinks />
-          </div>
-        </Container>
+      <nav className="relative mx-auto flex justify-between items-center p-2 responsive flex-col lg:flex-row">
+        <div className="flex items-center justify-between w-full gap-2 lg:justify-normal lg:w-auto xl:gap-6">
+          <Link href="/" className="flex items-center">
+            <Image
+              priority
+              src={logo}
+              alt="Logo"
+              width={80}
+              height={80}
+            ></Image>
+            <h1 className="text-base font-black hidden md:inline-block xl:text-2xl">
+              CrackChecker
+            </h1>
+          </Link>
+          <SearchForm className="hidden lg:flex" />
+          <HeaderMenu />
+        </div>
+        <SearchForm className="w-full flex lg:hidden" />
+        <div className="leading-[21px] pr-10 hidden gap-5 lg:flex xl:gap-10 ">
+          <NavLinks />
+        </div>
       </nav>
     </header>
   );
-};
+});

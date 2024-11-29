@@ -7,7 +7,7 @@ import { generateAccessToken } from "@/lib/jwt";
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    const { email, password, isRememberMe } = await request.json();
 
     const user = await prisma.user.findUnique({ where: { email: email } });
     if (!user) {
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      expires: Date.now(),
+      expires: isRememberMe ? new Date(Date.now() + 3600 * 1000) : undefined,
     });
     return response;
   } catch (error) {

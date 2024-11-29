@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "host1": "next dev --hostname 192.168.1.38",
+    "host1": "next dev --hostname 192.168.1.39",
     "host2": "next dev --hostname 192.168.1.104",
     "push": "prisma db push",
     "prisma:studio": "prisma studio",

@@ -1,20 +1,10 @@
-import { HTMLInputTypeAttribute } from "react";
-import { RegisterOptions } from "react-hook-form";
-import { registerFormSchema } from "./RegisterForm";
+import { RegisterFormSchema } from "./RegisterForm";
+import { FieldProps } from "@/types/form";
 
 export const minNameLength = 2;
 export const maxNameLength = 20;
 
-export const registerFormFields: Array<{
-  name: keyof registerFormSchema;
-  placeholder: string;
-  type: HTMLInputTypeAttribute;
-  label: string;
-  registerValidate?: RegisterOptions<
-    registerFormSchema,
-    keyof registerFormSchema
-  >;
-}> = [
+export const registerFormFields: FieldProps<RegisterFormSchema>[] = [
   {
     name: "name",
     placeholder: "Type your name",

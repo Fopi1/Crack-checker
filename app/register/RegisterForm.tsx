@@ -10,15 +10,7 @@ import { useRouter } from "next/navigation";
 import { registerFormFields } from "./constant";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/shared/components/ui/form";
-import { Input } from "@/shared/components/ui";
+import { Form } from "@/shared/components/ui/form";
 interface Props {
   className?: string;
 }
@@ -43,12 +35,13 @@ const formSchema = z
     path: ["confirmPassword"],
   });
 
-export type registerFormSchema = z.infer<typeof formSchema>;
+export type RegisterFormSchema = z.infer<typeof formSchema>;
 
 export const RegisterForm: FC<Props> = ({ className }) => {
   const [isCheckingData, setIsCheckingData] = useState(false);
   const { replace } = useRouter();
-  const form = useForm<registerFormSchema>({
+
+  const form = useForm<RegisterFormSchema>({
     mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,10 +51,10 @@ export const RegisterForm: FC<Props> = ({ className }) => {
       confirmPassword: "",
     },
   });
-  const { setError, clearErrors } = form;
+  const { watch, setError, clearErrors } = form;
 
-  const password = form.watch("password");
-  const confirmPassword = form.watch("confirmPassword");
+  const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
 
   useEffect(() => {
     if (password === confirmPassword) {
@@ -74,7 +67,7 @@ export const RegisterForm: FC<Props> = ({ className }) => {
     }
   }, [password, confirmPassword, setError, clearErrors]);
 
-  const onSubmit: SubmitHandler<registerFormSchema> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterFormSchema> = async (data) => {
     try {
       setIsCheckingData(true);
       const isEmailExist = await SiteApi.users.checkIfEmailExist(data.email);
@@ -85,13 +78,16 @@ export const RegisterForm: FC<Props> = ({ className }) => {
         });
         return;
       }
-      const { confirmPassword: _, ...filteredData } = data;
-      console.debug("Registering");
-      await axiosSiteInstance.post(ApiRoutes.REGISTER, filteredData);
-      console.debug("Logining");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      await axiosSiteInstance.post(ApiRoutes.REGISTER, {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
       await axiosSiteInstance.post(ApiRoutes.LOGIN, {
-        email: filteredData.email,
-        password: filteredData.password,
+        email: data.email,
+        password: data.password,
+        isRememberMe: true,
       });
       replace("/");
       console.debug("The user has been successfully registered");
@@ -110,29 +106,11 @@ export const RegisterForm: FC<Props> = ({ className }) => {
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <FormFields className={className}>
-          {registerFormFields.map((registerField) => (
-            <FormField
-              key={registerField.name}
-              control={form.control}
-              name={registerField.name}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{registerField.label}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={registerField.placeholder}
-                      type={registerField.type}
-                      autoComplete="on"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-        </FormFields>
+        <FormFields
+          fields={registerFormFields}
+          form={form}
+          className={className}
+        />
         <FormActions
           buttonText="Register"
           linkHref="/"

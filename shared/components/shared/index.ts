@@ -11,3 +11,4 @@ export { Footer } from "./footer";
 export { LoginLinks } from "./loginLinks";
 export { FormFields } from "./formFields";
 export { FormActions } from "./formActions";
+export { RememberMeCheckbox } from "./rememberMeCheckbox";

@@ -1,9 +1,9 @@
-import { Container, GamesByCategories } from "@/shared/components/shared";
+import { GamesByCategories } from "@/shared/components/shared";
 
 export default function Home() {
   return (
-    <Container className="flex flex-col h-full">
+    <div className="flex flex-col h-full">
       <GamesByCategories />
-    </Container>
+    </div>
   );
 }
