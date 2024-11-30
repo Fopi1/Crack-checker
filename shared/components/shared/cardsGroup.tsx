@@ -16,26 +16,23 @@ interface Props {
 
 export const CardsGroup: FC<Props> = observer(({ category, className }) => {
   const [games, setGames] = useState<Game[]>([]);
+  const { takeGames, sortBy, sortOrder, isAAA } =
+    sortStore.categoriesSortOptions[category];
   useAsyncEffect(
     async () => {
       const games = await SiteApi.games.getByParams(
         category,
-        sortStore.categoriesSortOptions[category].takeGames,
-        sortStore.categoriesSortOptions[category].sortBy,
-        sortStore.categoriesSortOptions[category].sortOrder,
-        sortStore.categoriesSortOptions[category].isAAA
+        takeGames,
+        sortBy,
+        sortOrder,
+        isAAA
       );
       if (games.length) {
         setGames(games);
       }
     },
     () => {},
-    [
-      sortStore.categoriesSortOptions[category].takeGames,
-      sortStore.categoriesSortOptions[category].sortBy,
-      sortStore.categoriesSortOptions[category].sortOrder,
-      sortStore.categoriesSortOptions[category].isAAA,
-    ]
+    [takeGames, sortBy, sortOrder, isAAA]
   );
 
   return (
@@ -52,6 +49,8 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
           {games.map((game) => (
             <GameCard
               key={game.apiId}
+              apiId={game.apiId}
+              slug={game.slug}
               isAAA={game.isAAA}
               likes={game.likes}
               views={game.views}

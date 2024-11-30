@@ -2,6 +2,7 @@ import { Game } from "@prisma/client";
 import { ApiRoutes } from "./constants";
 import { axiosSiteInstance } from "../instance";
 import { SortBy, SortOrder, TakeGames } from "@/types/api";
+import { prisma } from "@/prisma/prismaClient";
 
 export const getByParams = async (
   category: string,

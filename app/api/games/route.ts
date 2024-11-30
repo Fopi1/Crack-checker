@@ -1,7 +1,16 @@
+"use server";
+
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { SortBy, SortOrder } from "@/types/api";
 import { NextRequest, NextResponse } from "next/server";
+
+export type AddValue = "likes" | "views";
+
+export type PutProps = {
+  apiId: string;
+  addValue: AddValue;
+};
 
 export async function GET(request: NextRequest) {
   const category = request.nextUrl.searchParams.get("category") || "";
@@ -29,4 +38,23 @@ export async function GET(request: NextRequest) {
   );
 
   return NextResponse.json(games);
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const { apiId, addValue }: PutProps = await request.json();
+    console.log(addValue);
+
+    const game = await prisma.game.update({
+      where: { apiId },
+      data: { [addValue]: { increment: 1 } },
+    });
+    return NextResponse.json({ success: true, game: game });
+  } catch (error) {
+    console.error("Error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }

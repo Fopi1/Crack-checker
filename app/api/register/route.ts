@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { User } from "@prisma/client";

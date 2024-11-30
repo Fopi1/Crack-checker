@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import { cn } from "@/lib/utils";
 import { Bell, Calendar, Eye, ThumbsUp } from "lucide-react";
@@ -9,8 +11,11 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "../ui/hover-card";
+import { axiosSiteInstance } from "@/services/instance";
+import { ApiRoutes } from "@/services/siteApi/constants";
+import { AddValue } from "@/app/api/games/route";
 
-interface Props extends Omit<Game, "id" | "slug" | "apiId"> {
+interface Props extends Omit<Game, "id"> {
   className?: string;
 }
 
@@ -18,6 +23,8 @@ export const GameCard: FC<Props> = (props) => {
   const {
     className,
     title,
+    apiId,
+    slug,
     crackDate,
     protections,
     releaseDate,
@@ -36,6 +43,18 @@ export const GameCard: FC<Props> = (props) => {
   const crackBackgroundColor = crackDate ? "bg-green-700" : "bg-red-600";
   const crackTextColor = crackDate ? "text-green-600" : "text-red-600";
 
+  const handleClick = async (addValue: AddValue) => {
+    try {
+      await axiosSiteInstance.put(ApiRoutes.GAMES, {
+        apiId,
+        addValue,
+      });
+      console.log("updated");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <article
       className={cn(
@@ -44,7 +63,10 @@ export const GameCard: FC<Props> = (props) => {
       )}
     >
       <Link
-        href="/"
+        href={`/game/${slug}`}
+        onClick={() => {
+          handleClick("views");
+        }}
         className={cn(
           "cursor-pointer flex flex-col flex-shrink w-[100%] rounded-2xl",
           className
@@ -82,7 +104,13 @@ export const GameCard: FC<Props> = (props) => {
                     <p className="font-normal px-1">Turn on notifications</p>
                   </HoverCardContent>
                 </HoverCard>
-                <button className="bg-blue-600 rounded-2xl px-10 py-[6px] flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleClick("likes");
+                  }}
+                  className="bg-blue-600 rounded-2xl px-10 py-[6px] flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]"
+                >
                   <ThumbsUp
                     className="pointer-events-none mb-[2px]"
                     size={16}
