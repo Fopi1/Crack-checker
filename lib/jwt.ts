@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -10,10 +10,16 @@ export const generateAccessToken = (userId: number) => {
   return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: "1h" });
 };
 
-export const verifyToken = (token: string) => {
+export const verifyToken = (
+  token: string
+): (JwtPayload & { id: number }) | null => {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    const payload = jwt.verify(token, JWT_SECRET) as JwtPayload & {
+      id: number;
+    };
+    return payload;
   } catch (error) {
     console.error("Invalid token", error);
+    return null;
   }
 };

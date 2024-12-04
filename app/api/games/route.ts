@@ -2,15 +2,8 @@
 
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
-import { SortBy, SortOrder } from "@/types/api";
+import { PutProps, SortBy, SortOrder } from "@/types/api";
 import { NextRequest, NextResponse } from "next/server";
-
-export type AddValue = "likes" | "views";
-
-export type PutProps = {
-  apiId: string;
-  addValue: AddValue;
-};
 
 export async function GET(request: NextRequest) {
   const category = request.nextUrl.searchParams.get("category") || "";
@@ -42,14 +35,64 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { apiId, addValue }: PutProps = await request.json();
-    console.log(addValue);
+    const { id: gameId, addValue }: PutProps = await request.json();
 
-    const game = await prisma.game.update({
-      where: { apiId },
-      data: { [addValue]: { increment: 1 } },
-    });
-    return NextResponse.json({ success: true, game: game });
+    switch (addValue) {
+      case "views":
+        await prisma.game.update({
+          where: { id: gameId },
+          data: { views: { increment: 1 } },
+        });
+        break;
+      case "likes":
+        const userId = await SiteApi.users.getUserId();
+        if (!userId) {
+          return NextResponse.json(
+            { error: "You're not logged in" },
+            { status: 401 }
+          );
+        }
+        const user = await prisma.user.findUnique({
+          where: {
+            id: userId,
+          },
+          include: { likes: true },
+        });
+        const alreadyLiked = user?.likes.some((game) => game.id === gameId);
+        if (alreadyLiked) {
+          await prisma.user.update({
+            where: { id: userId },
+            data: {
+              likes: {
+                disconnect: { id: gameId },
+              },
+            },
+          });
+
+          await prisma.game.update({
+            where: { id: gameId },
+            data: { likes: { decrement: 1 } },
+          });
+
+          return NextResponse.json({ success: true, action: "disliked" });
+        } else {
+          await prisma.user.update({
+            where: { id: userId },
+            data: {
+              likes: {
+                connect: { id: gameId },
+              },
+            },
+          });
+
+          await prisma.game.update({
+            where: { id: gameId },
+            data: { likes: { increment: 1 } },
+          });
+
+          return NextResponse.json({ success: true, action: "liked" });
+        }
+    }
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(

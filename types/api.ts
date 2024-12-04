@@ -14,3 +14,11 @@ export interface AllGameData extends ReleasedGamesData {
   hacked_groups: string;
   crack_date: string | null;
 }
+
+export type AddValue = "likes" | "views";
+
+export type LikeActions = "disliked" | "liked" | undefined;
+export type PutProps = {
+  id: string;
+  addValue: AddValue;
+};

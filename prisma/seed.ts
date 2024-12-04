@@ -1,10 +1,10 @@
 import { prisma } from "./prismaClient";
 import { categories } from "./constants";
 import { AllGameData, ReleasedGamesData } from "@/types/api";
-import { GameStatusApi } from "@/services/externalApi/apiClient";
+import { GameStatusApi } from "../services/externalApi/apiClient";
 
 interface GameForBD {
-  apiId: string;
+  id: string;
   slug: string;
   title: string;
   isAAA: boolean;
@@ -33,7 +33,7 @@ async function fetchGameData(): Promise<GameForBD[]> {
     const GameForBDData: GameForBD[] = successfulData.map(
       (game: AllGameData) => {
         return {
-          apiId: game.id,
+          id: game.id,
           slug: game.slug,
           title: game.title,
           isAAA: game.is_AAA,

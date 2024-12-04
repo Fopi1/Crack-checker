@@ -8,6 +8,8 @@ import { SiteApi } from "@/services/siteApi/apiClient";
 import { sortStore } from "@/shared/store/sortStore";
 import { observer } from "mobx-react-lite";
 import { GameCard } from "./gameCard";
+import { axiosSiteInstance } from "@/services/instance";
+import { ApiRoutes } from "@/services/siteApi/constants";
 
 interface Props {
   category: string;
@@ -16,20 +18,25 @@ interface Props {
 
 export const CardsGroup: FC<Props> = observer(({ category, className }) => {
   const [games, setGames] = useState<Game[]>([]);
+  const [likedGames, setLikedGames] = useState([]);
   const { takeGames, sortBy, sortOrder, isAAA } =
     sortStore.categoriesSortOptions[category];
   useAsyncEffect(
     async () => {
-      const games = await SiteApi.games.getByParams(
-        category,
-        takeGames,
-        sortBy,
-        sortOrder,
-        isAAA
-      );
+      const [games, likedGames] = await Promise.all([
+        SiteApi.games.getByParams(
+          category,
+          takeGames,
+          sortBy,
+          sortOrder,
+          isAAA
+        ),
+        axiosSiteInstance.post(ApiRoutes.USER),
+      ]);
       if (games.length) {
         setGames(games);
       }
+      setLikedGames(likedGames.data);
     },
     () => {},
     [takeGames, sortBy, sortOrder, isAAA]
@@ -46,22 +53,26 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
             className
           )}
         >
-          {games.map((game) => (
-            <GameCard
-              key={game.apiId}
-              apiId={game.apiId}
-              slug={game.slug}
-              isAAA={game.isAAA}
-              likes={game.likes}
-              views={game.views}
-              title={game.title}
-              releaseDate={game.releaseDate}
-              shortImage={game.shortImage}
-              crackDate={game.crackDate}
-              protections={game.protections}
-              hackedGroups={game.hackedGroups}
-            />
-          ))}
+          {games.map((game) => {
+            const isGameLiked = likedGames.includes(game.id);
+            return (
+              <GameCard
+                key={game.id}
+                id={game.id}
+                slug={game.slug}
+                isAAA={game.isAAA}
+                likes={game.likes}
+                views={game.views}
+                title={game.title}
+                releaseDate={game.releaseDate}
+                shortImage={game.shortImage}
+                crackDate={game.crackDate}
+                protections={game.protections}
+                hackedGroups={game.hackedGroups}
+                isLiked={isGameLiked}
+              />
+            );
+          })}
         </div>
       )}
     </>

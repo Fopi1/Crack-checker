@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Bell, Calendar, Eye, ThumbsUp } from "lucide-react";
 import Link from "next/link";
@@ -13,17 +13,19 @@ import {
 } from "../ui/hover-card";
 import { axiosSiteInstance } from "@/services/instance";
 import { ApiRoutes } from "@/services/siteApi/constants";
-import { AddValue } from "@/app/api/games/route";
+import { AddValue, LikeActions } from "@/types/api";
+import { useAsyncEffect } from "@reactuses/core";
 
-interface Props extends Omit<Game, "id"> {
+interface Props extends Game {
   className?: string;
+  isLiked: boolean;
 }
 
 export const GameCard: FC<Props> = (props) => {
   const {
     className,
     title,
-    apiId,
+    id,
     slug,
     crackDate,
     protections,
@@ -32,8 +34,10 @@ export const GameCard: FC<Props> = (props) => {
     hackedGroups,
     likes,
     views,
+    isLiked = false,
   } = props;
-
+  const [stateIsLiked, setStateIsLiked] = useState(isLiked);
+  const [stateLikes, setStateLikes] = useState(likes);
   const { crackedBy, crackStatus } = useCrackStatus({
     releaseDate,
     crackDate,
@@ -45,16 +49,26 @@ export const GameCard: FC<Props> = (props) => {
 
   const handleClick = async (addValue: AddValue) => {
     try {
-      await axiosSiteInstance.put(ApiRoutes.GAMES, {
-        apiId,
+      const response = await axiosSiteInstance.put(ApiRoutes.GAMES, {
+        id,
         addValue,
       });
-      console.log("updated");
+      const action: LikeActions = response.data.action;
+      switch (action) {
+        case "disliked":
+          setStateLikes((prevLikes) => prevLikes - 1);
+          setStateIsLiked(false);
+          break;
+        case "liked":
+          setStateLikes((prevLikes) => prevLikes + 1);
+          setStateIsLiked(true);
+        default:
+          break;
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <article
       className={cn(
@@ -107,16 +121,19 @@ export const GameCard: FC<Props> = (props) => {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     handleClick("likes");
                   }}
                   className="bg-blue-600 rounded-2xl px-10 py-[6px] flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]"
                 >
                   <ThumbsUp
                     className="pointer-events-none mb-[2px]"
-                    size={16}
+                    size={18}
                     strokeWidth={3}
+                    fill="white"
+                    fillOpacity={stateIsLiked ? "1" : "0"}
                   />
-                  <p>{likes}</p>
+                  <p>{stateLikes}</p>
                 </button>
               </div>
             </div>

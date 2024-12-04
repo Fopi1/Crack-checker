@@ -14,11 +14,12 @@ model User {
   name     String
   email    String @unique
   password String
+
+  likes Game[]
 }
 
 model Game {
-  id    Int    @id @default(autoincrement())
-  apiId String @unique
+  id String @id
 
   slug         String
   title        String
@@ -33,11 +34,12 @@ model Game {
   views Int @default(0)
 
   categories Category[]
+  users      User[]
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
   title String @unique
   icon  String
-  game  Game[]
+  games Game[]
 }
