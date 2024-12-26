@@ -18,12 +18,12 @@ interface Props {
 
 export const CardsGroup: FC<Props> = observer(({ category, className }) => {
   const [games, setGames] = useState<Game[]>([]);
-  const [likedGames, setLikedGames] = useState([]);
+  const [likedGames, setLikedGames] = useState<string[]>([]);
   const { takeGames, sortBy, sortOrder, isAAA } =
     sortStore.categoriesSortOptions[category];
   useAsyncEffect(
     async () => {
-      const [games, likedGames] = await Promise.all([
+      const [games, likedGamesResponse] = await Promise.all([
         SiteApi.games.getByParams(
           category,
           takeGames,
@@ -33,10 +33,14 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
         ),
         axiosSiteInstance.post(ApiRoutes.USER),
       ]);
+      const likedGames = likedGamesResponse.data;
+      if (likedGames.length) {
+        const gameIds = likedGames.map((game: Game) => game.id);
+        setLikedGames(gameIds);
+      }
       if (games.length) {
         setGames(games);
       }
-      setLikedGames(likedGames.data);
     },
     () => {},
     [takeGames, sortBy, sortOrder, isAAA]
@@ -55,6 +59,7 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
         >
           {games.map((game) => {
             const isGameLiked = likedGames.includes(game.id);
+            console.log(`game: ${game.title}`, isGameLiked);
             return (
               <GameCard
                 key={game.id}

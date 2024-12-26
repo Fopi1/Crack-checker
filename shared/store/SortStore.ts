@@ -1,12 +1,12 @@
 import { makeAutoObservable } from "mobx";
 import { categories } from "@/prisma/constants";
 import { SortBy, SortOrder, TakeGames } from "@/types/api";
-interface SortOptions {
+type SortOptions = {
   sortBy: SortBy;
   sortOrder: SortOrder;
   takeGames: TakeGames;
   isAAA: boolean;
-}
+};
 
 class SortStore {
   categoriesSortOptions: Record<string, SortOptions> = {};

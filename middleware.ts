@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyToken } from "./lib/jwt";
+import { verifyAccessToken } from "./lib/jwt";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("accessToken")?.value;
 
-  if (!token || !verifyToken(token)) {
+  if (!token || !verifyAccessToken(token)) {
     console.log("Token can't be verified. Redirecting to login...");
     return NextResponse.redirect(new URL("/login", req.url));
   }

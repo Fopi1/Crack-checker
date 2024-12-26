@@ -14,7 +14,6 @@ import {
 import { axiosSiteInstance } from "@/services/instance";
 import { ApiRoutes } from "@/services/siteApi/constants";
 import { AddValue, LikeActions } from "@/types/api";
-import { useAsyncEffect } from "@reactuses/core";
 
 interface Props extends Game {
   className?: string;
@@ -38,6 +37,7 @@ export const GameCard: FC<Props> = (props) => {
   } = props;
   const [stateIsLiked, setStateIsLiked] = useState(isLiked);
   const [stateLikes, setStateLikes] = useState(likes);
+  const [processingActions, setProcessingActions] = useState<AddValue[]>([]);
   const { crackedBy, crackStatus } = useCrackStatus({
     releaseDate,
     crackDate,
@@ -48,6 +48,8 @@ export const GameCard: FC<Props> = (props) => {
   const crackTextColor = crackDate ? "text-green-600" : "text-red-600";
 
   const handleClick = async (addValue: AddValue) => {
+    if (processingActions.includes(addValue)) return;
+    setProcessingActions((prev) => [...prev, addValue]);
     try {
       const response = await axiosSiteInstance.put(ApiRoutes.GAMES, {
         id,
@@ -67,6 +69,10 @@ export const GameCard: FC<Props> = (props) => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setProcessingActions((prev) =>
+        prev.filter((action) => action !== addValue)
+      );
     }
   };
   return (

@@ -1,6 +1,7 @@
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Heart } from "lucide-react";
 import Image from "next/image";
+import TelegramIcon from "@/public/telegram.svg";
 
 export const Footer = () => {
   return (
@@ -62,7 +63,7 @@ export const Footer = () => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <Image src="./telegram.svg" alt="da" width={24} height={24} />
+            <Image src={TelegramIcon} alt="da" width={24} height={24} />
             <span className="text-[--text-secondary]">
               https://t.me/fopipopi1
             </span>

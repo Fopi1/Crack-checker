@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password, isRememberMe } = await request.json();
 
-    const user = await prisma.user.findUnique({ where: { email: email } });
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -20,14 +20,14 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-    const token = generateAccessToken(user.id);
+    const { token, expirationDate } = generateAccessToken(user.id);
 
     const response = NextResponse.json({ success: true, userId: user.id });
     response.cookies.set("accessToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      expires: isRememberMe ? new Date(Date.now() + 3600 * 1000) : undefined,
+      expires: isRememberMe ? expirationDate : undefined,
     });
     return response;
   } catch (error) {

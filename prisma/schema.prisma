@@ -16,6 +16,8 @@ model User {
   password String
 
   likes Game[]
+  // refreshTokenId Int 
+  // RefreshToken   RefreshToken[]
 }
 
 model Game {
@@ -30,11 +32,10 @@ model Game {
   crackDate    String?
   shortImage   String
 
-  likes Int @default(0)
-  views Int @default(0)
+  likes User[]
+  views Int    @default(0)
 
   categories Category[]
-  users      User[]
 }
 
 model Category {
@@ -43,3 +44,10 @@ model Category {
   icon  String
   games Game[]
 }
+
+// model RefreshToken {
+//   id     Int    @id @default(autoincrement())
+//   token  String @unique
+//   userId Int
+//   user   User   @relation(fields: [userId], references: [id])
+// }

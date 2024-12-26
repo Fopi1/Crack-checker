@@ -1,7 +1,6 @@
 "use client";
 
-import { FC, useEffect } from "react";
-import { Container } from "./container";
+import { FC, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/public/logo.png";
@@ -19,15 +18,41 @@ interface Props {
 
 export const Header: FC<Props> = observer(({ className }) => {
   const pathname = usePathname();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     componentStore.setIsOpened(false);
   }, [pathname]);
 
+  useEffect(() => {
+    console.log(window.innerWidth);
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+    if (window.innerWidth < 768) {
+      window.addEventListener("scroll", handleScroll);
+
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [lastScrollY]);
+
   return (
     <header
       className={cn(
-        "uppercase bg-slate-900 sticky top-0 shadow-2xl z-30 text-wrap",
+        "uppercase bg-slate-900 sticky top-0 shadow-2xl z-30 text-wrap transition-transform duration-300",
+        isVisible ? "translate-y-0" : "-translate-y-full",
         className
       )}
     >
@@ -41,15 +66,15 @@ export const Header: FC<Props> = observer(({ className }) => {
               width={80}
               height={80}
             ></Image>
-            <h1 className="text-base font-black hidden md:inline-block xl:text-2xl">
+            <h1 className="text-base font-black hidden md:inline-block 2xl:text-2xl">
               CrackChecker
             </h1>
           </Link>
           <SearchForm className="hidden lg:flex" />
-          <HeaderMenu />
+          <HeaderMenu className="lg:hidden" />
         </div>
         <SearchForm className="w-full flex lg:hidden" />
-        <div className="leading-[21px] pr-10 hidden gap-5 lg:flex xl:gap-10 ">
+        <div className="leading-[21px] pr-2 hidden gap-5 lg:flex xl:gap-10">
           <NavLinks />
         </div>
       </nav>

@@ -78,7 +78,6 @@ export const RegisterForm: FC<Props> = ({ className }) => {
         });
         return;
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       await axiosSiteInstance.post(ApiRoutes.REGISTER, {
         name: data.name,
         email: data.email,

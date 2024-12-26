@@ -1,6 +1,6 @@
 "use server";
 
-import { verifyToken } from "@/lib/jwt";
+import { verifyAccessToken } from "@/lib/jwt";
 import { prisma } from "@/prisma/prismaClient";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
@@ -22,7 +22,7 @@ export const getUserId = async () => {
   if (!token) {
     return null;
   }
-  const userId = verifyToken(token)?.id;
+  const userId = verifyAccessToken(token)?.id;
   if (!userId) {
     return null;
   }

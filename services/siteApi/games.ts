@@ -2,7 +2,6 @@ import { Game } from "@prisma/client";
 import { ApiRoutes } from "./constants";
 import { axiosSiteInstance } from "../instance";
 import { SortBy, SortOrder, TakeGames } from "@/types/api";
-import { prisma } from "@/prisma/prismaClient";
 
 export const getByParams = async (
   category: string,
@@ -12,8 +11,12 @@ export const getByParams = async (
   isAAA: boolean
 ): Promise<Game[]> => {
   const data = (
-    await axiosSiteInstance.get<Game[]>(ApiRoutes.GAMES, {
-      params: { category, take, sortBy, sortOrder, isAAA },
+    await axiosSiteInstance.post<Game[]>(ApiRoutes.GAMES, {
+      category,
+      take,
+      sortBy,
+      sortOrder,
+      isAAA,
     })
   ).data;
   return data;
