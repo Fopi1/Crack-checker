@@ -36,5 +36,7 @@ export async function POST(request: NextRequest) {
       { error: "Internal Server Error" },
       { status: 500 }
     );
+  } finally {
+    prisma.$disconnect();
   }
 }

@@ -36,12 +36,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={Scandia.className}>
       <head>
-        <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
+        {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js" async /> */}
       </head>
       <body className="flex flex-col overflow-x-hidden selection:bg-red-500 text-white">
         <Background />
         <Header />
-        <main className="flex-1">{children}</main>
+        <main>{children}</main>
         <Footer />
       </body>
     </html>

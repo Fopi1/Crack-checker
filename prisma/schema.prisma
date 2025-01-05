@@ -15,9 +15,9 @@ model User {
   email    String @unique
   password String
 
-  likes Game[]
-  // refreshTokenId Int 
-  // RefreshToken   RefreshToken[]
+  likes          Game[]
+  refreshTokenId Int?
+  RefreshToken   RefreshToken[]
 }
 
 model Game {
@@ -32,6 +32,10 @@ model Game {
   crackDate    String?
   shortImage   String
 
+  steamId   Int?
+  metaScore Int?
+  userScore Float?
+
   likes User[]
   views Int    @default(0)
 
@@ -45,9 +49,9 @@ model Category {
   games Game[]
 }
 
-// model RefreshToken {
-//   id     Int    @id @default(autoincrement())
-//   token  String @unique
-//   userId Int
-//   user   User   @relation(fields: [userId], references: [id])
-// }
+model RefreshToken {
+  id     Int    @id @default(autoincrement())
+  token  String @unique
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+}

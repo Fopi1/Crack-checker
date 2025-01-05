@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { Bell, Calendar, Eye, ThumbsUp } from "lucide-react";
 import Link from "next/link";
 import { useCrackStatus } from "@/shared/hooks";
-import { Game } from "@prisma/client";
 import {
   HoverCard,
   HoverCardContent,
@@ -13,9 +12,9 @@ import {
 } from "../ui/hover-card";
 import { axiosSiteInstance } from "@/services/instance";
 import { ApiRoutes } from "@/services/siteApi/constants";
-import { AddValue, LikeActions } from "@/types/api";
+import { AddValue, GameWithLikes, LikeActions } from "@/types/api";
 
-interface Props extends Game {
+interface Props extends GameWithLikes {
   className?: string;
   isLiked: boolean;
 }
@@ -36,7 +35,7 @@ export const GameCard: FC<Props> = (props) => {
     isLiked = false,
   } = props;
   const [stateIsLiked, setStateIsLiked] = useState(isLiked);
-  const [stateLikes, setStateLikes] = useState(likes);
+  const [likesNumber, setLikesNumber] = useState(likes.length);
   const [processingActions, setProcessingActions] = useState<AddValue[]>([]);
   const { crackedBy, crackStatus } = useCrackStatus({
     releaseDate,
@@ -58,11 +57,11 @@ export const GameCard: FC<Props> = (props) => {
       const action: LikeActions = response.data.action;
       switch (action) {
         case "disliked":
-          setStateLikes((prevLikes) => prevLikes - 1);
+          setLikesNumber((prevLikes) => prevLikes - 1);
           setStateIsLiked(false);
           break;
         case "liked":
-          setStateLikes((prevLikes) => prevLikes + 1);
+          setLikesNumber((prevLikes) => prevLikes + 1);
           setStateIsLiked(true);
         default:
           break;
@@ -139,7 +138,7 @@ export const GameCard: FC<Props> = (props) => {
                     fill="white"
                     fillOpacity={stateIsLiked ? "1" : "0"}
                   />
-                  <p>{stateLikes}</p>
+                  <p>{likesNumber}</p>
                 </button>
               </div>
             </div>

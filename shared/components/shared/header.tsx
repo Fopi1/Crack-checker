@@ -26,8 +26,6 @@ export const Header: FC<Props> = observer(({ className }) => {
   }, [pathname]);
 
   useEffect(() => {
-    console.log(window.innerWidth);
-
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 

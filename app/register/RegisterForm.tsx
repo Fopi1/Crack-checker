@@ -39,6 +39,7 @@ export type RegisterFormSchema = z.infer<typeof formSchema>;
 
 export const RegisterForm: FC<Props> = ({ className }) => {
   const [isCheckingData, setIsCheckingData] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
   const { replace } = useRouter();
 
   const form = useForm<RegisterFormSchema>({
@@ -91,7 +92,8 @@ export const RegisterForm: FC<Props> = ({ className }) => {
       replace("/");
       console.debug("The user has been successfully registered");
     } catch (error) {
-      console.error(error);
+      console.error("Registration error: ", error);
+      setServerError("Something went wrong. Please try again later.");
     } finally {
       setIsCheckingData(false);
     }
@@ -105,6 +107,7 @@ export const RegisterForm: FC<Props> = ({ className }) => {
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
+        {serverError && <p className="text-red-500 text-sm">{serverError}</p>}
         <FormFields
           fields={registerFormFields}
           form={form}

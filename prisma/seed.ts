@@ -2,20 +2,9 @@ import { prisma } from "./prismaClient";
 import { categories } from "./constants";
 import { AllGameData, ReleasedGamesData } from "@/types/api";
 import { GameStatusApi } from "../services/externalApi/apiClient";
+import { Game } from "@prisma/client";
 
-interface GameForBD {
-  id: string;
-  slug: string;
-  title: string;
-  isAAA: boolean;
-  releaseDate: string;
-  shortImage: string;
-  protections: string;
-  hackedGroups: string;
-  crackDate: string | null;
-}
-
-async function fetchGameData(): Promise<GameForBD[]> {
+async function fetchGameData(): Promise<Game[]> {
   try {
     const releasedGames = await GameStatusApi.games.getReleasedGames();
     const allGameData = await Promise.allSettled(
@@ -30,21 +19,23 @@ async function fetchGameData(): Promise<GameForBD[]> {
           result.status === "fulfilled"
       )
       .map((result) => result.value);
-    const GameForBDData: GameForBD[] = successfulData.map(
-      (game: AllGameData) => {
-        return {
-          id: game.id,
-          slug: game.slug,
-          title: game.title,
-          isAAA: game.is_AAA,
-          protections: game.protections,
-          hackedGroups: game.hacked_groups,
-          releaseDate: game.release_date,
-          crackDate: game.crack_date,
-          shortImage: game.short_image,
-        };
-      }
-    );
+    const GameForBDData: Game[] = successfulData.map((game: AllGameData) => {
+      return {
+        id: game.id,
+        slug: game.slug,
+        title: game.title,
+        isAAA: game.is_AAA,
+        protections: game.protections,
+        hackedGroups: game.hacked_groups,
+        releaseDate: game.release_date,
+        crackDate: game.crack_date,
+        shortImage: game.short_image,
+        steamId: game.steam_prod_id,
+        userScore: game.user_score,
+        metaScore: game.mata_score,
+        views: 0,
+      };
+    });
     return GameForBDData;
   } catch (e) {
     console.error(e);

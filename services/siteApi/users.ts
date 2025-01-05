@@ -28,3 +28,28 @@ export const getUserId = async () => {
   }
   return userId;
 };
+
+export const getLikedGames = async (): Promise<string[] | null> => {
+  try {
+    const userId = await getUserId();
+    if (!userId) {
+      throw new Error("Cannot find user id");
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: { likes: true },
+    });
+    if (!user) {
+      throw new Error("Cannot find user");
+    }
+    const gameIds = user.likes.map((game) => game.id);
+    return gameIds;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    prisma.$disconnect();
+  }
+};

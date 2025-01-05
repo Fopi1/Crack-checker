@@ -3,27 +3,24 @@
 import { FC, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAsyncEffect } from "@reactuses/core";
-import { Game } from "@prisma/client";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { sortStore } from "@/shared/store/sortStore";
 import { observer } from "mobx-react-lite";
 import { GameCard } from "./gameCard";
-import { axiosSiteInstance } from "@/services/instance";
-import { ApiRoutes } from "@/services/siteApi/constants";
+import { GameWithLikes } from "@/types/api";
 
 interface Props {
   category: string;
   className?: string;
 }
-
 export const CardsGroup: FC<Props> = observer(({ category, className }) => {
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<GameWithLikes[]>([]);
   const [likedGames, setLikedGames] = useState<string[]>([]);
   const { takeGames, sortBy, sortOrder, isAAA } =
     sortStore.categoriesSortOptions[category];
   useAsyncEffect(
     async () => {
-      const [games, likedGamesResponse] = await Promise.all([
+      const [games, likedGamesIds] = await Promise.all([
         SiteApi.games.getByParams(
           category,
           takeGames,
@@ -31,12 +28,10 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
           sortOrder,
           isAAA
         ),
-        axiosSiteInstance.post(ApiRoutes.USER),
+        SiteApi.users.getLikedGames(),
       ]);
-      const likedGames = likedGamesResponse.data;
-      if (likedGames.length) {
-        const gameIds = likedGames.map((game: Game) => game.id);
-        setLikedGames(gameIds);
+      if (likedGamesIds !== null) {
+        setLikedGames(likedGamesIds);
       }
       if (games.length) {
         setGames(games);
@@ -59,21 +54,11 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
         >
           {games.map((game) => {
             const isGameLiked = likedGames.includes(game.id);
-            console.log(`game: ${game.title}`, isGameLiked);
             return (
               <GameCard
                 key={game.id}
-                id={game.id}
-                slug={game.slug}
-                isAAA={game.isAAA}
+                {...game}
                 likes={game.likes}
-                views={game.views}
-                title={game.title}
-                releaseDate={game.releaseDate}
-                shortImage={game.shortImage}
-                crackDate={game.crackDate}
-                protections={game.protections}
-                hackedGroups={game.hackedGroups}
                 isLiked={isGameLiked}
               />
             );

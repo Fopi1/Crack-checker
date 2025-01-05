@@ -1,3 +1,5 @@
+import { Game, User } from "@prisma/client";
+
 export type SortBy = "views" | "likes" | "releaseDate" | "crackDate";
 export type SortOrder = "ascending" | "descending";
 export type TakeGames = "25" | "5" | "10";
@@ -13,6 +15,9 @@ export interface AllGameData extends ReleasedGamesData {
   protections: string;
   hacked_groups: string;
   crack_date: string | null;
+  steam_prod_id: number | null;
+  mata_score: number | null;
+  user_score: number | null;
 }
 
 export type AddValue = "likes" | "views";
@@ -22,3 +27,7 @@ export type PutProps = {
   id: string;
   addValue: AddValue;
 };
+
+export interface GameWithLikes extends Game {
+  likes: User[];
+}

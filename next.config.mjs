@@ -3,6 +3,9 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        hostname: "cdn.gamestatus.info",
+      },
+      {
         hostname: "f000.backblazeb2.com",
       },
     ],
