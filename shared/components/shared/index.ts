@@ -12,3 +12,6 @@ export { LoginLinks } from "./loginLinks";
 export { FormFields } from "./formFields";
 export { FormActions } from "./formActions";
 export { RememberMeCheckbox } from "./rememberMeCheckbox";
+export { SearchForm } from "./searchForm";
+export { Blurred } from "./blurred";
+export * from "./uiGameCard";

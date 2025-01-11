@@ -48,15 +48,15 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { id: gameId, addValue }: PutProps = await request.json();
+    const { gameId, addValue }: PutProps = await request.json();
     switch (addValue) {
-      case "views":
+      case "view":
         await prisma.game.update({
           where: { id: gameId },
           data: { views: { increment: 1 } },
         });
         return NextResponse.json({ success: true });
-      case "likes":
+      case "like":
         const userId = await SiteApi.users.getUserId();
         if (!userId) {
           return NextResponse.json(
@@ -95,7 +95,7 @@ export async function PUT(request: NextRequest) {
           return NextResponse.json({ action: "liked" });
         }
       default:
-        return NextResponse.json({ error: "Unknown command", status: 500 });
+        return NextResponse.json({ error: "Unknown command" }, { status: 500 });
     }
   } catch (error) {
     console.error("Error:", error);

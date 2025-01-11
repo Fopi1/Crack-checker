@@ -20,11 +20,12 @@ export interface AllGameData extends ReleasedGamesData {
   user_score: number | null;
 }
 
-export type AddValue = "likes" | "views";
+export type AddValue = "like" | "view";
 
-export type LikeActions = "disliked" | "liked" | undefined;
+export type LikeActions = "liked" | "disliked";
+
 export type PutProps = {
-  id: string;
+  gameId: string;
   addValue: AddValue;
 };
 

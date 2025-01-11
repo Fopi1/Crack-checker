@@ -1,6 +1,13 @@
 import { ApiRoutes } from "./constants";
 import { axiosSiteInstance } from "../instance";
-import { GameWithLikes, SortBy, SortOrder, TakeGames } from "@/types/api";
+import {
+  AddValue,
+  GameWithLikes,
+  LikeActions,
+  SortBy,
+  SortOrder,
+  TakeGames,
+} from "@/types/api";
 
 export const getByParams = async (
   category: string,
@@ -59,4 +66,21 @@ export const getGameBySlug = async (
     return null;
   }
   return game;
+};
+export const performActionOnGame = async (
+  gameId: string,
+  addValue: AddValue
+) => {
+  try {
+    const response = await axiosSiteInstance.put(ApiRoutes.GAMES, {
+      gameId,
+      addValue,
+    });
+    const action: LikeActions = response.data.action;
+    if (action) {
+      return action;
+    }
+  } catch (error) {
+    console.error("No actions catched", error);
+  }
 };

@@ -1,8 +1,8 @@
-import React from "react";
+import { cloneElement, ReactElement } from "react";
 
 export const useIcon = (
-  icon: React.ReactElement,
+  icon: ReactElement,
   iconProps: object
-): React.ReactElement => {
-  return React.cloneElement(icon, { ...iconProps });
+): ReactElement => {
+  return cloneElement(icon, { ...iconProps });
 };

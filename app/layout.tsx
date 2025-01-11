@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import scandia from "next/font/local";
 import { Background, Footer, Header } from "@/shared/components/shared";
 import "./globals.css";
+import { QueryProvider } from "@/shared/components/providers/queryProvider";
 
 const Scandia = scandia({
   src: [
@@ -39,10 +40,12 @@ export default function RootLayout({
         {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js" async /> */}
       </head>
       <body className="flex flex-col overflow-x-hidden selection:bg-red-500 text-white">
-        <Background />
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <QueryProvider>
+          <Background />
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
   );
