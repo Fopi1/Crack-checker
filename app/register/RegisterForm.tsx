@@ -11,6 +11,7 @@ import { registerFormFields } from "./constant";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/shared/components/ui/form";
+import { useQueryClient } from "@tanstack/react-query";
 interface Props {
   className?: string;
 }
@@ -38,8 +39,9 @@ const formSchema = z
 export type RegisterFormSchema = z.infer<typeof formSchema>;
 
 export const RegisterForm: FC<Props> = ({ className }) => {
+  const queryClient = useQueryClient();
   const [isCheckingData, setIsCheckingData] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<string>("");
   const { replace } = useRouter();
 
   const form = useForm<RegisterFormSchema>({
@@ -89,6 +91,7 @@ export const RegisterForm: FC<Props> = ({ className }) => {
         password: data.password,
         isRememberMe: true,
       });
+      await queryClient.invalidateQueries({ queryKey: ["likedGames"] });
       replace("/");
       console.debug("The user has been successfully registered");
     } catch (error) {
@@ -114,9 +117,9 @@ export const RegisterForm: FC<Props> = ({ className }) => {
           className={className}
         />
         <FormActions
-          buttonText="Register"
           linkHref="/"
           linkText="Already registered?"
+          buttonText="Register"
           buttonDisabled={isCheckingData}
         />
       </form>

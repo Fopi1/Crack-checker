@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   images: {
-    qualities: [25, 50, 75],
     remotePatterns: [
       {
+        protocol: "https",
         hostname: "cdn.gamestatus.info",
       },
       {
+        protocol: "https",
         hostname: "f000.backblazeb2.com",
       },
     ],

@@ -1,9 +1,11 @@
 "use client";
 
+import { ThumbsUp } from "lucide-react";
+import { FC, MouseEvent } from "react";
+
 import { cn } from "@/lib/utils";
 import { performActionOnGame } from "@/services/siteApi/games";
-import { ThumbsUp } from "lucide-react";
-import { FC, MouseEvent, useRef } from "react";
+import { processingActionsStore } from "@/shared/store/processingActionsStore";
 
 interface Props {
   className?: string;
@@ -20,33 +22,18 @@ export const GameLike: FC<Props> = ({
   likesNumber,
   handleClick,
 }) => {
-  const processingActions = useRef<string[]>([]);
   const toggleLike = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    if (processingActions.current.includes("like")) return;
-    processingActions.current = [...processingActions.current, "like"];
-    try {
-      const action = await performActionOnGame(gameId, "like");
-      switch (action) {
-        case "disliked":
-          likesNumber--;
-          handleClick(likesNumber, false);
-          break;
-        case "liked":
-          likesNumber++;
-          handleClick(likesNumber, true);
-        default:
-          break;
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      processingActions.current = processingActions.current.filter(
-        (action) => action !== "like"
-      );
-    }
+    if (processingActionsStore.hasAction(gameId, "like")) return;
+    processingActionsStore.addAction(gameId, "like");
+    const newLikesNumber = isLiked ? likesNumber - 1 : likesNumber + 1;
+    const newIsLiked = isLiked ? false : true;
+    handleClick(newLikesNumber, newIsLiked);
+    await performActionOnGame(gameId, "like");
+    processingActionsStore.removeAction(gameId, "like");
   };
+
   return (
     <button
       onClick={toggleLike}

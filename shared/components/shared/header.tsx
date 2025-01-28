@@ -1,16 +1,18 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import logo from "@/public/logo.png";
-import { cn } from "@/lib/utils";
-import { NavLinks } from "./navLinks";
-import { usePathname } from "next/navigation";
-import { SearchForm } from "./searchForm";
-import { HeaderMenu } from "./headerMenu";
-import { componentStore } from "@/shared/store/componentsStore";
 import { observer } from "mobx-react-lite";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { FC, useEffect, useState } from "react";
+
+import { cn } from "@/lib/utils";
+import logo from "@/public/logo.png";
+import { componentStore } from "@/shared/store/componentsStore";
+
+import { HeaderMenu } from "./headerMenu";
+import { NavLinks } from "./navLinks";
+import { SearchForm } from "./searchForm";
 
 interface Props {
   className?: string;
@@ -26,24 +28,17 @@ export const Header: FC<Props> = observer(({ className }) => {
   }, [pathname]);
 
   useEffect(() => {
+    if (window.innerWidth >= 768) return;
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const shouldHide = currentScrollY > lastScrollY && currentScrollY > 50;
 
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
+      setIsVisible(!shouldHide);
 
       setLastScrollY(currentScrollY);
     };
-    if (window.innerWidth < 768) {
-      window.addEventListener("scroll", handleScroll);
-
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
-    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
   return (

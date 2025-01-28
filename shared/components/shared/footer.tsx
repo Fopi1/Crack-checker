@@ -36,7 +36,7 @@ export const Footer = () => {
         are for informational purposes only, this means that we do not teach or
         persuade our visitors to download games illegally. <br /> We do not
         provide any download links on our sites, we are fully compliant with
-        DMCA law.
+        EUCD law.
       </p>
       <div className="flex flex-col md:flex-row items-center justify-between">
         <div>

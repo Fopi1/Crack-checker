@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { prisma } from "@/prisma/prismaClient";
 import GameClient from "./page.client";
+import FPI from "./default";
 
 interface Props {
   params: { slug: string };
@@ -27,18 +28,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function Game({ params }: Props) {
-  const game = await prisma.game.findFirst({
-    include: {
-      likes: true,
-    },
+export default async function GameServer({ params }: Props) {
+  const gameExists = await prisma.game.findFirst({
     where: {
       slug: params.slug,
     },
+    select: {
+      id: true,
+    },
   });
-  if (!game) {
-    return <div>Game not found</div>;
-  }
 
-  return <GameClient game={game} />;
+  if (!gameExists) {
+    return <FPI />;
+  }
+  return <GameClient slug={params.slug} />;
 }

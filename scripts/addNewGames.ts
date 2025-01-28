@@ -1,39 +1,69 @@
+import pLimit from "p-limit";
+
+import { GameSchema } from "@/prisma/constants";
 import { prisma } from "@/prisma/prismaClient";
 import { GameStatusApi } from "@/services/externalApi/apiClient";
-import { AllGameData } from "@/types/api";
+
+const limit = pLimit(10);
 
 const addNewGames = async () => {
   try {
     const releasedGames = await GameStatusApi.games.getReleasedGames();
-    const existingGames: AllGameData[] = [];
-    for (const game of releasedGames) {
-      const existingGame = await prisma.game.findUnique({
-        where: {
-          apiId: game.id,
-        },
-      });
+    console.log(releasedGames.length, "games were detected");
 
-      if (!existingGame) {
-        const newGameAllData = await GameStatusApi.games.getGameDetailsByTitle(
-          game.title
-        );
-        existingGames.push(newGameAllData);
-      }
-    }
+    console.log("Starting adding new games");
+    const existingIds = (
+      await prisma.game.findMany({
+        where: { id: { in: releasedGames.map((game) => game.id) } },
+        select: { id: true },
+      })
+    ).map((game) => game.id);
+    console.log(existingIds.length, "games already exist");
+
+    const newGames = releasedGames.filter(
+      (game) => !existingIds.includes(game.id)
+    );
+    const gamesPromises = newGames.map((game) =>
+      limit(async () => {
+        try {
+          const gameDetails = await GameStatusApi.games.getGameDetailsByTitle(
+            game.title
+          );
+          const validation = GameSchema.safeParse(gameDetails);
+          if (!validation.success) {
+            console.error("Invalid game data:", validation.error);
+            return null;
+          }
+
+          return {
+            id: validation.data.id,
+            slug: validation.data.slug,
+            title: validation.data.title,
+            isAAA: validation.data.is_AAA,
+            protections: validation.data.protections,
+            hackedGroups: validation.data.hacked_groups,
+            releaseDate: validation.data.release_date,
+            crackDate: validation.data.crack_date,
+            shortImage: validation.data.short_image,
+            steamId: validation.data.steam_prod_id,
+            userScore: validation.data.user_score,
+            metaScore: validation.data.mata_score,
+            views: 0,
+          };
+        } catch (error) {
+          console.error(`Failed to fetch details for ${game.title}:`, error);
+          return null;
+        }
+      })
+    );
+    const gamesToAdd = (await Promise.all(gamesPromises)).filter(Boolean);
+
     await prisma.game.createMany({
-      data: existingGames.map((game: AllGameData) => ({
-        apiId: game.id,
-        slug: game.slug,
-        title: game.title,
-        isAAA: game.is_AAA,
-        protections: game.protections,
-        hackedGroups: game.hacked_groups,
-        releaseDate: game.release_date,
-        crackDate: game.crack_date,
-        shortImage: game.short_image,
-      })),
+      //@ts-expect-error gamesToAdd cant be falsy because filter(Boolean)
+      data: gamesToAdd,
+      skipDuplicates: true,
     });
-    console.log(`Added ${existingGames.length} new games`);
+    console.log(`Added ${gamesToAdd.length} new games`);
   } catch (e) {
     console.error(e);
     throw new Error("Failed to add new games");

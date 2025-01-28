@@ -6,3 +6,4 @@ export { GameProtections } from "./gameProtections";
 export { GameCracker } from "./gameCracker";
 export { GameCrackDate } from "./gameCrackDate";
 export { GameViews } from "./gameViews";
+export { GameScore } from "./gameScore";

@@ -1,13 +1,13 @@
-import { ApiRoutes } from "./constants";
-import { axiosSiteInstance } from "../instance";
 import {
   AddValue,
   GameWithLikes,
-  LikeActions,
   SortBy,
   SortOrder,
   TakeGames,
 } from "@/types/api";
+
+import { axiosSiteInstance } from "../instance";
+import { ApiRoutes } from "./constants";
 
 export const getByParams = async (
   category: string,
@@ -35,7 +35,11 @@ const sortFunctions: Record<
   views: (a, b) => a.views - b.views,
   likes: (a, b) => a.likes.length - b.likes.length,
   releaseDate: (a, b) => Date.parse(a.releaseDate) - Date.parse(b.releaseDate),
-  crackDate: (a, b) => Date.parse(a.crackDate) - Date.parse(b.crackDate),
+  crackDate: (a, b) => {
+    const a_crackDate = a.crackDate === null ? "0" : a.crackDate;
+    const b_crackDate = b.crackDate === null ? "0" : b.crackDate;
+    return Date.parse(a_crackDate) - Date.parse(b_crackDate);
+  },
 };
 
 export const sortGames = (
@@ -58,7 +62,7 @@ export const getGameBySlug = async (
   slug: string
 ): Promise<GameWithLikes | null> => {
   const game = (
-    await axiosSiteInstance.post<GameWithLikes>(ApiRoutes.GAMES, {
+    await axiosSiteInstance.post<GameWithLikes>(ApiRoutes.GAME, {
       slug,
     })
   ).data;
@@ -72,15 +76,11 @@ export const performActionOnGame = async (
   addValue: AddValue
 ) => {
   try {
-    const response = await axiosSiteInstance.put(ApiRoutes.GAMES, {
+    await axiosSiteInstance.put(ApiRoutes.GAMES, {
       gameId,
       addValue,
     });
-    const action: LikeActions = response.data.action;
-    if (action) {
-      return action;
-    }
   } catch (error) {
-    console.error("No actions catched", error);
+    console.error(`Cant perform ${addValue} on the game`, error);
   }
 };

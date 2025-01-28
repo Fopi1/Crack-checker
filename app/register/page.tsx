@@ -1,5 +1,6 @@
-import { Container, LoginLinks } from "@/shared/components/shared";
+import { Container } from "@/shared/components/shared";
 import { RegisterForm } from "./RegisterForm";
+import { LoginLinks } from "../login/loginLinks";
 
 export default function Register() {
   return (

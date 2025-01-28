@@ -1,3 +1,5 @@
+import z from "zod";
+
 export const categories = [
   {
     id: 1,
@@ -25,3 +27,18 @@ export const categories = [
     icon: "Clock",
   },
 ];
+
+export const GameSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  title: z.string(),
+  is_AAA: z.boolean(),
+  protections: z.string(),
+  hacked_groups: z.string(),
+  release_date: z.string(),
+  crack_date: z.string().nullable(),
+  short_image: z.string().url(),
+  steam_prod_id: z.number().nullable(),
+  user_score: z.number().nullable(),
+  mata_score: z.number().nullable(),
+});

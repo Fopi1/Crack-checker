@@ -1,43 +1,43 @@
 import { prisma } from "@/prisma/prismaClient";
 import { GameStatusApi } from "@/services/externalApi/apiClient";
-import { AllGameData } from "@/types/api";
-
-const checkIfGameExists = async (title: string): Promise<boolean> => {
-  const game = await prisma.game.findFirst({
-    where: { title },
-  });
-  const isGameExist = game !== undefined && game !== null;
-  return isGameExist;
-};
+import type { AllGameData } from "@/types/api";
 
 const addGame = async (title: string) => {
   try {
     const game: AllGameData = await GameStatusApi.games.getGameDetailsByTitle(
       title
     );
-    if (game) {
-      if (await checkIfGameExists(game.title)) {
-        throw new Error("New game already exist");
-      }
-      await prisma.game.create({
-        data: {
-          apiId: game.id,
-          slug: game.slug,
-          title: game.title,
-          isAAA: game.is_AAA,
-          protections: game.protections,
-          hackedGroups: game.hacked_groups,
-          releaseDate: game.release_date,
-          crackDate: game.crack_date,
-          shortImage: game.short_image,
-        },
-      });
-      console.log("The game:", game.title, "was added");
-    } else {
-      console.log("The game was not found");
+
+    if (!game) {
+      console.error(`Game ${title} not found`);
+      return;
     }
+
+    await prisma.game.create({
+      data: {
+        id: game.id,
+        slug: game.slug,
+        title: game.title,
+        isAAA: game.is_AAA,
+        protections: game.protections,
+        hackedGroups: game.hacked_groups,
+        releaseDate: game.release_date,
+        crackDate: game.crack_date,
+        shortImage: game.short_image,
+        steamId: game.steam_prod_id,
+        userScore: game.user_score,
+        metaScore: game.mata_score,
+        views: 0,
+      },
+    });
+    console.log(`Successfully added game: ${title} `);
   } catch (error) {
-    console.error("Catched error while adding new game", error);
+    if (error instanceof Error && error.message.includes("Unique constraint")) {
+      console.error(`Game ${title} already exists in database`);
+      return;
+    }
+    console.error(`Error adding game "${title}":`, error);
+    throw error;
   } finally {
     await prisma.$disconnect();
   }
@@ -50,4 +50,6 @@ if (!gameTitle) {
   process.exit(1);
 }
 
-addGame(gameTitle);
+addGame(gameTitle)
+  .then(() => process.exit(0))
+  .catch(() => process.exit(1));

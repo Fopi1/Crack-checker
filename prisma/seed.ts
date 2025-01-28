@@ -1,77 +1,118 @@
 import { prisma } from "./prismaClient";
-import { categories } from "./constants";
+import { categories, GameSchema } from "./constants";
 import { AllGameData, ReleasedGamesData } from "@/types/api";
 import { GameStatusApi } from "../services/externalApi/apiClient";
 import { Game } from "@prisma/client";
+import pLimit from "p-limit";
+
+const limit = pLimit(10);
 
 async function fetchGameData(): Promise<Game[]> {
   try {
     const releasedGames = await GameStatusApi.games.getReleasedGames();
+    console.log(`Fetched ${releasedGames.length} games`);
+
     const allGameData = await Promise.allSettled(
-      releasedGames.map(async (game: ReleasedGamesData) =>
-        GameStatusApi.games.getGameDetailsByTitle(game.title)
+      releasedGames.map((game: ReleasedGamesData) =>
+        limit(() => GameStatusApi.games.getGameDetailsByTitle(game.title))
       )
     );
 
     const successfulData = allGameData
       .filter(
         (result): result is PromiseFulfilledResult<AllGameData> =>
-          result.status === "fulfilled"
+          result.status === "fulfilled" && result.value !== null
       )
-      .map((result) => result.value);
-    const GameForBDData: Game[] = successfulData.map((game: AllGameData) => {
-      return {
-        id: game.id,
-        slug: game.slug,
-        title: game.title,
-        isAAA: game.is_AAA,
-        protections: game.protections,
-        hackedGroups: game.hacked_groups,
-        releaseDate: game.release_date,
-        crackDate: game.crack_date,
-        shortImage: game.short_image,
-        steamId: game.steam_prod_id,
-        userScore: game.user_score,
-        metaScore: game.mata_score,
-        views: 0,
-      };
-    });
-    return GameForBDData;
+      .map((result) => {
+        const validation = GameSchema.safeParse(result.value);
+        if (!validation.success) {
+          console.error("Invalid game data:", validation.error);
+          return null;
+        }
+        return validation.data;
+      })
+      .filter(Boolean) as AllGameData[];
+    console.log(
+      `Successfully processed ${successfulData.length}/${releasedGames.length} games`
+    );
+
+    return successfulData.map((game) => ({
+      id: game.id,
+      slug: game.slug,
+      title: game.title,
+      isAAA: game.is_AAA,
+      protections: game.protections,
+      hackedGroups: game.hacked_groups,
+      releaseDate: game.release_date,
+      crackDate: game.crack_date,
+      shortImage: game.short_image,
+      steamId: game.steam_prod_id,
+      userScore: game.user_score,
+      metaScore: game.mata_score,
+      views: 0,
+    }));
   } catch (e) {
-    console.error(e);
-    throw new Error("Failed to fetch game data");
+    console.error(
+      "Error fetching games:",
+      e instanceof Error ? e.message : "Unknown error"
+    );
+    throw new Error(
+      `Failed to fetch games: ${
+        e instanceof Error ? e.message : "Unknown error"
+      }`
+    );
   }
 }
 
 async function populateDatabaseWithSeedData() {
+  const games = await fetchGameData();
+  if (games.length === 0) {
+    throw new Error("No games data available for data seeding");
+  }
   await prisma.$transaction([
     prisma.category.createMany({
       data: categories,
+      skipDuplicates: true,
     }),
     prisma.game.createMany({
-      data: await fetchGameData(),
+      data: games,
+      skipDuplicates: true,
     }),
   ]);
 }
 
 async function resetDatabase() {
-  await prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE`;
-  await prisma.$executeRaw`TRUNCATE TABLE "Game" RESTART IDENTITY CASCADE`;
+  await Promise.all([
+    prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE`,
+    prisma.$executeRaw`TRUNCATE TABLE "Game" RESTART IDENTITY CASCADE`,
+  ]);
 }
 
 async function main() {
   try {
+    console.log("Starting database reset...");
     await resetDatabase();
+    console.log("Database cleaned successfully");
+
+    console.log("Starting data seeding...");
     await populateDatabaseWithSeedData();
+    console.log("Data seeded successfully");
   } catch (e) {
-    console.error(e);
+    console.error(
+      "Seeding failed:",
+      e instanceof Error ? e.message : "Unknown error"
+    );
+    process.exit(1);
   }
 }
 
 main()
-  .then(async () => await prisma.$disconnect())
+  .then(async () => {
+    await prisma.$disconnect();
+    console.log("Process completed successfully");
+  })
   .catch(async (e) => {
-    console.error(e);
+    console.error("Fatal error: ", e);
     await prisma.$disconnect();
     process.exit(1);
   });

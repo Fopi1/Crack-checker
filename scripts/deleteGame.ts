@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma/prismaClient";
 
-const deleteGameById = async (gameId: number) => {
+const deleteGameById = async (gameId: string) => {
   try {
     await prisma.game.delete({
       where: { id: gameId },
@@ -15,9 +15,9 @@ const deleteGameById = async (gameId: number) => {
 
 const gameId = process.argv[2];
 
-if (!gameId || isNaN(Number(gameId))) {
+if (!gameId) {
   console.error("No game id provided");
   process.exit(1);
 }
 
-deleteGameById(Number(gameId));
+deleteGameById(gameId);

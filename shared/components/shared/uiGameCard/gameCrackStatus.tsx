@@ -15,8 +15,9 @@ export const GameCrackStatus: FC<Props> = ({
   return (
     <div
       className={cn(
-        `w-fit px-3 py-[2px] rounded-2xl text-sm font-semibold ${crackBackgroundColor} drop-shadow-status`,
-        className
+        `w-fit px-3 py-[2px] rounded-2xl text-sm font-semibold drop-shadow-status`,
+        className,
+        crackBackgroundColor
       )}
     >
       <p>{crackStatus}</p>

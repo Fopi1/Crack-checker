@@ -1,4 +1,6 @@
+import { GameSchema } from "@/prisma/constants";
 import { Game, User } from "@prisma/client";
+import { z } from "zod";
 
 export type SortBy = "views" | "likes" | "releaseDate" | "crackDate";
 export type SortOrder = "ascending" | "descending";
@@ -9,16 +11,11 @@ export interface ReleasedGamesData {
   title: string;
   is_AAA: boolean;
   release_date: string;
-  short_image: string;
-}
-export interface AllGameData extends ReleasedGamesData {
-  protections: string;
-  hacked_groups: string;
   crack_date: string | null;
+  short_image: string;
   steam_prod_id: number | null;
-  mata_score: number | null;
-  user_score: number | null;
 }
+export type AllGameData = z.infer<typeof GameSchema>;
 
 export type AddValue = "like" | "view";
 

@@ -1,11 +1,15 @@
 "use client";
 
-import { FC, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
+import { FC, useState } from "react";
+
+import { cn } from "@/lib/utils";
+import { performActionOnGame } from "@/services/siteApi/games";
 import { useCrackStatus } from "@/shared/hooks";
+import { processingActionsStore } from "@/shared/store/processingActionsStore";
 import { GameWithLikes } from "@/types/api";
-import { GameCrackStatus } from "./uiGameCard/gameCrackStatus";
+
 import {
   GameBell,
   GameCrackDate,
@@ -15,17 +19,15 @@ import {
   GameReleaseDate,
   GameViews,
 } from "./uiGameCard";
-import { performActionOnGame } from "@/services/siteApi/games";
-import Image from "next/image";
+import { GameCrackStatus } from "./uiGameCard/gameCrackStatus";
 
 interface Props extends GameWithLikes {
   className?: string;
   isLiked: boolean;
 }
 
-export const GameCard: FC<Props> = (props) => {
+export const GameCard: FC<Props> = (props, { className }) => {
   const {
-    className,
     title,
     id,
     slug,
@@ -40,33 +42,36 @@ export const GameCard: FC<Props> = (props) => {
   } = props;
   const [stateIsLiked, setStateIsLiked] = useState(isLiked);
   const [likesNumber, setLikesNumber] = useState(likes.length);
-  const processingActions = useRef<string[]>([]);
+
   const { crackedBy, crackStatus } = useCrackStatus({
     releaseDate,
     crackDate,
     hackedGroups,
   });
 
-  const crackBackgroundColor = crackDate ? "bg-green-700" : "bg-red-600";
-  const crackTextColor = crackDate ? "text-green-600" : "text-red-600";
+  const crackBackgroundColor = crackDate ? "bg-crack-green" : "bg-crack-red";
+  const crackTextColor = crackDate
+    ? "text-crack-light-green"
+    : "text-crack-red";
 
   const handleToggleLike = (likesNumber: number, isLiked: boolean) => {
     setLikesNumber(likesNumber);
     setStateIsLiked(isLiked);
   };
+
   const addView = async () => {
-    if (processingActions.current.includes("view")) return;
-    processingActions.current = [...processingActions.current, "view"];
+    if (processingActionsStore.hasAction(id, "view")) {
+      return;
+    }
+    processingActionsStore.addAction(id, "view");
     try {
       await performActionOnGame(id, "view");
     } catch (error) {
-      console.error(error);
-    } finally {
-      processingActions.current = processingActions.current.filter(
-        (action) => action !== "view"
-      );
+      console.error("Action failed:", error);
+      processingActionsStore.removeAction(id, "view");
     }
   };
+
   return (
     <article
       className={cn(
@@ -77,13 +82,16 @@ export const GameCard: FC<Props> = (props) => {
       <Link
         href={`/game/${slug}`}
         onClick={addView}
-        className={cn(
-          "cursor-pointer flex flex-col flex-shrink w-[100%] rounded-2xl",
-          className
-        )}
+        className="cursor-pointer flex flex-col flex-shrink w-[100%] rounded-2xl"
       >
-        <figure className="overflow-hidden relative h-52 rounded-2xl bg-cover bg-center flex flex-col justify-between font-bold">
-          <Image src={shortImage} fill alt="Game image" quality={100} />
+        <figure className="overflow-hidden relative h-56 rounded-2xl bg-cover bg-center flex flex-col justify-between font-bold">
+          <Image
+            src={shortImage}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            alt="Game image"
+            quality={50}
+          />
           <figcaption className="self-end m-1">
             <GameCrackStatus
               crackBackgroundColor={crackBackgroundColor}
@@ -113,7 +121,7 @@ export const GameCard: FC<Props> = (props) => {
           <GameReleaseDate releaseDate={releaseDate} />
           <GameProtections protections={protections} />
           <GameCracker crackTextColor={crackTextColor} crackedBy={crackedBy} />
-          {crackDate && <GameCrackDate crackDate={crackDate} />}
+          <GameCrackDate crackDate={crackDate} />
         </div>
         <GameViews views={views} />
       </section>

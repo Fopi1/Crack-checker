@@ -15,7 +15,7 @@ export const GameCracker: FC<Props> = ({
   return (
     <div className={cn("flex gap-1", className)}>
       <p>Cracked by:</p>
-      <span className={`${crackTextColor} font-bold uppercase`}>
+      <span className={cn("font-bold uppercase", crackTextColor)}>
         {crackedBy}
       </span>
     </div>

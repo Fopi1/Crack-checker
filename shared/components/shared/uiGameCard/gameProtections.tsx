@@ -1,5 +1,6 @@
-import { cn } from "@/lib/utils";
 import { FC } from "react";
+
+import { cn } from "@/lib/utils";
 
 interface Props {
   className?: string;
@@ -9,7 +10,7 @@ interface Props {
 export const GameProtections: FC<Props> = ({ className, protections }) => {
   return (
     <div className={cn("flex gap-1", className)}>
-      <p>Protection</p>
+      <p>Protection:</p>
       <span className=" text-blue-500 font-bold uppercase">{protections}</span>
     </div>
   );

@@ -1,9 +1,10 @@
 "use server";
 
+import { NextRequest, NextResponse } from "next/server";
+
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { PutProps, SortBy, SortOrder } from "@/types/api";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -98,7 +99,7 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ error: "Unknown command" }, { status: 500 });
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error while adding views or likes", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
