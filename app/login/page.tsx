@@ -1,7 +1,9 @@
-import { Container } from "@/shared/components/shared";
 import Link from "next/link";
-import { LoginForm } from "./LoginForm";
-import { LoginLinks } from "./loginLinks";
+
+import { Container } from "@/shared/components/shared";
+
+import { AuthLinks } from "../../shared/components/auth/authLinks";
+import { LoginForm } from "./loginForm";
 
 export default function Login() {
   return (
@@ -18,7 +20,7 @@ export default function Login() {
         </div>
         <h2 className="text-[28px] font-medium text-center">Log in</h2>
         <div className="pt-14">
-          <LoginLinks />
+          <AuthLinks />
           <LoginForm />
         </div>
       </Container>

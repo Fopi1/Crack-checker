@@ -1,9 +1,10 @@
 "use server";
 
+import { NextRequest, NextResponse } from "next/server";
+
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { User } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +23,5 @@ export async function POST(request: NextRequest) {
       { error: "Internal Server Error" },
       { status: 500 }
     );
-  } finally {
-    prisma.$disconnect();
   }
 }

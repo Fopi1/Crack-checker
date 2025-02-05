@@ -1,6 +1,8 @@
-import { cn } from "@/lib/utils";
-import { Input, Label } from "../ui";
 import { Search } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+
+import { Input, Label } from "../ui/shadcn";
 
 interface Props {
   className?: string;

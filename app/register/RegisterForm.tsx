@@ -1,17 +1,20 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { FormActions, FormFields } from "@/shared/components/shared";
-import { axiosSiteInstance } from "@/services/instance";
-import { ApiRoutes } from "@/services/siteApi/constants";
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { useRouter } from "next/navigation";
-import { registerFormFields } from "./constant";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/shared/components/ui/form";
-import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from 'next/navigation';
+import { FC, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { axiosSiteInstance } from '@/services/instance';
+import { SiteApi } from '@/services/siteApi/apiClient';
+import { ApiRoutes } from '@/services/siteApi/constants';
+import { FormActions, FormFields } from '@/shared/components/formPieces';
+import { Form } from '@/shared/components/ui/shadcn';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { registerFormFields } from './constant';
+
 interface Props {
   className?: string;
 }

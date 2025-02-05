@@ -71,6 +71,7 @@ export const getGameBySlug = async (
   }
   return game;
 };
+
 export const performActionOnGame = async (
   gameId: string,
   addValue: AddValue

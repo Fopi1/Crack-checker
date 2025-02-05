@@ -1,8 +1,9 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, PropsWithChildren, useState } from 'react';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export const QueryProvider: FC<PropsWithChildren> = ({ children }) => {
   const [queryClient] = useState(
@@ -18,7 +19,10 @@ export const QueryProvider: FC<PropsWithChildren> = ({ children }) => {
   );
   return (
     <QueryClientProvider client={queryClient}>
-      {children} <ReactQueryDevtools initialIsOpen={false} />
+      {children}{" "}
+      {process.env.NODE_ENV === "development" && (
+        <ReactQueryDevtools initialIsOpen={false} />
+      )}
     </QueryClientProvider>
   );
 };

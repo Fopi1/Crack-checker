@@ -1,6 +1,7 @@
+import { AuthLinks } from "@/shared/components/auth";
 import { Container } from "@/shared/components/shared";
-import { RegisterForm } from "./RegisterForm";
-import { LoginLinks } from "../login/loginLinks";
+
+import { RegisterForm } from "./registerForm";
 
 export default function Register() {
   return (
@@ -8,7 +9,7 @@ export default function Register() {
       <Container className="py-14 w-3/4 lg:w-[900px]">
         <h2 className="text-[28px] font-medium text-center">Register</h2>
         <div className="pt-14">
-          <LoginLinks />
+          <AuthLinks />
           <RegisterForm />
         </div>
       </Container>

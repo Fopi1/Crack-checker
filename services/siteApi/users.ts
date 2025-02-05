@@ -1,9 +1,10 @@
 "use server";
 
-import { verifyAccessToken } from "@/lib/jwt";
-import { prisma } from "@/prisma/prismaClient";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
+
+import { verifyAccessToken } from "@/lib/jwt";
+import { prisma } from "@/prisma/prismaClient";
 
 export const hashPassword = async (password: string) =>
   await bcrypt.hash(password, 10);
@@ -16,22 +17,20 @@ export const checkIfEmailExist = async (email: string) => {
   }));
 };
 
-export const getUserId = async () => {
-  const cookieStore = cookies();
-  const token = cookieStore.get("accessToken")?.value;
-  if (!token) {
-    return null;
-  }
-  const userId = verifyAccessToken(token)?.id;
-  if (!userId) {
-    return null;
-  }
-  return userId;
+export const getCookiePayload = () => {
+  const token = cookies().get("accessToken")?.value;
+  const payload = token ? verifyAccessToken(token) : null;
+  return payload;
+};
+
+export const removeCookiePayload = () => {
+  cookies().delete("accessToken");
 };
 
 export const getLikedGames = async (): Promise<string[] | null> => {
   try {
-    const userId = await getUserId();
+    const payload = await getCookiePayload();
+    const userId = payload?.id;
     if (!userId) {
       throw new Error("Cannot find user id");
     }
@@ -49,7 +48,5 @@ export const getLikedGames = async (): Promise<string[] | null> => {
   } catch (error) {
     console.error(error);
     return null;
-  } finally {
-    prisma.$disconnect();
   }
 };

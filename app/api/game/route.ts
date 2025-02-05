@@ -1,5 +1,6 @@
-import { prisma } from "@/prisma/prismaClient";
 import { NextRequest, NextResponse } from "next/server";
+
+import { prisma } from "@/prisma/prismaClient";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,7 +20,5 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Error was happened while getting game by slug", error);
     return NextResponse.json({ error: error }, { status: 401 });
-  } finally {
-    await prisma.$disconnect();
   }
 }

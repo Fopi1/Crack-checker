@@ -1,9 +1,10 @@
 "use server";
 
 import bcrypt from "bcrypt";
-import { prisma } from "@/prisma/prismaClient";
 import { NextRequest, NextResponse } from "next/server";
+
 import { generateAccessToken } from "@/lib/jwt";
+import { prisma } from "@/prisma/prismaClient";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,12 +21,13 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-    const { token, expirationDate } = generateAccessToken(user.id);
+    const { token, expirationDate } = generateAccessToken(user.id, user.name);
 
     const response = NextResponse.json({ success: true, userId: user.id });
     response.cookies.set("accessToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
       path: "/",
       expires: isRememberMe ? expirationDate : undefined,
     });
@@ -36,7 +38,5 @@ export async function POST(request: NextRequest) {
       { error: "Internal Server Error" },
       { status: 500 }
     );
-  } finally {
-    prisma.$disconnect();
   }
 }

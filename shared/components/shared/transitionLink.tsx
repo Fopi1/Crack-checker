@@ -1,8 +1,7 @@
-import Link from 'next/link';
-import { FC, PropsWithChildren, ReactElement } from 'react';
+import Link from "next/link";
+import { FC, MouseEvent, PropsWithChildren } from "react";
 
-import { cn } from '@/lib/utils';
-import { useIcon } from '@/shared/hooks';
+import { cn } from "@/lib/utils";
 
 interface Props extends PropsWithChildren {
   className?: string;
@@ -10,7 +9,7 @@ interface Props extends PropsWithChildren {
   href: string;
   backgroundColor: string;
   hoverColor: string;
-  icon: ReactElement;
+  icon: () => JSX.Element;
   iconProps?: object;
 }
 
@@ -24,50 +23,37 @@ export const TransitionLink: FC<Props> = ({
   iconProps,
   sameSite = false,
 }) => {
+  const IconComponent = icon;
+  const commonProps = {
+    style: { backgroundColor },
+    className: cn(
+      "transition-colors duration-300 flex items-center justify-center gap-3 font-bold py-3 rounded-[15px] text-white z-[1]",
+      className
+    ),
+    onMouseOver: (e: MouseEvent<HTMLElement>) => (
+      (e.currentTarget.style.backgroundColor = hoverColor),
+      (e.currentTarget.style.color = backgroundColor)
+    ),
+    onMouseOut: (e: MouseEvent<HTMLElement>) => (
+      (e.currentTarget.style.backgroundColor = backgroundColor),
+      (e.currentTarget.style.color = hoverColor)
+    ),
+  };
   return (
     <>
       {sameSite ? (
-        <Link
-          style={{ backgroundColor: backgroundColor }}
-          className={cn(
-            "transition-colors duration-300 flex items-center justify-center gap-3 font-bold py-3 rounded-[15px] text-white z-[1]",
-            className
-          )}
-          href={href}
-          onMouseOver={(e) => (
-            (e.currentTarget.style.backgroundColor = hoverColor),
-            (e.currentTarget.style.color = backgroundColor)
-          )}
-          onMouseOut={(e) => (
-            (e.currentTarget.style.backgroundColor = backgroundColor),
-            (e.currentTarget.style.color = hoverColor)
-          )}
-        >
-          {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
-          {useIcon(icon, iconProps)}
+        <Link {...commonProps} href={href}>
+          <IconComponent {...iconProps} />
           {children}
         </Link>
       ) : (
         <a
-          style={{ backgroundColor: backgroundColor }}
-          className={cn(
-            "transition-colors duration-300 flex items-center justify-center gap-3 font-bold py-3 rounded-[15px] text-white z-[1]",
-            className
-          )}
+          {...commonProps}
           href={href}
-          onMouseOver={(e) => (
-            (e.currentTarget.style.backgroundColor = hoverColor),
-            (e.currentTarget.style.color = backgroundColor)
-          )}
-          onMouseOut={(e) => (
-            (e.currentTarget.style.backgroundColor = backgroundColor),
-            (e.currentTarget.style.color = hoverColor)
-          )}
           rel="noopener noreferrer"
           target="_blank"
         >
-          {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
-          {useIcon(icon, iconProps)}
+          <IconComponent {...iconProps} />
           {children}
         </a>
       )}

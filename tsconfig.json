@@ -28,7 +28,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "shared/components/shared/header/desktop-wrapper.tsx",
-    "shared/components/shared/formActions.tsx",
+    "shared/components/formPieces/formActions.tsx",
     "app/login/constants.tsx"
   ],
   "exclude": ["node_modules"]

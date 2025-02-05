@@ -1,5 +1,6 @@
-import { RegisterFormSchema } from "./RegisterForm";
 import { FieldProps } from "@/types/form";
+
+import { RegisterFormSchema } from "./registerForm";
 
 export const minNameLength = 2;
 export const maxNameLength = 20;

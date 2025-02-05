@@ -42,8 +42,6 @@ export async function POST(request: NextRequest) {
       { error: "Failed to fetch games" },
       { status: 500 }
     );
-  } finally {
-    prisma.$disconnect();
   }
 }
 

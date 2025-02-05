@@ -1,6 +1,7 @@
+import { z } from "zod";
+
 import { GameSchema } from "@/prisma/constants";
 import { Game, User } from "@prisma/client";
-import { z } from "zod";
 
 export type SortBy = "views" | "likes" | "releaseDate" | "crackDate";
 export type SortOrder = "ascending" | "descending";

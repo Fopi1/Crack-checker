@@ -14,7 +14,7 @@ const nextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["@reactuses/core"],
+    optimizePackageImports: ["@reactuses/core", ""],
   },
   reactStrictMode: true,
 };

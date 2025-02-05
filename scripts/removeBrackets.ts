@@ -21,8 +21,6 @@ const removeBrackets = async () => {
     console.log("Brackets was successfully removed!");
   } catch (error) {
     console.error(error);
-  } finally {
-    await prisma.$disconnect();
   }
 };
 

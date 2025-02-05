@@ -10,6 +10,10 @@ class ComponentsStore {
   setIsOpened(state: boolean) {
     this.isOpened = state;
   }
+
+  toggleIsOpened() {
+    this.isOpened = !this.isOpened;
+  }
 }
 
 export const componentStore = new ComponentsStore();

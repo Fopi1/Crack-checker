@@ -1,40 +1,39 @@
-import { SiteApi } from "@/services/siteApi/apiClient";
 import { makeAutoObservable } from "mobx";
-// import { parseCookies } from "nookies";
+
+import { SiteApi } from "@/services/siteApi/apiClient";
 
 class AuthStore {
-  userId: number | null = null;
+  userData: { id: number; name: string } | null = null;
   isRememberMe = false;
+  isLoading = false;
 
   constructor() {
     makeAutoObservable(this);
-    // this.checkAuthStatus();
   }
 
-  // async checkAuthStatus() {
-  //   try {
-  //     const cookies = parseCookies();
-  //     const token = cookies["accessToken"];
-  //     if (token) {
-  //       const user = await SiteApi.users.getUserId();
-  //       this.userId = user;
-  //     } else {
-  //       this.userId = null;
-  //     }
-  //   } catch (error) {
-  //     console.error("Error checking auth status:", error);
-  //     this.userId = null;
-  //   }
-  // }
-
-  // logout() {
-  //   this.userId = null;
-  //   document.cookie = "accessToken=; Max-Age=0; path=/;";
-  // }
-
-  toggleIsRememberMe() {
+  toggleIsRememberMe = () => {
     this.isRememberMe = !this.isRememberMe;
-  }
+  };
+
+  checkAuth = () => {
+    if (this.isLoading) return;
+    this.isLoading = true;
+    try {
+      const payload = SiteApi.users.getCookiePayload();
+      if (!payload) {
+        SiteApi.users.removeCookiePayload();
+        this.userData = null;
+        return null;
+      }
+      this.userData = { id: payload.id, name: payload.name };
+    } catch (error) {
+      console.error("Auth check error:", error);
+      this.userData = null;
+      SiteApi.users.removeCookiePayload();
+    } finally {
+      this.isLoading = false;
+    }
+  };
 }
 
 export const authStore = new AuthStore();

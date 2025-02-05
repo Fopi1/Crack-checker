@@ -1,26 +1,25 @@
 "use client";
 
-import {
-  Blurred,
-  Container,
-  GameBell,
-  GameCrackDate,
-  GameCracker,
-  GameCrackStatus,
-  GameLike,
-  GameProtections,
-  GameReleaseDate,
-  GameScore,
-  GameViews,
-  TransitionLink,
-} from "@/shared/components/shared";
 import { Users } from "lucide-react";
 import Image from "next/image";
 import { FC, useState } from "react";
+
 import metaScoreImage from "@/public/meta.svg";
-import { GameWithLikes } from "@/types/api";
+import { Steam } from "@/shared/components/icons/steam";
+import { Blurred, Container, TransitionLink } from "@/shared/components/shared";
+import {
+  CrackBell,
+  CrackCracker,
+  CrackDate,
+  CrackLike,
+  CrackProtections,
+  CrackReleaseDate,
+  CrackScore,
+  CrackStatus,
+  CrackViews,
+} from "@/shared/components/ui/custom";
 import { useCrackStatus } from "@/shared/hooks";
-import { steamIcon } from "./constants";
+import { GameWithLikes } from "@/types/api";
 
 interface Props extends GameWithLikes {
   isLiked?: boolean;
@@ -86,23 +85,23 @@ export const Game: FC<Props> = (gameProps) => {
                     {title}
                   </h2>
                   <Blurred>
-                    <GameCrackStatus
+                    <CrackStatus
                       crackBackgroundColor={crackBackgroundColor}
                       crackStatus={crackStatus}
                     />
                   </Blurred>
                 </div>
-                <GameViews className="w-fit" views={views} />
+                <CrackViews className="w-fit" views={views} />
               </div>
               <div className="w-full flex flex-col gap-5 text-xl">
                 <div className="flex justify-between gap-2">
                   <div className="flex flex-col gap-2">
-                    <GameReleaseDate releaseDate={releaseDate} />
-                    <GameCrackDate crackDate={crackDate} />
+                    <CrackReleaseDate releaseDate={releaseDate} />
+                    <CrackDate crackDate={crackDate} />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <GameProtections protections={protections} />
-                    <GameCracker
+                    <CrackProtections protections={protections} />
+                    <CrackCracker
                       crackedBy={crackedBy}
                       crackTextColor={crackTextColor}
                     />
@@ -110,7 +109,7 @@ export const Game: FC<Props> = (gameProps) => {
                 </div>
                 <div className="flex justify-between gap-2">
                   <div className="flex flex-col gap-2">
-                    <GameScore
+                    <CrackScore
                       image={
                         <Image
                           src={metaScoreImage}
@@ -121,7 +120,7 @@ export const Game: FC<Props> = (gameProps) => {
                       }
                       score={metaScore}
                     />
-                    <GameScore
+                    <CrackScore
                       image={
                         <Users
                           className="w-[36px] height-[36px]"
@@ -136,17 +135,17 @@ export const Game: FC<Props> = (gameProps) => {
             </div>
             <div className="flex flex-col justify-between gap-3 font-bold">
               <div className="flex items-center gap-4">
-                <GameLike
+                <CrackLike
                   className="p-5"
-                  likesNumber={likesNumber}
                   gameId={id}
-                  handleClick={handleToggleLike}
+                  likesNumber={likesNumber}
                   isLiked={stateIsLiked}
+                  handleClick={handleToggleLike}
                 />
-                <GameBell className="p-6" />
+                <CrackBell className="p-6" />
               </div>
               <TransitionLink
-                icon={steamIcon}
+                icon={Steam}
                 href={`https://store.steampowered.com/app/${steamId}`}
                 backgroundColor="#0c4077"
                 hoverColor="#fff"

@@ -1,17 +1,5 @@
 export { Background } from "./background";
 export { Container } from "./container";
-export { CardsGroup } from "./cardsGroup";
-export { Header } from "./header";
-export { NavLinks } from "./navLinks";
-export { SortOptions } from "./sortOptions";
-export { GameCard } from "./gameCard";
-export { GamesByCategories } from "./gamesByCategories";
-export { GameFilterHeader } from "./gameFilterHeader";
-export { Footer } from "./footer";
-export { FormFields } from "./formFields";
-export { FormActions } from "./formActions";
-export { RememberMeCheckbox } from "./rememberMeCheckbox";
 export { SearchForm } from "./searchForm";
 export { Blurred } from "./blurred";
 export { TransitionLink } from "./transitionLink";
-export * from "./uiGameCard";
