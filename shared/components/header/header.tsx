@@ -1,23 +1,24 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import Link from "next/link";
 import { FC, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import logo from "@/public/logo.png";
+import { authStore } from "@/shared/store/authStore";
 
 import { SearchForm } from "../shared/searchForm";
 import { HeaderMenu } from "./headerMenu";
-import { LastNavLink } from "./navigation/lastNavLink";
+import { LoginedDropdownButton } from "./navigation";
 import { NavLinks } from "./navigation/navLinks";
 
 interface Props {
   className?: string;
-  lastNavLinkData: { href: string; text: string };
 }
 
-export const Header: FC<Props> = ({ className, lastNavLinkData }) => {
+export const Header: FC<Props> = observer(({ className }) => {
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
 
@@ -64,9 +65,9 @@ export const Header: FC<Props> = ({ className, lastNavLinkData }) => {
         <SearchForm className="w-full flex lg:hidden" />
         <div className="leading-[21px] pr-2 hidden gap-5 lg:flex xl:gap-10">
           <NavLinks />
-          <LastNavLink {...lastNavLinkData} />
+          {authStore.userData && <LoginedDropdownButton />}
         </div>
       </nav>
     </header>
   );
-};
+});

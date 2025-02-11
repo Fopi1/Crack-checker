@@ -17,13 +17,13 @@ export const checkIfEmailExist = async (email: string) => {
   }));
 };
 
-export const getCookiePayload = () => {
+export const getCookiePayload = async () => {
   const token = cookies().get("accessToken")?.value;
-  const payload = token ? verifyAccessToken(token) : null;
+  const payload = token ? await verifyAccessToken(token) : null;
   return payload;
 };
 
-export const removeCookiePayload = () => {
+export const removeCookiePayload = async () => {
   cookies().delete("accessToken");
 };
 

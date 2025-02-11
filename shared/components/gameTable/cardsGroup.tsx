@@ -48,13 +48,13 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
 
   useAsyncEffect(
     async () => {
-      if (!authStore.userId) {
+      if (!authStore.userData) {
         await queryClient.invalidateQueries({ queryKey: ["likedGames"] });
         await queryClient.invalidateQueries({ queryKey: ["games"] });
       }
     },
     () => {},
-    [authStore.userId, queryClient]
+    [authStore.userData, queryClient]
   );
 
   if (gamesQuery.isLoading || likedGamesQuery.isLoading) {
@@ -66,7 +66,7 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
   }
 
   const games = gamesQuery.data || [];
-  const likedGames = likedGamesQuery.data || [];
+  const likedGames = authStore.userData ? likedGamesQuery.data : [];
 
   return (
     <div

@@ -1,7 +1,8 @@
-import Link from "next/link";
-import { FC, MouseEvent, PropsWithChildren } from "react";
+import Link from 'next/link';
+import { ComponentType, FC, MouseEvent, PropsWithChildren } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
+import { IconProps } from '@/types/components';
 
 interface Props extends PropsWithChildren {
   className?: string;
@@ -9,8 +10,8 @@ interface Props extends PropsWithChildren {
   href: string;
   backgroundColor: string;
   hoverColor: string;
-  icon: () => JSX.Element;
-  iconProps?: object;
+  icon: ComponentType<Partial<IconProps>>;
+  iconProps?: Partial<IconProps>;
 }
 
 export const TransitionLink: FC<Props> = ({
@@ -20,7 +21,7 @@ export const TransitionLink: FC<Props> = ({
   hoverColor,
   icon,
   children,
-  iconProps,
+  iconProps = {},
   sameSite = false,
 }) => {
   const IconComponent = icon;

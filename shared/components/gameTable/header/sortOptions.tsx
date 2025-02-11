@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { usePathname } from "next/navigation";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -24,24 +24,27 @@ interface Props {
 
 export const SortOptions: FC<Props> = observer(({ category, className }) => {
   const pathname = usePathname();
-  const sortOptions = [
-    {
-      placeholder: sortStore.categoriesSortOptions[category].sortBy,
-      values: ["views", "crack Date", "likes", "release Date"],
-      onChange: (sortBy: SortBy) => sortStore.setSortBy(category, sortBy),
-    },
-    {
-      placeholder: sortStore.categoriesSortOptions[category].sortOrder,
-      values: ["descending", "ascending"],
-      onChange: (sortOrder: SortOrder) =>
-        sortStore.setSortOrder(category, sortOrder),
-    },
-    {
-      placeholder: sortStore.categoriesSortOptions[category].takeGames,
-      values: ["5", "10", "25"],
-      onChange: (value: TakeGames) => sortStore.setTakeGames(category, value),
-    },
-  ];
+  const sortOptions = useMemo(
+    () => [
+      {
+        placeholder: sortStore.categoriesSortOptions[category].sortBy,
+        values: ["views", "crack Date", "likes", "release Date"],
+        onChange: (sortBy: SortBy) => sortStore.setSortBy(category, sortBy),
+      },
+      {
+        placeholder: sortStore.categoriesSortOptions[category].sortOrder,
+        values: ["descending", "ascending"],
+        onChange: (sortOrder: SortOrder) =>
+          sortStore.setSortOrder(category, sortOrder),
+      },
+      {
+        placeholder: sortStore.categoriesSortOptions[category].takeGames,
+        values: ["5", "10", "25"],
+        onChange: (value: TakeGames) => sortStore.setTakeGames(category, value),
+      },
+    ],
+    [category]
+  );
   const handleSetIsAAAOption = () => {
     sortStore.toggleIsAAA(category);
   };

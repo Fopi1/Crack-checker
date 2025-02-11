@@ -1,16 +1,16 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import { colors, iconMap } from './constants';
-import { SortOptions } from './sortOptions';
+import { colors, iconMap } from "./constants";
+import { SortOptions } from "./sortOptions";
 
 interface Props {
   className?: string;
   title: string;
   icon: string;
 }
-export const GameFilterHeader: FC<Props> = ({ className, title, icon }) => {
+const GameFilterHeaderComponent: FC<Props> = ({ className, title, icon }) => {
   const categoryIconProps = {
     size: 24,
     strokeWidth: 3,
@@ -37,3 +37,7 @@ export const GameFilterHeader: FC<Props> = ({ className, title, icon }) => {
     </div>
   );
 };
+
+const GameFilterHeader = memo(GameFilterHeaderComponent);
+GameFilterHeader.displayName = "GameFilterHeader";
+export { GameFilterHeader };

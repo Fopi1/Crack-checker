@@ -15,7 +15,7 @@ export default function Login() {
             href="/register"
             className="hover:text-[#0056b3] text-[#007bff] font-bold"
           >
-            Register
+            {" Register"}
           </Link>
         </div>
         <h2 className="text-[28px] font-medium text-center">Log in</h2>

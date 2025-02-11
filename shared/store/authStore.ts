@@ -1,9 +1,10 @@
-import { makeAutoObservable } from "mobx";
+import { flow, makeAutoObservable } from "mobx";
 
 import { SiteApi } from "@/services/siteApi/apiClient";
+import { UserData } from "@/types/store";
 
 class AuthStore {
-  userData: { id: number; name: string } | null = null;
+  userData: UserData = null;
   isRememberMe = false;
   isLoading = false;
 
@@ -15,17 +16,22 @@ class AuthStore {
     this.isRememberMe = !this.isRememberMe;
   };
 
-  checkAuth = () => {
+  setAuthState = (userData: typeof this.userData) => {
+    this.userData = userData;
+  };
+
+  checkAuth = flow(function* (this: AuthStore) {
     if (this.isLoading) return;
     this.isLoading = true;
     try {
-      const payload = SiteApi.users.getCookiePayload();
+      const payload = yield SiteApi.users.getCookiePayload();
       if (!payload) {
         SiteApi.users.removeCookiePayload();
         this.userData = null;
         return null;
       }
       this.userData = { id: payload.id, name: payload.name };
+      return payload;
     } catch (error) {
       console.error("Auth check error:", error);
       this.userData = null;
@@ -33,7 +39,7 @@ class AuthStore {
     } finally {
       this.isLoading = false;
     }
-  };
+  });
 }
 
 export const authStore = new AuthStore();

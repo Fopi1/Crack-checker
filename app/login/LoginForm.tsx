@@ -3,7 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
-import { Form, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { axiosSiteInstance } from "@/services/instance";
@@ -13,6 +13,7 @@ import {
   FormFields,
   RememberMeCheckbox,
 } from "@/shared/components/formPieces";
+import { Form } from "@/shared/components/ui/shadcn";
 import { authStore } from "@/shared/store/authStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -49,6 +50,7 @@ export const LoginForm: FC<Props> = observer(({ className }) => {
         ...data,
         isRememberMe: authStore.isRememberMe,
       });
+      await authStore.checkAuth();
       await queryClient.refetchQueries({ queryKey: ["likedGames"] });
       await queryClient.refetchQueries({ queryKey: ["games"] });
       replace("/");

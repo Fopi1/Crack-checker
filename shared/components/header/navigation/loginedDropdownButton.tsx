@@ -1,18 +1,34 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+import { authStore } from "@/shared/store/authStore";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../../ui/shadcn";
 
 export const LoginedDropdownButton = () => {
+  const router = useRouter();
+
+  const handlePushRoute = () => {
+    console.log("da");
+    router.replace("/profile");
+  };
+
+  const user = authStore.userData;
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>Eron Nic</DropdownMenuTrigger>
+      <DropdownMenuTrigger>{user?.name}</DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem className="font-bold" onClick={handlePushRoute}>
+          Profile
+        </DropdownMenuItem>
+        <DropdownMenuItem>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

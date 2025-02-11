@@ -1,6 +1,8 @@
+import { FC } from "react";
+
 import { IconProps } from "@/types/components";
 
-export const Google: IconProps = (props) => {
+export const Google: FC<Partial<IconProps>> = (props) => {
   return (
     <svg {...props}>
       <title>Google</title>

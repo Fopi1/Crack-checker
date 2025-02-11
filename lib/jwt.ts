@@ -1,4 +1,5 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { jwtVerify } from "jose";
+import jwt from "jsonwebtoken";
 
 import { JWTToken } from "@/types/jwt";
 
@@ -16,10 +17,11 @@ export const generateAccessToken = (userId: number, userName: string) => {
   return { token, expirationDate };
 };
 
-export const verifyAccessToken = (token: string): JWTToken | null => {
+export const verifyAccessToken = async (token: string) => {
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as JWTToken;
-    return payload;
+    const secret = new TextEncoder().encode(JWT_SECRET);
+    const { payload } = await jwtVerify(token, secret);
+    return payload as JWTToken;
   } catch (error) {
     console.error("Invalid token", error);
     return null;

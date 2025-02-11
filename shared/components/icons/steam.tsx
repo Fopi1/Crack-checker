@@ -1,6 +1,8 @@
+import { FC } from "react";
+
 import { IconProps } from "@/types/components";
 
-export const Steam: IconProps = (props) => {
+export const Steam: FC<Partial<IconProps>> = (props) => {
   return (
     <svg
       {...props}

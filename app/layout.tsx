@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import './globals.css';
+import "./globals.css";
 
-import scandia from 'next/font/local';
-import { cookies } from 'next/headers';
+import scandia from "next/font/local";
 
-import { verifyAccessToken } from '@/lib/jwt';
-import { Footer } from '@/shared/components';
-import { Header } from '@/shared/components/header';
-import { Providers } from '@/shared/components/providers';
-import { Background } from '@/shared/components/shared';
+import { SiteApi } from "@/services/siteApi/apiClient";
+import { Footer } from "@/shared/components";
+import { Header } from "@/shared/components/header";
+import { Providers } from "@/shared/components/providers";
+import { Background } from "@/shared/components/shared";
 
 const Scandia = scandia({
   src: [
@@ -40,13 +39,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const token = cookies().get("accessToken")?.value;
-  const payload = token ? verifyAccessToken(token) : null;
-
-  const lastNavLinkData = {
-    href: payload ? "/profile" : "/login",
-    text: payload ? payload.name : "log in",
-  };
+  const payload = await SiteApi.users.getCookiePayload();
+  const userData = payload ? { id: payload.id, name: payload.name } : null;
 
   return (
     <html lang="en" className={Scandia.className}>
@@ -54,9 +48,9 @@ export default async function RootLayout({
         <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
       </head>
       <body className="flex flex-col overflow-x-hidden selection:bg-red-500 text-white">
-        <Providers>
+        <Providers userData={userData}>
           <Background />
-          <Header lastNavLinkData={lastNavLinkData} />
+          <Header />
           <main>{children}</main>
           <Footer />
         </Providers>

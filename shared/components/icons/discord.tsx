@@ -1,6 +1,8 @@
+import { FC } from "react";
+
 import { IconProps } from "@/types/components";
 
-export const Discord: IconProps = (props) => {
+export const Discord: FC<Partial<IconProps>> = (props) => {
   return (
     <svg {...props}>
       <title>Discord</title>
