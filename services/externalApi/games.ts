@@ -1,14 +1,18 @@
+import { ExternalApiRoutes } from "@/routes";
 import { AllGameData, ReleasedGamesData } from "@/types/api";
-import { ApiRoutes } from "./constants";
+
 import { axiosGameStatusInstance } from "../instance";
 
 export const getGameDetailsByTitle = async (
   title: string
 ): Promise<AllGameData> => {
   try {
-    const response = await axiosGameStatusInstance.post(ApiRoutes.SEARCH, {
-      title,
-    });
+    const response = await axiosGameStatusInstance.post(
+      ExternalApiRoutes.SEARCH,
+      {
+        title,
+      }
+    );
     const game: AllGameData[] = response.data.filter(
       (e: AllGameData) => e.title === title
     );
@@ -22,7 +26,7 @@ export const getGameDetailsByTitle = async (
 export const getReleasedGames = async (): Promise<ReleasedGamesData[]> => {
   try {
     const response = await axiosGameStatusInstance.get(
-      ApiRoutes.RELEASED_GAMES
+      ExternalApiRoutes.RELEASED_GAMES
     );
 
     const releasedGames = Object.values(

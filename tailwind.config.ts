@@ -70,9 +70,6 @@ const config: Config = {
         card: "0 0 10px #000",
         status: "0 10px 20px #000",
       },
-      maxWidth: {
-        "screen-3xl": "1920px",
-      },
       boxShadow: {
         padding: "inset 0 0 0 3px rgba(0,0,0,1)",
       },

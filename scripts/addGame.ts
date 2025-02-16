@@ -1,5 +1,6 @@
 import { prisma } from "@/prisma/prismaClient";
 import { GameStatusApi } from "@/services/externalApi/apiClient";
+
 import type { AllGameData } from "@/types/api";
 
 const addGame = async (title: string) => {
@@ -38,8 +39,6 @@ const addGame = async (title: string) => {
     }
     console.error(`Error adding game "${title}":`, error);
     throw error;
-  } finally {
-    await prisma.$disconnect();
   }
 };
 

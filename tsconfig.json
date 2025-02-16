@@ -28,8 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "shared/components/shared/header/desktop-wrapper.tsx",
-    "shared/components/formPieces/formActions.tsx",
-    "app/login/constants.tsx"
+    "shared/components/shared/formPieces/formActions.tsx",
+    "app/login/constants.ts"
   ],
   "exclude": ["node_modules"]
 }

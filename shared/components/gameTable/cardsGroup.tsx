@@ -1,16 +1,15 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
-import { FC } from "react";
+import { observer } from 'mobx-react-lite';
+import { FC } from 'react';
 
-import { cn } from "@/lib/utils";
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { authStore } from "@/shared/store/authStore";
-import { sortStore } from "@/shared/store/sortStore";
-import { useAsyncEffect } from "@reactuses/core";
-import { useQueries, useQueryClient } from "@tanstack/react-query";
+import { cn } from '@/lib/utils';
+import { SiteApi } from '@/services/siteApi/apiClient';
+// import { authStore } from "@/shared/store/authStore";
+import { sortStore } from '@/shared/store/sortStore';
+import { useQueries } from '@tanstack/react-query';
 
-import { GameCard } from "../gameTable/gameCard";
+import { GameCard } from '../gameTable/gameCard';
 
 interface Props {
   category: string;
@@ -43,20 +42,6 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
       },
     ],
   });
-
-  const queryClient = useQueryClient();
-
-  useAsyncEffect(
-    async () => {
-      if (!authStore.userData) {
-        await queryClient.invalidateQueries({ queryKey: ["likedGames"] });
-        await queryClient.invalidateQueries({ queryKey: ["games"] });
-      }
-    },
-    () => {},
-    [authStore.userData, queryClient]
-  );
-
   if (gamesQuery.isLoading || likedGamesQuery.isLoading) {
     return <div>Loading...</div>;
   }
@@ -66,8 +51,7 @@ export const CardsGroup: FC<Props> = observer(({ category, className }) => {
   }
 
   const games = gamesQuery.data || [];
-  const likedGames = authStore.userData ? likedGamesQuery.data : [];
-
+  const likedGames = likedGamesQuery.data || [];
   return (
     <div
       className={cn(

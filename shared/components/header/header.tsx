@@ -7,11 +7,12 @@ import { FC, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import logo from "@/public/logo.png";
+import { AppRoutes } from "@/routes";
 import { authStore } from "@/shared/store/authStore";
 
 import { SearchForm } from "../shared/searchForm";
 import { HeaderMenu } from "./headerMenu";
-import { LoginedDropdownButton } from "./navigation";
+import { LoginedActionsButton } from "./navigation";
 import { NavLinks } from "./navigation/navLinks";
 
 interface Props {
@@ -47,7 +48,7 @@ export const Header: FC<Props> = observer(({ className }) => {
     >
       <nav className="relative mx-auto flex justify-between items-center p-2 responsive flex-col lg:flex-row">
         <div className="flex items-center justify-between w-full gap-2 lg:justify-normal lg:w-auto xl:gap-6">
-          <Link href="/" className="flex items-center">
+          <Link href={AppRoutes.MAIN} className="flex items-center">
             <Image
               priority
               src={logo}
@@ -59,13 +60,13 @@ export const Header: FC<Props> = observer(({ className }) => {
               CrackChecker
             </h1>
           </Link>
-          <SearchForm className="hidden lg:flex" />
+          <SearchForm id="desktop-search" className="hidden lg:flex" />
           <HeaderMenu className="lg:hidden" />
         </div>
-        <SearchForm className="w-full flex lg:hidden" />
+        <SearchForm id="mobile-search" className="w-full flex lg:hidden" />
         <div className="leading-[21px] pr-2 hidden gap-5 lg:flex xl:gap-10">
           <NavLinks />
-          {authStore.userData && <LoginedDropdownButton />}
+          {authStore.userData && <LoginedActionsButton />}
         </div>
       </nav>
     </header>

@@ -1,10 +1,10 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { PropsWithChildren, useRef } from "react";
+import { usePathname } from 'next/navigation';
+import { PropsWithChildren, useRef } from 'react';
 
-import { authStore } from "@/shared/store/authStore";
-import { useAsyncEffect } from "@reactuses/core";
+import { authStore } from '@/shared/store/authStore';
+import { useAsyncEffect } from '@reactuses/core';
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       if (isChecking.current) return;
       isChecking.current = true;
       await authStore.checkAuth();
-      console.log("Auth check completed");
       isChecking.current = false;
     },
     () => {},

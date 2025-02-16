@@ -24,7 +24,7 @@ class AuthStore {
     if (this.isLoading) return;
     this.isLoading = true;
     try {
-      const payload = yield SiteApi.users.getCookiePayload();
+      const payload = yield SiteApi.users.getJWTPayload();
       if (!payload) {
         SiteApi.users.removeCookiePayload();
         this.userData = null;

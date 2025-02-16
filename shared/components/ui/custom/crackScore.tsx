@@ -1,6 +1,6 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface Props {
   className?: string;

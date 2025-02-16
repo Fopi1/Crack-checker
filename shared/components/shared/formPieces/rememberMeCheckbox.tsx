@@ -6,7 +6,7 @@ import { FC } from "react";
 import { cn } from "@/lib/utils";
 import { authStore } from "@/shared/store/authStore";
 
-import { Checkbox, Label } from "../ui/shadcn";
+import { Checkbox, Label } from "../../ui/shadcn";
 
 interface Props {
   className?: string;

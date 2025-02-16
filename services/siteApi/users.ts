@@ -3,6 +3,7 @@
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 
+import { CookieToken } from "@/constants";
 import { verifyAccessToken } from "@/lib/jwt";
 import { prisma } from "@/prisma/prismaClient";
 
@@ -17,19 +18,19 @@ export const checkIfEmailExist = async (email: string) => {
   }));
 };
 
-export const getCookiePayload = async () => {
-  const token = cookies().get("accessToken")?.value;
+export const getJWTPayload = async () => {
+  const token = cookies().get(CookieToken.AUTH_TOKEN)?.value;
   const payload = token ? await verifyAccessToken(token) : null;
   return payload;
 };
 
 export const removeCookiePayload = async () => {
-  cookies().delete("accessToken");
+  cookies().delete(CookieToken.AUTH_TOKEN);
 };
 
 export const getLikedGames = async (): Promise<string[] | null> => {
   try {
-    const payload = await getCookiePayload();
+    const payload = await getJWTPayload();
     const userId = payload?.id;
     if (!userId) {
       throw new Error("Cannot find user id");

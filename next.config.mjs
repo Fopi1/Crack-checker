@@ -15,7 +15,6 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ["@reactuses/core"],
-    typedRoutes: true,
   },
   reactStrictMode: true,
 };

@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FC, useState } from "react";
+import { FC, memo, useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { AppRoutes } from "@/routes";
 import { performActionOnGame } from "@/services/siteApi/games";
 import { useCrackStatus } from "@/shared/hooks";
 import { processingActionsStore } from "@/shared/store/processingActionsStore";
@@ -26,7 +27,7 @@ interface Props extends GameWithLikes {
   isLiked: boolean;
 }
 
-export const GameCard: FC<Props> = (props, { className }) => {
+const GameCardComponent: FC<Props> = (props, { className }) => {
   const {
     title,
     id,
@@ -60,14 +61,13 @@ export const GameCard: FC<Props> = (props, { className }) => {
   };
 
   const addView = async () => {
-    if (processingActionsStore.hasAction(id, "view")) {
-      return;
-    }
+    if (processingActionsStore.hasAction(id, "view")) return;
     processingActionsStore.addAction(id, "view");
     try {
       await performActionOnGame(id, "view");
     } catch (error) {
       console.error("Action failed:", error);
+    } finally {
       processingActionsStore.removeAction(id, "view");
     }
   };
@@ -80,7 +80,7 @@ export const GameCard: FC<Props> = (props, { className }) => {
       )}
     >
       <Link
-        href={`/game/${slug}`}
+        href={AppRoutes.GAME(slug)}
         onClick={addView}
         className="cursor-pointer flex flex-col flex-shrink w-[100%] rounded-2xl"
       >
@@ -88,9 +88,10 @@ export const GameCard: FC<Props> = (props, { className }) => {
           <Image
             src={shortImage}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            sizes="(max-width: 1200px) 50vw, 25vw"
             alt="Game image"
-            quality={50}
+            loading="lazy"
+            quality={25}
           />
           <figcaption className="self-end m-1">
             <CrackStatus
@@ -129,3 +130,7 @@ export const GameCard: FC<Props> = (props, { className }) => {
     </article>
   );
 };
+
+const GameCard = memo(GameCardComponent);
+GameCard.displayName = "GameCard";
+export { GameCard };

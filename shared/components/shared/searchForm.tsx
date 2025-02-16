@@ -6,9 +6,10 @@ import { Input, Label } from "../ui/shadcn";
 
 interface Props {
   className?: string;
+  id: string;
 }
 
-export const SearchForm = ({ className }: Props) => {
+export const SearchForm = ({ className, id }: Props) => {
   return (
     <search
       role="search"
@@ -21,12 +22,12 @@ export const SearchForm = ({ className }: Props) => {
           className
         )}
       >
-        <Label htmlFor="search-input" className="py-3 px-4">
+        <Label htmlFor={id} className="py-3 px-4">
           <Search size={20} strokeWidth={3} />
         </Label>
         <Input
           type="text"
-          id="search-input"
+          id={id}
           placeholder="Type game name to search & ENTER"
           className="bg-[#13162b] rounded-2xl w-full px-3 focus:outline-none h-10 mr-2 placeholder:text-sm placeholder:text-[#5b6271] border-none"
         />

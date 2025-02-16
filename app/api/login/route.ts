@@ -1,10 +1,12 @@
 "use server";
 
-import bcrypt from "bcrypt";
-import { NextRequest, NextResponse } from "next/server";
+import bcrypt from 'bcrypt';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { generateAccessToken } from "@/lib/jwt";
-import { prisma } from "@/prisma/prismaClient";
+import { CookieToken } from '@/constants';
+import { generateAccessToken } from '@/lib/jwt';
+import { setSecureCookie } from '@/lib/utils';
+import { prisma } from '@/prisma/prismaClient';
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,25 +14,23 @@ export async function POST(request: NextRequest) {
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "There is no user with this email address." },
+        { status: 404 }
+      );
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return NextResponse.json(
-        { error: "Invalid credentials" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid password" }, { status: 401 });
     }
-    const { token, expirationDate } = generateAccessToken(user.id, user.name);
+    const { token } = await generateAccessToken(
+      user.id,
+      user.name,
+      user.email
+    );
 
     const response = NextResponse.json({ success: true, userId: user.id });
-    response.cookies.set("accessToken", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      expires: isRememberMe ? expirationDate : undefined,
-    });
+    setSecureCookie(response, CookieToken.AUTH_TOKEN, token);
     return response;
   } catch (error) {
     console.error("Login error", error);

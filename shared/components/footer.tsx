@@ -1,10 +1,11 @@
 import { Heart } from "lucide-react";
-import Image from "next/image";
 
-import TelegramIcon from "@/public/telegram.svg";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
+import { Telegram } from "./icons/telegram";
+
 export const Footer = () => {
+  const currentDate = new Date().getFullYear();
   return (
     <div className="bg-secondary-foreground px-10 pt-10 pb-5 flex flex-col gap-5 ">
       <div className="flex flex-col items-center gap-2">
@@ -43,7 +44,7 @@ export const Footer = () => {
         <div>
           <strong className="capitalize">
             <span className="text-[--text-secondary]">© </span>
-            2025 CRACKCHECKER
+            {currentDate} CRACKCHECKER
           </strong>
         </div>
         <div className="flex flex-col md:flex-row gap-5">
@@ -64,7 +65,7 @@ export const Footer = () => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <Image src={TelegramIcon} alt="da" width={24} height={24} />
+            <Telegram className="size-6" />
             <span className="text-[--text-secondary]">
               https://t.me/fopipopi1
             </span>

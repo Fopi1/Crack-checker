@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FC } from "react";
 
 import { cn } from "@/lib/utils";
+import { AppRoutes } from "@/routes";
 import { authStore } from "@/shared/store/authStore";
 
 import { links, navLinksIconProps } from "./constants";
@@ -17,7 +18,7 @@ export const NavLinks: FC<Props> = observer(({ className }) => {
   return (
     <>
       {links.map((link) => {
-        if (link.href === "/login" && authStore.userData) return;
+        if (link.href === AppRoutes.LOGIN && authStore.userData) return;
         const IconComponent = link.icon;
         return (
           <Link

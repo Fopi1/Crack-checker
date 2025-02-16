@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
-} from "../ui/shadcn";
+} from "../../ui/shadcn";
 
 interface Props<T extends FieldValues> {
   fields: FieldProps<T>[];
@@ -37,7 +37,8 @@ export const FormFields = <T extends FieldValues>({
                 <Input
                   placeholder={myField.placeholder}
                   type={myField.type}
-                  autoComplete="on"
+                  autoComplete={myField.autocomplete}
+                  className="text-base"
                   {...field}
                 />
               </FormControl>

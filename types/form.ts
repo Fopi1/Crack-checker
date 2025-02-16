@@ -6,4 +6,5 @@ export type FieldProps<T extends FieldValues> = {
   placeholder: string;
   type: HTMLInputTypeAttribute;
   label: string;
+  autocomplete?: HTMLInputTypeAttribute;
 };

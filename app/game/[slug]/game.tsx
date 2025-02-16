@@ -4,8 +4,8 @@ import { Users } from "lucide-react";
 import Image from "next/image";
 import { FC, useState } from "react";
 
-import metaScoreImage from "@/public/meta.svg";
-import { Steam } from "@/shared/components/icons/steam";
+import { Steam } from "@/shared/components/icons";
+import { Meta } from "@/shared/components/icons/meta";
 import { Blurred, Container, TransitionLink } from "@/shared/components/shared";
 import {
   CrackBell,
@@ -62,7 +62,7 @@ export const Game: FC<Props> = (gameProps) => {
     : "text-crack-red";
 
   return (
-    <section className="w-full h-full bg-secondary-foreground pt-12">
+    <article className="w-full h-full bg-secondary-foreground pt-12">
       <Container>
         <div className="grid grid-cols-[50%_50%] grid-rows-1 gap-4">
           <div className="w-full flex justify-center">
@@ -110,23 +110,11 @@ export const Game: FC<Props> = (gameProps) => {
                 <div className="flex justify-between gap-2">
                   <div className="flex flex-col gap-2">
                     <CrackScore
-                      image={
-                        <Image
-                          src={metaScoreImage}
-                          width={36}
-                          height={36}
-                          alt="Meta score image"
-                        />
-                      }
+                      image={<Meta className="size-9" />}
                       score={metaScore}
                     />
                     <CrackScore
-                      image={
-                        <Users
-                          className="w-[36px] height-[36px]"
-                          strokeWidth={3}
-                        />
-                      }
+                      image={<Users className="size-9" strokeWidth={3} />}
                       score={userScore}
                     />
                   </div>
@@ -151,12 +139,12 @@ export const Game: FC<Props> = (gameProps) => {
                 hoverColor="#fff"
                 className="px-40"
               >
-                <span>Game Link</span>
+                <span>Get {title}</span>
               </TransitionLink>
             </div>
           </div>
         </div>
       </Container>
-    </section>
+    </article>
   );
 };

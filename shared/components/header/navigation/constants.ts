@@ -1,7 +1,6 @@
 import { CalendarDays, Home, LogIn, ReceiptText } from "lucide-react";
 
-import { LucideComponent } from "@/types/components";
-import { Routes } from "@/types/routes";
+import { AppRoutes } from "@/routes";
 
 export const navLinksIconProps = {
   size: 20,
@@ -9,17 +8,17 @@ export const navLinksIconProps = {
   className: "text-[color:--text-secondary]",
 };
 
-export const links: { name: string; href: Routes; icon: LucideComponent }[] = [
+export const links = [
   {
     name: "home",
-    href: "/",
+    href: AppRoutes.MAIN,
     icon: Home,
   },
   {
     name: "release calendar",
-    href: "/release-calendar",
+    href: AppRoutes.RELEASE_CALENDAR,
     icon: CalendarDays,
   },
-  { name: "articles", href: "/articles", icon: ReceiptText },
-  { name: "log in", href: "/login", icon: LogIn },
+  { name: "articles", href: AppRoutes.ARTICLES, icon: ReceiptText },
+  { name: "log in", href: AppRoutes.LOGIN, icon: LogIn },
 ];

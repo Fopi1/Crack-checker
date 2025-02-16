@@ -56,7 +56,8 @@ export async function PUT(request: NextRequest) {
         });
         return NextResponse.json({ success: true });
       case "like":
-        const userId = await SiteApi.users.getUserId();
+        const payload = await SiteApi.users.getJWTPayload();
+        const userId = payload?.id;
         if (!userId) {
           return NextResponse.json(
             { error: "You're not logged in" },

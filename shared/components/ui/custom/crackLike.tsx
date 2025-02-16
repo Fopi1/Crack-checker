@@ -1,14 +1,14 @@
 "use client";
 
-import { ThumbsUp } from 'lucide-react';
-import { observer } from 'mobx-react-lite';
-import { FC, MouseEvent } from 'react';
+import { ThumbsUp } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { FC, MouseEvent } from "react";
 
-import { cn } from '@/lib/utils';
-import { performActionOnGame } from '@/services/siteApi/games';
-import { authStore } from '@/shared/store/authStore';
-import { processingActionsStore } from '@/shared/store/processingActionsStore';
-import { useQueryClient } from '@tanstack/react-query';
+import { cn } from "@/lib/utils";
+import { performActionOnGame } from "@/services/siteApi/games";
+import { authStore } from "@/shared/store/authStore";
+import { processingActionsStore } from "@/shared/store/processingActionsStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   className?: string;
@@ -22,11 +22,15 @@ interface Props {
 export const CrackLike: FC<Props> = observer(
   ({ className, gameId, slug, isLiked, likesNumber, handleClick }) => {
     const queryClient = useQueryClient();
+    const fillOpacity = isLiked && authStore.userData ? "1" : "0";
 
     const toggleLike = async (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      if (processingActionsStore.hasAction(gameId, "like") || !authStore.userId)
+      if (
+        processingActionsStore.hasAction(gameId, "like") ||
+        !authStore.userData
+      )
         return;
       processingActionsStore.addAction(gameId, "like");
       const newLikesNumber = isLiked ? likesNumber - 1 : likesNumber + 1;
@@ -59,7 +63,7 @@ export const CrackLike: FC<Props> = observer(
           size={18}
           strokeWidth={3}
           fill="white"
-          fillOpacity={isLiked ? "1" : "0"}
+          fillOpacity={fillOpacity}
         />
         <p>{likesNumber}</p>
       </button>
