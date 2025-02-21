@@ -1,4 +1,4 @@
-import { ExternalApiRoutes } from "@/routes";
+import { ExternalApiRoutes } from "@/constants/routes";
 import { AllGameData, ReleasedGamesData } from "@/types/api";
 
 import { axiosGameStatusInstance } from "../instance";

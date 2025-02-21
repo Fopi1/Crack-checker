@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { CookieToken } from "./constants";
 import { verifyAccessToken } from "./lib/jwt";
 
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  const token = req.cookies.get("accessToken")?.value;
+  const token = req.cookies.get(CookieToken.AUTH_TOKEN)?.value;
 
-  const isValidToken = token ? Boolean(await verifyAccessToken(token)) : false;
+  const isValidToken = token ? await verifyAccessToken(token) : false;
 
   if (!isValidToken && path === "/profile") {
     console.log("Token can't be verified. Redirecting to login...");

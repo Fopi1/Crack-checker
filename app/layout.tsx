@@ -8,6 +8,7 @@ import { Footer } from '@/shared/components';
 import { Header } from '@/shared/components/header';
 import { Providers } from '@/shared/components/providers';
 import { Background } from '@/shared/components/shared';
+import { Toaster } from '@/shared/components/ui/shadcn';
 
 const Scandia = scandia({
   src: [
@@ -39,8 +40,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const payload = await SiteApi.users.getJWTPayload();
-  const userData = payload ? { id: payload.id, name: payload.name } : null;
+  const payload = await SiteApi.users.getJWTPayloadFromCookies();
+  const userData = payload
+    ? { id: payload.id, name: payload.name, email: payload.email }
+    : null;
 
   return (
     <html lang="en" className={Scandia.className}>
@@ -53,6 +56,7 @@ export default async function RootLayout({
           <Header />
           <main>{children}</main>
           <Footer />
+          <Toaster />
         </Providers>
       </body>
     </html>

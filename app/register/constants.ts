@@ -1,11 +1,12 @@
 import { z } from "zod";
 
+import { FormFieldsLength } from "@/constants";
 import { FieldProps } from "@/types/form";
 
-export const minNameLength = 2;
-export const maxNameLength = 20;
+const { minLength: minNameLength, maxLength: maxNameLength } =
+  FormFieldsLength.name;
 
-export const formSchema = z
+export const registerFormSchema = z
   .object({
     name: z
       .string()
@@ -18,7 +19,11 @@ export const formSchema = z
       .regex(/^[a-zA-Z0-9_]+$/, {
         message: "Username must contain only Latin letters and numbers",
       }),
-    email: z.string().email("Invalid email address"),
+    email: z
+      .string()
+      .trim()
+      .email("Invalid email address")
+      .transform((email) => email.toLowerCase()),
     password: z
       .string()
       .min(8, { message: "The password field must be at least 8 characters." }),
@@ -29,7 +34,7 @@ export const formSchema = z
     path: ["confirmPassword"],
   });
 
-export type RegisterFormSchema = z.infer<typeof formSchema>;
+export type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
 export const registerFormFields: FieldProps<RegisterFormSchema>[] = [
   {

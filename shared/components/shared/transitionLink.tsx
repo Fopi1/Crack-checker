@@ -1,8 +1,8 @@
-import Link from 'next/link';
-import { ComponentType, FC, MouseEvent, PropsWithChildren } from 'react';
+import Link from "next/link";
+import { ComponentType, FC, MouseEvent, PropsWithChildren } from "react";
 
-import { cn } from '@/lib/utils';
-import { IconProps } from '@/types/components';
+import { cn } from "@/lib/utils";
+import { IconProps } from "@/types/components";
 
 interface Props extends PropsWithChildren {
   className?: string;

@@ -1,21 +1,15 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
-import { usePathname } from "next/navigation";
-import { FC, useEffect, useMemo } from "react";
+import { observer } from 'mobx-react-lite';
+import { usePathname } from 'next/navigation';
+import { FC, useEffect, useMemo } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import {
-  Checkbox,
-  Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/shadcn";
-import { sortStore } from "@/shared/store/sortStore";
-import { SortBy, SortOrder, TakeGames } from "@/types/api";
+    Checkbox, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+} from '@/shared/components/ui/shadcn';
+import { sortStore } from '@/shared/store/sortStore';
+import { SortBy, SortOrder, TakeGames } from '@/types/store';
 
 interface Props {
   category: string;

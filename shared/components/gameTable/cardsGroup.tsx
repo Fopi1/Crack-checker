@@ -1,15 +1,15 @@
 "use client";
 
-import { observer } from 'mobx-react-lite';
-import { FC } from 'react';
+import { observer } from "mobx-react-lite";
+import { FC } from "react";
 
-import { cn } from '@/lib/utils';
-import { SiteApi } from '@/services/siteApi/apiClient';
+import { cn } from "@/lib/utils";
+import { SiteApi } from "@/services/siteApi/apiClient";
 // import { authStore } from "@/shared/store/authStore";
-import { sortStore } from '@/shared/store/sortStore';
-import { useQueries } from '@tanstack/react-query';
+import { sortStore } from "@/shared/store/sortStore";
+import { useQueries } from "@tanstack/react-query";
 
-import { GameCard } from '../gameTable/gameCard';
+import { GameCard } from "../gameTable/gameCard";
 
 interface Props {
   category: string;

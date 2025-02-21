@@ -3,7 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
 
-import { AppRoutes } from "@/routes";
+import { AppRoutes } from "@/constants/routes";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { authStore } from "@/shared/store/authStore";
 import { ChevronDownIcon } from "@radix-ui/react-icons";

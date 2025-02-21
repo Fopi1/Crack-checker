@@ -4,8 +4,8 @@ import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { FC } from "react";
 
+import { AppRoutes } from "@/constants/routes";
 import { cn } from "@/lib/utils";
-import { AppRoutes } from "@/routes";
 import { authStore } from "@/shared/store/authStore";
 
 import { links, navLinksIconProps } from "./constants";

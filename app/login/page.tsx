@@ -10,7 +10,7 @@ export default function Login() {
     <section className="w-full h-full bg-secondary-foreground">
       <Container className="py-14 w-3/4 lg:w-[900px]">
         <div>
-          <p className="inline-block">Don&apos;t have an account? </p>
+          <p className="inline-block">{"Don't have an account?"} </p>
           <Link
             href="/register"
             className="hover:text-[#0056b3] text-[#007bff] font-bold"

@@ -1,9 +1,9 @@
-import { Bell } from 'lucide-react';
-import { FC, MouseEvent } from 'react';
+import { Bell } from "lucide-react";
+import { FC, MouseEvent } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '../shadcn';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "../shadcn";
 
 interface Props {
   className?: string;

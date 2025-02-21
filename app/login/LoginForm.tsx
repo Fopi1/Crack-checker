@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { AppRoutes, SiteApiRoutes } from "@/routes";
+import { AppRoutes, SiteApiRoutes } from "@/constants/routes";
+import { getApiError } from "@/lib/utils";
 import { axiosSiteInstance } from "@/services/instance";
 import { Error } from "@/shared/components/shared";
 import {
@@ -26,10 +27,12 @@ interface Props {
 }
 
 export const LoginForm: FC<Props> = observer(({ className }) => {
-  const [isLogining, setIsLogining] = useState(false);
-  const [serverError, setServerError] = useState("");
   const queryClient = useQueryClient();
+
+  const [isLogining, setIsLogining] = useState(false);
+
   const { replace } = useRouter();
+
   const form = useForm<LoginFormSchema>({
     mode: "onChange",
     resolver: zodResolver(loginFormSchema),
@@ -38,6 +41,7 @@ export const LoginForm: FC<Props> = observer(({ className }) => {
       password: "",
     },
   });
+  const serverError = form.formState.errors.root;
 
   const onSubmit: SubmitHandler<LoginFormSchema> = async (data) => {
     try {
@@ -46,17 +50,15 @@ export const LoginForm: FC<Props> = observer(({ className }) => {
         ...data,
         isRememberMe: authStore.isRememberMe,
       });
-      await authStore.checkAuth();
       await Promise.all([
+        authStore.checkAuth(),
         queryClient.refetchQueries({ queryKey: ["likedGames"] }),
         queryClient.refetchQueries({ queryKey: ["games"] }),
       ]);
       replace("/");
     } catch (error) {
-      console.error(error);
-      setServerError(
-        "The user with this email does not exist or the password is incorrect"
-      );
+      const { errorField, errorMessage } = getApiError(error);
+      form.setError(errorField, { message: errorMessage });
     } finally {
       setIsLogining(false);
     }
@@ -70,7 +72,7 @@ export const LoginForm: FC<Props> = observer(({ className }) => {
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {serverError && <Error>{serverError}</Error>}
+        {serverError && <Error>{serverError.message}</Error>}
         <FormFields
           fields={loginFormFields}
           form={form}

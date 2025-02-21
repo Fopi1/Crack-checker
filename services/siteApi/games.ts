@@ -1,7 +1,8 @@
-import { SiteApiRoutes } from '@/routes';
-import { AddValue, GameWithLikes, SortBy, SortOrder, TakeGames } from '@/types/api';
+import { SiteApiRoutes } from "@/constants/routes";
+import { AddValue, GameWithLikes } from "@/types/api";
+import { SortBy, SortOrder, TakeGames } from "@/types/store";
 
-import { axiosSiteInstance } from '../instance';
+import { axiosSiteInstance } from "../instance";
 
 export const getByParams = async (
   category: string,
@@ -10,15 +11,18 @@ export const getByParams = async (
   sortOrder: SortOrder,
   isAAA: boolean
 ): Promise<GameWithLikes[]> => {
-  const data = (
-    await axiosSiteInstance.post<GameWithLikes[]>(SiteApiRoutes.GAMES, {
-      category,
-      take,
-      sortBy,
-      sortOrder,
-      isAAA,
-    })
-  ).data;
+  const { data } = await axiosSiteInstance.get<GameWithLikes[]>(
+    SiteApiRoutes.GAMES,
+    {
+      params: {
+        category,
+        take,
+        sortBy,
+        sortOrder,
+        isAAA,
+      },
+    }
+  );
   return data;
 };
 
@@ -55,11 +59,14 @@ export const sortGames = (
 export const getGameBySlug = async (
   slug: string
 ): Promise<GameWithLikes | null> => {
-  const game = (
-    await axiosSiteInstance.post<GameWithLikes>(SiteApiRoutes.GAME, {
-      slug,
-    })
-  ).data;
+  const { data: game } = await axiosSiteInstance.get<GameWithLikes>(
+    SiteApiRoutes.GAME,
+    {
+      params: {
+        slug,
+      },
+    }
+  );
   if (!game) {
     return null;
   }
@@ -71,7 +78,7 @@ export const performActionOnGame = async (
   addValue: AddValue
 ) => {
   try {
-    await axiosSiteInstance.put(SiteApiRoutes.GAMES, {
+    await axiosSiteInstance.put(SiteApiRoutes.GAME, {
       gameId,
       addValue,
     });

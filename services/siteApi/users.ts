@@ -2,8 +2,9 @@
 
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 
-import { CookieToken } from "@/constants";
+import { CookieToken } from "@/constants/constants";
 import { verifyAccessToken } from "@/lib/jwt";
 import { prisma } from "@/prisma/prismaClient";
 
@@ -11,15 +12,23 @@ export const hashPassword = async (password: string) =>
   await bcrypt.hash(password, 10);
 
 export const checkIfEmailExist = async (email: string) => {
-  return !!(await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  }));
+  return Boolean(
+    await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    })
+  );
 };
 
-export const getJWTPayload = async () => {
+export const getJWTPayloadFromCookies = async () => {
   const token = cookies().get(CookieToken.AUTH_TOKEN)?.value;
+  const payload = token ? await verifyAccessToken(token) : null;
+  return payload;
+};
+
+export const getJWTPayloadFromRequest = async (req: NextRequest) => {
+  const token = req.cookies.get(CookieToken.AUTH_TOKEN)?.value;
   const payload = token ? await verifyAccessToken(token) : null;
   return payload;
 };
@@ -30,7 +39,7 @@ export const removeCookiePayload = async () => {
 
 export const getLikedGames = async (): Promise<string[] | null> => {
   try {
-    const payload = await getJWTPayload();
+    const payload = await getJWTPayloadFromCookies();
     const userId = payload?.id;
     if (!userId) {
       throw new Error("Cannot find user id");

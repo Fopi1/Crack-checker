@@ -1,6 +1,6 @@
 import { CalendarDays, Home, LogIn, ReceiptText } from "lucide-react";
 
-import { AppRoutes } from "@/routes";
+import { AppRoutes } from "@/constants/routes";
 
 export const navLinksIconProps = {
   size: 20,

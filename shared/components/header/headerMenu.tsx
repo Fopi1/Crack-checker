@@ -1,14 +1,14 @@
 "use client";
 
-import { AlignJustify } from 'lucide-react';
-import { observer } from 'mobx-react-lite';
-import { usePathname } from 'next/navigation';
-import { useCallback, useEffect, useRef } from 'react';
+import { AlignJustify } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef } from "react";
 
-import { cn } from '@/lib/utils';
-import { componentStore } from '@/shared/store/componentsStore';
+import { cn } from "@/lib/utils";
+import { componentStore } from "@/shared/store/componentsStore";
 
-import { NavLinks } from './navigation/navLinks';
+import { NavLinks } from "./navigation/navLinks";
 
 interface Props {
   className?: string;

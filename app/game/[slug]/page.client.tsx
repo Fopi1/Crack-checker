@@ -1,8 +1,9 @@
 "use client";
-import { useQueries } from "@tanstack/react-query";
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { Game } from "./game";
-import { coolPlaceholder } from "./constants";
+import { SiteApi } from '@/services/siteApi/apiClient';
+import { useQueries } from '@tanstack/react-query';
+
+import { coolPlaceholder } from './constants';
+import { Game } from './game';
 
 interface Props {
   slug: string;

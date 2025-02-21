@@ -1,27 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useRouter } from 'next/navigation';
+import { FC, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { AppRoutes, SiteApiRoutes } from "@/routes";
-import { axiosSiteInstance } from "@/services/instance";
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { Error } from "@/shared/components/shared";
-import {
-  FormButton,
-  FormFields,
-  FormTextLink,
-} from "@/shared/components/shared/formPieces";
-import { Form } from "@/shared/components/ui/shadcn";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { AppRoutes, SiteApiRoutes } from '@/constants/routes';
+import { getApiError } from '@/lib/utils';
+import { axiosSiteInstance } from '@/services/instance';
+import { SiteApi } from '@/services/siteApi/apiClient';
+import { Error } from '@/shared/components/shared';
+import { FormButton, FormFields, FormTextLink } from '@/shared/components/shared/formPieces';
+import { Form } from '@/shared/components/ui/shadcn';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 
-import {
-  formSchema,
-  registerFormFields,
-  RegisterFormSchema,
-} from "./constants";
+import { registerFormFields, registerFormSchema, RegisterFormSchema } from './constants';
 
 interface Props {
   className?: string;
@@ -30,12 +23,11 @@ interface Props {
 export const RegisterForm: FC<Props> = ({ className }) => {
   const queryClient = useQueryClient();
   const [isCheckingData, setIsCheckingData] = useState(false);
-  const [serverError, setServerError] = useState<string>("");
   const { replace } = useRouter();
 
   const form = useForm<RegisterFormSchema>({
     mode: "onChange",
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -44,6 +36,7 @@ export const RegisterForm: FC<Props> = ({ className }) => {
     },
   });
   const { watch, setError, clearErrors } = form;
+  const serverError = form.formState.errors.root;
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
@@ -53,7 +46,6 @@ export const RegisterForm: FC<Props> = ({ className }) => {
       clearErrors("confirmPassword");
     } else {
       setError("confirmPassword", {
-        type: "custom",
         message: "Passwords don't match",
       });
     }
@@ -65,7 +57,6 @@ export const RegisterForm: FC<Props> = ({ className }) => {
       const isEmailExist = await SiteApi.users.checkIfEmailExist(data.email);
       if (isEmailExist) {
         setError("email", {
-          type: "custom",
           message: "User with this email already exists",
         });
         return;
@@ -83,8 +74,8 @@ export const RegisterForm: FC<Props> = ({ className }) => {
       await queryClient.invalidateQueries({ queryKey: ["likedGames"] });
       replace("/");
     } catch (error) {
-      console.error("Registration error: ", error);
-      setServerError("Something went wrong. Please try again later.");
+      const { errorField, errorMessage } = getApiError(error);
+      setError(errorField, { message: errorMessage });
     } finally {
       setIsCheckingData(false);
     }
@@ -97,7 +88,7 @@ export const RegisterForm: FC<Props> = ({ className }) => {
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {serverError && <Error>{serverError}</Error>}
+        {serverError && <Error>{serverError.message}</Error>}
         <FormFields
           fields={registerFormFields}
           form={form}

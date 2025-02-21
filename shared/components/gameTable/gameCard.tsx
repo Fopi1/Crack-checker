@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { FC, memo, useState } from "react";
 
+import { AppRoutes } from "@/constants/routes";
 import { cn } from "@/lib/utils";
-import { AppRoutes } from "@/routes";
 import { performActionOnGame } from "@/services/siteApi/games";
 import { useCrackStatus } from "@/shared/hooks";
 import { processingActionsStore } from "@/shared/store/processingActionsStore";

@@ -11,9 +11,9 @@ export const AppRoutes = {
 
 export enum SiteApiRoutes {
   GAMES = "/games",
-  GAME = "/game",
-  REGISTER = "/register",
-  LOGIN = "/login",
+  GAME = "/games/[slug]",
+  REGISTER = "/auth/register",
+  LOGIN = "/auth/login",
   USER = "/user",
 }
 

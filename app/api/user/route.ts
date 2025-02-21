@@ -1,12 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { UserInfoSchema, userInfoSchema } from "@/app/profile/constants";
+import { CookieToken } from "@/constants";
 import { generateAccessToken } from "@/lib/jwt";
+import { responseApiFormError, setLaxCookie } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
+import { SiteApi } from "@/services/siteApi/apiClient";
 
+const userApiFormError = (
+  args: Parameters<typeof responseApiFormError<UserInfoSchema>>[0]
+) => responseApiFormError<UserInfoSchema>(args);
 export async function PUT(req: NextRequest) {
   try {
-    const { email, changeData } = await req.json();
-    const { name: newName, email: newEmail } = changeData;
+    const body = await req.json();
+    const parseResult = userInfoSchema.safeParse(body);
+    if (!parseResult.success) {
+      return NextResponse.json(
+        { error: parseResult.error.format() },
+        { status: 400 }
+      );
+    }
+    const payload = await SiteApi.users.getJWTPayloadFromRequest(req);
+    if (!payload) {
+      return userApiFormError({
+        field: "name",
+        error: "Unathorized",
+        status: 401,
+      });
+    }
+    const email = payload.email;
+
+    const { name: newName, email: newEmail } = parseResult.data;
+
     const [user, newEmailUser] = await Promise.all([
       prisma.user.findUnique({ where: { email } }),
       prisma.user.findUnique({
@@ -14,16 +39,18 @@ export async function PUT(req: NextRequest) {
       }),
     ]);
     if (!user) {
-      return NextResponse.json(
-        { error: "There is no user with this email address." },
-        { status: 404 }
-      );
+      return userApiFormError({
+        field: "root",
+        error: "There is no user with your email address.",
+        status: 404,
+      });
     }
-    if (newEmailUser) {
-      return NextResponse.json(
-        { error: "User with this email already exist" },
-        { status: 409 }
-      );
+    if (newEmailUser && email !== newEmail) {
+      return userApiFormError({
+        field: "email",
+        error: "User with this email already exist",
+        status: 409,
+      });
     }
     if (email !== newEmail || user.name !== newName) {
       const newUser = await prisma.user.update({
@@ -39,13 +66,8 @@ export async function PUT(req: NextRequest) {
         newUser.email
       );
       const response = NextResponse.json({ success: true, user: newUser });
-      response.cookies.set("accessToken", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        expires: undefined,
-      });
+      setLaxCookie(response, CookieToken.AUTH_TOKEN, token);
+      return response;
     }
     return NextResponse.json({ success: true });
   } catch (error) {

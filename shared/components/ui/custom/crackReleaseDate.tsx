@@ -1,7 +1,7 @@
-import { Calendar } from 'lucide-react';
-import { FC } from 'react';
+import { Calendar } from "lucide-react";
+import { FC } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface Props {
   className?: string;

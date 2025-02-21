@@ -8,3 +8,9 @@ export type FieldProps<T extends FieldValues> = {
   label: string;
   autocomplete?: HTMLInputTypeAttribute;
 };
+
+export type ApiFormError<T extends Record<string, unknown>> = {
+  field: keyof T | "root";
+  error: string;
+  status?: number;
+};

@@ -1,10 +1,19 @@
 import { z } from "zod";
 
+import { FormFieldsLength } from "@/constants";
 import { FieldProps } from "@/types/form";
 
 export const loginFormSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string(),
+  email: z
+    .string()
+    .trim()
+    .email("Invalid email address")
+    .transform((email) => email.toLowerCase()),
+  password: z
+    .string()
+    .min(FormFieldsLength.password.minLength, {
+      message: "Your password must be at least 8 characters long.",
+    }),
 });
 export type LoginFormSchema = z.infer<typeof loginFormSchema>;
 
