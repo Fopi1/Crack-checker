@@ -1,4 +1,4 @@
-import { GamesByCategories } from '@/shared/components/gameTable';
+import { GamesByCategories } from "@/shared/components/gamesGroup";
 
 export default function Home() {
   return (

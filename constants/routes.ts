@@ -14,7 +14,8 @@ export enum SiteApiRoutes {
   GAME = "/games/[slug]",
   REGISTER = "/auth/register",
   LOGIN = "/auth/login",
-  USER = "/user",
+  USER = "/update/user",
+  PASSWORD = "/update/password",
 }
 
 export enum ExternalApiRoutes {

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { categories } from "@/prisma/constants";
 
 import { Container } from "../shared/container";
-import { CardsGroup } from "./cardsGroup";
+import { GamesGroup } from "./gamesGroup";
 import { GameFilterHeader } from "./header/gameFilterHeader";
 
 interface Props {
@@ -29,7 +29,7 @@ export const GamesByCategories: FC<Props> = ({ className }) => {
             )}
           >
             <GameFilterHeader title={category.title} icon={category.icon} />
-            <CardsGroup category={category.title} />
+            <GamesGroup category={category.title} />
           </Container>
         </div>
       ))}

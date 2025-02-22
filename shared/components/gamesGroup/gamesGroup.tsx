@@ -5,11 +5,10 @@ import { FC } from "react";
 
 import { cn } from "@/lib/utils";
 import { SiteApi } from "@/services/siteApi/apiClient";
-// import { authStore } from "@/shared/store/authStore";
 import { sortStore } from "@/shared/store/sortStore";
 import { useQueries } from "@tanstack/react-query";
 
-import { GameCard } from "../gameTable/gameCard";
+import { GameCard } from "./gameCard";
 
 interface Props {
   category: string;
@@ -18,7 +17,7 @@ interface Props {
 
 const staleTime = 1000 * 60 * 5;
 
-export const CardsGroup: FC<Props> = observer(({ category, className }) => {
+export const GamesGroup: FC<Props> = observer(({ category, className }) => {
   const { takeGames, sortBy, sortOrder, isAAA } =
     sortStore.categoriesSortOptions[category];
   const [gamesQuery, likedGamesQuery] = useQueries({

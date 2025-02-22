@@ -6,6 +6,8 @@ import { FieldProps } from "@/types/form";
 const { minLength: minNameLength, maxLength: maxNameLength } =
   FormFieldsLength.name;
 
+const { minLength: minPasswordLength } = FormFieldsLength.password;
+
 export const registerFormSchema = z
   .object({
     name: z
@@ -24,9 +26,9 @@ export const registerFormSchema = z
       .trim()
       .email("Invalid email address")
       .transform((email) => email.toLowerCase()),
-    password: z
-      .string()
-      .min(8, { message: "The password field must be at least 8 characters." }),
+    password: z.string().min(minPasswordLength, {
+      message: `The password field must be at least ${minPasswordLength} characters.`,
+    }),
     confirmPassword: z.string(),
   })
   .refine(({ password, confirmPassword }) => password === confirmPassword, {
@@ -65,4 +67,4 @@ export const registerFormFields: FieldProps<RegisterFormSchema>[] = [
     label: "Confirm Password",
     autocomplete: "new-password",
   },
-];
+] as const;

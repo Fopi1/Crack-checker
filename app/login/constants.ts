@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { FormFieldsLength } from "@/constants";
-import { FieldProps } from "@/types/form";
+import { FormFieldsLength } from '@/constants';
+import { FieldProps } from '@/types/form';
 
 export const loginFormSchema = z.object({
   email: z
@@ -32,4 +32,4 @@ export const loginFormFields: FieldProps<LoginFormSchema>[] = [
     label: "Password",
     autocomplete: "current-password",
   },
-];
+] as const;

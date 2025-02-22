@@ -1,11 +1,14 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { FormFieldsLength } from '@/constants';
-import { FieldProps } from '@/types/form';
+import { FormFieldsLength } from "@/constants";
+import { FieldProps } from "@/types/form";
 
 const { minLength: minNameLength, maxLength: maxNameLength } =
   FormFieldsLength.name;
 
+const { minLength: minPasswordLength } = FormFieldsLength.password;
+
+// UserInfo
 export const userInfoSchema = z.object({
   name: z
     .string()
@@ -36,4 +39,52 @@ export const userInfoFields: FieldProps<UserInfoSchema>[] = [
     label: "Name",
   },
   { name: "email", placeholder: "", type: "email", label: "Email" },
-];
+] as const;
+
+// PasswordInfo
+
+export const passwordInfoSchema = z
+  .object({
+    currentPassword: z.string().min(minPasswordLength, {
+      message: `The new password must not be less than ${minPasswordLength} characters in length.`,
+    }),
+    password: z.string().min(minPasswordLength, {
+      message: `New password must be at least ${minPasswordLength} characters.`,
+    }),
+    confirmPassword: z.string(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+      });
+    }
+    if (data.password === data.currentPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "New password must be different from the current password",
+        path: ["password"],
+      });
+    }
+  });
+
+export type PasswordInfoSchema = z.infer<typeof passwordInfoSchema>;
+
+export const passwordInfoFields: FieldProps<PasswordInfoSchema>[] = [
+  {
+    name: "currentPassword",
+    placeholder: "",
+    type: "string",
+    label: "Current Password",
+    autocomplete: "current-password",
+  },
+  { name: "password", placeholder: "", type: "string", label: "New Password" },
+  {
+    name: "confirmPassword",
+    placeholder: "",
+    type: "string",
+    label: "Confirm Password",
+  },
+] as const;
