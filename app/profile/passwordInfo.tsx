@@ -6,8 +6,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { SiteApiRoutes } from "@/constants";
 import { getApiError } from "@/lib/utils";
 import { axiosSiteInstance } from "@/services/instance";
+import { useToast } from "@/shadcn/hooks";
 import { FormTemplate } from "@/shared/components/page/profile/formTemplate";
-import { useToast } from "@/shared/hooks";
 import { authStore } from "@/shared/store/authStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -36,6 +36,7 @@ export const PasswordInfo = () => {
       await axiosSiteInstance.put(SiteApiRoutes.PASSWORD, {
         ...data,
       });
+      form.reset();
       authStore.checkAuth();
       toast({ description: "Saved." });
     } catch (error) {

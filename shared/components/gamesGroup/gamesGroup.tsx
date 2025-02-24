@@ -3,8 +3,8 @@
 import { observer } from "mobx-react-lite";
 import { FC } from "react";
 
-import { cn } from "@/lib/utils";
 import { SiteApi } from "@/services/siteApi/apiClient";
+import { cn } from "@/shadcn";
 import { sortStore } from "@/shared/store/sortStore";
 import { useQueries } from "@tanstack/react-query";
 

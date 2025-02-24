@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FC, PropsWithChildren } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/shadcn";
 
 interface Props extends PropsWithChildren {
   className?: string;

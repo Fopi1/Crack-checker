@@ -1,13 +1,13 @@
 "use server";
 
-import bcrypt from "bcrypt";
-import { NextRequest, NextResponse } from "next/server";
+import bcrypt from 'bcrypt';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { LoginFormSchema, loginFormSchema } from "@/app/login/constants";
-import { CookieToken } from "@/constants/constants";
-import { generateAccessToken } from "@/lib/jwt";
-import { responseApiFormError, setLaxCookie } from "@/lib/utils";
-import { prisma } from "@/prisma/prismaClient";
+import { LoginFormSchema, loginFormSchema } from '@/app/login/constants';
+import { CookieToken } from '@/constants/constants';
+import { generateAccessToken } from '@/lib/jwt';
+import { responseApiFormError, setLaxCookie } from '@/lib/utils';
+import { prisma } from '@/prisma/prismaClient';
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,9 +30,8 @@ export async function POST(req: NextRequest) {
     }
     const { token } = await generateAccessToken(user.id, user.name, user.email);
 
-    const response = NextResponse.json({ success: true, userId: user.id });
-    setLaxCookie(response, CookieToken.AUTH_TOKEN, token);
-    return response;
+    setLaxCookie(CookieToken.AUTH_TOKEN, token);
+    return NextResponse.json({ success: true, userId: user.id });
   } catch (error) {
     console.error("Login error", error);
     return NextResponse.json(

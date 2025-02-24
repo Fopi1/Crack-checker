@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/shadcn";
 import { componentStore } from "@/shared/store/componentsStore";
 
 import { NavLinks } from "./navigation/navLinks";

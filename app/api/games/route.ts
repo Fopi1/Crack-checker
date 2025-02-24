@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { getParams } from "@/lib/utils";
+import { getApiParams } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { SortBy, SortOrder } from "@/types/store";
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
       sortOrder = "descending",
       take = 25,
       isAAA = false,
-    } = getParams(req.nextUrl.searchParams);
+    } = getApiParams(req.nextUrl.searchParams);
     const games = await prisma.game.findMany({
       include: {
         likes: true,

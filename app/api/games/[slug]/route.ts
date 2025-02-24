@@ -1,13 +1,15 @@
+"use server";
+
 import { NextRequest, NextResponse } from "next/server";
 
-import { getParams } from "@/lib/utils";
+import { getApiParams } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { AddValue } from "@/types/api";
 
 export async function GET(req: NextRequest) {
   try {
-    const params = getParams(req.nextUrl.searchParams);
+    const params = getApiParams(req.nextUrl.searchParams);
     const { slug } = params;
     const game = await prisma.game.findFirst({
       where: {
@@ -55,7 +57,7 @@ export async function PUT(req: NextRequest) {
         });
         return NextResponse.json({ success: true });
       case "like":
-        const payload = await SiteApi.users.getJWTPayloadFromRequest(req);
+        const payload = await SiteApi.users.getJWTPayload();
         const userId = payload?.id;
         if (!userId) {
           return NextResponse.json(

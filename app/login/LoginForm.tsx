@@ -6,8 +6,9 @@ import { FC, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { AppRoutes, SiteApiRoutes } from "@/constants/routes";
-import { getApiError } from "@/lib/utils";
+import { getApiFormError } from "@/lib/utils";
 import { axiosSiteInstance } from "@/services/instance";
+import { Form } from "@/shadcn/components/ui";
 import { Error } from "@/shared/components/shared";
 import {
   FormButton,
@@ -15,7 +16,6 @@ import {
   FormTextLink,
   RememberMeCheckbox,
 } from "@/shared/components/shared/formPieces";
-import { Form } from "@/shared/components/ui/shadcn";
 import { authStore } from "@/shared/store/authStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -57,7 +57,7 @@ export const LoginForm: FC<Props> = observer(({ className }) => {
       ]);
       replace("/");
     } catch (error) {
-      const { errorField, errorMessage } = getApiError(error);
+      const { errorField, errorMessage } = getApiFormError(error);
       form.setError(errorField, { message: errorMessage });
     } finally {
       setIsLogining(false);

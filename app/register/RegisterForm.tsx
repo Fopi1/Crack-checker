@@ -1,20 +1,28 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
-import { FC, useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useRouter } from "next/navigation";
+import { FC, useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-import { AppRoutes, SiteApiRoutes } from '@/constants/routes';
-import { getApiError } from '@/lib/utils';
-import { axiosSiteInstance } from '@/services/instance';
-import { SiteApi } from '@/services/siteApi/apiClient';
-import { Error } from '@/shared/components/shared';
-import { FormButton, FormFields, FormTextLink } from '@/shared/components/shared/formPieces';
-import { Form } from '@/shared/components/ui/shadcn';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
+import { AppRoutes, SiteApiRoutes } from "@/constants/routes";
+import { getApiFormError } from "@/lib/utils";
+import { axiosSiteInstance } from "@/services/instance";
+import { SiteApi } from "@/services/siteApi/apiClient";
+import { Form } from "@/shadcn/components/ui";
+import { Error } from "@/shared/components/shared";
+import {
+  FormButton,
+  FormFields,
+  FormTextLink,
+} from "@/shared/components/shared/formPieces";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { registerFormFields, registerFormSchema, RegisterFormSchema } from './constants';
+import {
+  registerFormFields,
+  registerFormSchema,
+  RegisterFormSchema,
+} from "./constants";
 
 interface Props {
   className?: string;
@@ -54,7 +62,9 @@ export const RegisterForm: FC<Props> = ({ className }) => {
   const onSubmit: SubmitHandler<RegisterFormSchema> = async (data) => {
     try {
       setIsCheckingData(true);
-      const isEmailExist = await SiteApi.users.checkIfEmailExist(data.email);
+      const isEmailExist = Boolean(
+        await SiteApi.users.getUserByEmail(data.email)
+      );
       if (isEmailExist) {
         setError("email", {
           message: "User with this email already exists",
@@ -62,9 +72,7 @@ export const RegisterForm: FC<Props> = ({ className }) => {
         return;
       }
       await axiosSiteInstance.post(SiteApiRoutes.REGISTER, {
-        name: data.name,
-        email: data.email,
-        password: data.password,
+        ...data,
       });
       await axiosSiteInstance.post(SiteApiRoutes.LOGIN, {
         email: data.email,
@@ -74,7 +82,7 @@ export const RegisterForm: FC<Props> = ({ className }) => {
       await queryClient.invalidateQueries({ queryKey: ["likedGames"] });
       replace("/");
     } catch (error) {
-      const { errorField, errorMessage } = getApiError(error);
+      const { errorField, errorMessage } = getApiFormError(error);
       setError(errorField, { message: errorMessage });
     } finally {
       setIsCheckingData(false);

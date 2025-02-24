@@ -3,10 +3,9 @@
 import { observer } from "mobx-react-lite";
 import { FC } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/shadcn";
+import { Checkbox, Label } from "@/shadcn/components/ui";
 import { authStore } from "@/shared/store/authStore";
-
-import { Checkbox, Label } from "../../ui/shadcn";
 
 interface Props {
   className?: string;

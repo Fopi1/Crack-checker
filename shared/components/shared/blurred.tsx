@@ -1,24 +1,15 @@
 "use client";
 
-import { FC, PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useState } from "react";
 
-import { cn } from "@/lib/utils";
-
-interface Props extends PropsWithChildren {
-  className?: string;
-}
-
-export const Blurred: FC<Props> = ({ className, children }) => {
+export const Blurred = ({ children }: PropsWithChildren) => {
   const [isBlurred, setIsBlurred] = useState(true);
   const handleIsBlurred = () => {
     setIsBlurred(false);
   };
   return (
     <div
-      className={cn(
-        isBlurred ? "select-none blur-sm cursor-pointer" : "",
-        className
-      )}
+      className={isBlurred ? "select-none blur-sm cursor-pointer" : ""}
       onClick={handleIsBlurred}
     >
       {children}

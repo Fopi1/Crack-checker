@@ -1,3 +1,5 @@
+"use server";
+import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
 import {
@@ -24,7 +26,7 @@ export async function PUT(req: NextRequest) {
         { status: 400 }
       );
     }
-    const payload = await SiteApi.users.getJWTPayloadFromRequest(req);
+    const payload = await SiteApi.users.getJWTPayload();
     if (!payload) {
       return passwordApiFormError({
         field: "root",
@@ -38,7 +40,14 @@ export async function PUT(req: NextRequest) {
     const user = await prisma.user.findUnique({
       where: { email },
     });
-    if (currentPassword !== user?.password) {
+    if (!user) {
+      return passwordApiFormError({
+        field: "root",
+        error: "Unathorized",
+        status: 401,
+      });
+    }
+    if (!(await bcrypt.compare(currentPassword, user.password))) {
       return passwordApiFormError({
         field: "currentPassword",
         error: "Invalid password",
@@ -52,11 +61,11 @@ export async function PUT(req: NextRequest) {
         status: 409,
       });
     }
-
+    const hashedPassword = await SiteApi.users.hashPassword(password);
     const newUser = await prisma.user.update({
       where: { email },
       data: {
-        password: password,
+        password: hashedPassword,
       },
     });
     const { token } = await generateAccessToken(
@@ -65,7 +74,7 @@ export async function PUT(req: NextRequest) {
       newUser.email
     );
     const response = NextResponse.json({ success: true, user: newUser });
-    setLaxCookie(response, CookieToken.AUTH_TOKEN, token);
+    setLaxCookie(CookieToken.AUTH_TOKEN, token);
     return response;
   } catch (error) {
     console.error("Update user password error: ", error);

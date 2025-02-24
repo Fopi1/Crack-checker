@@ -6,8 +6,8 @@ import Link from "next/link";
 import { FC, useEffect, useRef, useState } from "react";
 
 import { AppRoutes } from "@/constants/routes";
-import { cn } from "@/lib/utils";
 import logo from "@/public/logo.png";
+import { cn } from "@/shadcn";
 import { authStore } from "@/shared/store/authStore";
 
 import { SearchForm } from "../shared/searchForm";

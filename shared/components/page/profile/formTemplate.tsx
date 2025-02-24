@@ -1,10 +1,9 @@
 import { SubmitHandler, UseFormReturn } from "react-hook-form";
 
+import { Form } from "@/shadcn/components/ui";
+import { Error, FormButton, FormFields } from "@/shared/components/shared";
 import { ServerError } from "@/types/components";
 import { FieldProps } from "@/types/form";
-
-import { Error, FormButton, FormFields } from "../../shared";
-import { Form } from "../../ui/shadcn";
 
 interface Props<T extends Record<string, any>> {
   title: string;

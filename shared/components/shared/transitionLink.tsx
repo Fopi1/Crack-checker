@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ComponentType, FC, MouseEvent, PropsWithChildren } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/shadcn";
 import { IconProps } from "@/types/components";
 
 interface Props extends PropsWithChildren {

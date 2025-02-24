@@ -1,8 +1,6 @@
 import { FieldValues, UseFormReturn } from "react-hook-form";
 
-import { cn } from "@/lib/utils";
-import { FieldProps } from "@/types/form";
-
+import { cn } from "@/shadcn";
 import {
   FormControl,
   FormField,
@@ -10,7 +8,8 @@ import {
   FormLabel,
   FormMessage,
   Input,
-} from "../../ui/shadcn";
+} from "@/shadcn/components/ui";
+import { FieldProps } from "@/types/form";
 
 interface Props<T extends FieldValues> {
   fields: FieldProps<T>[];

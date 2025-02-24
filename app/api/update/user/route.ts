@@ -1,3 +1,5 @@
+"use server";
+
 import { NextRequest, NextResponse } from "next/server";
 
 import { UserInfoSchema, userInfoSchema } from "@/app/profile/constants";
@@ -20,7 +22,7 @@ export async function PUT(req: NextRequest) {
         { status: 400 }
       );
     }
-    const payload = await SiteApi.users.getJWTPayloadFromRequest(req);
+    const payload = await SiteApi.users.getJWTPayload();
     if (!payload) {
       return userApiFormError({
         field: "name",
@@ -66,7 +68,7 @@ export async function PUT(req: NextRequest) {
         newUser.email
       );
       const response = NextResponse.json({ success: true, user: newUser });
-      setLaxCookie(response, CookieToken.AUTH_TOKEN, token);
+      setLaxCookie(CookieToken.AUTH_TOKEN, token);
       return response;
     }
     return NextResponse.json({ success: true });

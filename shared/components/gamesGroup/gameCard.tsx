@@ -5,8 +5,8 @@ import Link from "next/link";
 import { FC, memo, useState } from "react";
 
 import { AppRoutes } from "@/constants/routes";
-import { cn } from "@/lib/utils";
 import { performActionOnGame } from "@/services/siteApi/games";
+import { cn } from "@/shadcn";
 import { useCrackStatus } from "@/shared/hooks";
 import { processingActionsStore } from "@/shared/store/processingActionsStore";
 import { GameWithLikes } from "@/types/api";
@@ -20,7 +20,7 @@ import {
   CrackReleaseDate,
   CrackStatus,
   CrackViews,
-} from "../ui/custom";
+} from "../ui";
 
 interface Props extends GameWithLikes {
   className?: string;

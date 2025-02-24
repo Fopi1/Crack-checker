@@ -4,8 +4,7 @@ import { Users } from "lucide-react";
 import Image from "next/image";
 import { FC, useState } from "react";
 
-import { Steam } from "@/shared/components/icons";
-import { Meta } from "@/shared/components/icons/meta";
+import { Meta, Steam } from "@/shared/components/icons";
 import { Blurred, Container, TransitionLink } from "@/shared/components/shared";
 import {
   CrackBell,
@@ -17,7 +16,7 @@ import {
   CrackScore,
   CrackStatus,
   CrackViews,
-} from "@/shared/components/ui/custom";
+} from "@/shared/components/ui";
 import { useCrackStatus } from "@/shared/hooks";
 import { GameWithLikes } from "@/types/api";
 

@@ -1,8 +1,7 @@
-import { ButtonHTMLAttributes, FC, PropsWithChildren } from "react";
+import { ButtonHTMLAttributes, FC, PropsWithChildren } from 'react';
 
-import { cn } from "@/lib/utils";
-
-import { Button } from "../../ui/shadcn";
+import { cn } from '@/shadcn';
+import { Button } from '@/shadcn/components/ui';
 
 interface Props
   extends ButtonHTMLAttributes<HTMLButtonElement>,

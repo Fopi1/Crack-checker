@@ -2,8 +2,8 @@
 
 import { FC } from "react";
 
-import { cn } from "@/lib/utils";
 import { categories } from "@/prisma/constants";
+import { cn } from "@/shadcn";
 
 import { Container } from "../shared/container";
 import { GamesGroup } from "./gamesGroup";

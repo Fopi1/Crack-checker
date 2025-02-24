@@ -3,17 +3,16 @@
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
 
-import { AppRoutes } from "@/constants/routes";
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { authStore } from "@/shared/store/authStore";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
-
+import { AppRoutes, SiteApiRoutes } from "@/constants/routes";
+import { axiosSiteInstance } from "@/services/instance";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../ui/shadcn";
+} from "@/shadcn/components/ui";
+import { authStore } from "@/shared/store/authStore";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 export const LoginedActionsButton = observer(() => {
   const router = useRouter();
@@ -24,7 +23,8 @@ export const LoginedActionsButton = observer(() => {
   };
 
   const logOut = async () => {
-    await SiteApi.users.removeCookiePayload();
+    await axiosSiteInstance.post(SiteApiRoutes.LOGOUT);
+    authStore.userData = null;
     if (pathname === AppRoutes.MAIN) {
       await authStore.checkAuth();
     } else {

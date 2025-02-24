@@ -5,7 +5,7 @@ import Link from "next/link";
 import { FC } from "react";
 
 import { AppRoutes } from "@/constants/routes";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shadcn";
 import { authStore } from "@/shared/store/authStore";
 
 import { links, navLinksIconProps } from "./constants";

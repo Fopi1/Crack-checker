@@ -1,7 +1,7 @@
-import { Eye } from "lucide-react";
-import { FC } from "react";
+import { Eye } from 'lucide-react';
+import { FC } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/shadcn/lib';
 
 interface Props {
   className?: string;

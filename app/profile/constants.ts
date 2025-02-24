@@ -80,11 +80,18 @@ export const passwordInfoFields: FieldProps<PasswordInfoSchema>[] = [
     label: "Current Password",
     autocomplete: "current-password",
   },
-  { name: "password", placeholder: "", type: "string", label: "New Password" },
+  {
+    name: "password",
+    placeholder: "",
+    type: "string",
+    label: "New Password",
+    autocomplete: "new-password",
+  },
   {
     name: "confirmPassword",
     placeholder: "",
     type: "string",
     label: "Confirm Password",
+    autocomplete: "new-password",
   },
 ] as const;

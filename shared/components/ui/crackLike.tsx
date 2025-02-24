@@ -1,14 +1,14 @@
 "use client";
 
-import { ThumbsUp } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { FC, MouseEvent } from "react";
+import { ThumbsUp } from 'lucide-react';
+import { observer } from 'mobx-react-lite';
+import { FC, MouseEvent } from 'react';
 
-import { cn } from "@/lib/utils";
-import { performActionOnGame } from "@/services/siteApi/games";
-import { authStore } from "@/shared/store/authStore";
-import { processingActionsStore } from "@/shared/store/processingActionsStore";
-import { useQueryClient } from "@tanstack/react-query";
+import { performActionOnGame } from '@/services/siteApi/games';
+import { cn } from '@/shadcn/lib';
+import { authStore } from '@/shared/store/authStore';
+import { processingActionsStore } from '@/shared/store/processingActionsStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   className?: string;

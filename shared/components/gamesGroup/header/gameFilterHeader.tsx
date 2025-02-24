@@ -1,9 +1,9 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/shadcn';
 
-import { colors, iconMap } from "./constants";
-import { SortOptions } from "./sortOptions";
+import { colors, iconMap } from './constants';
+import { SortOptions } from './sortOptions';
 
 interface Props {
   className?: string;

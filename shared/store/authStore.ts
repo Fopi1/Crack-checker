@@ -1,8 +1,8 @@
-import { flow, makeAutoObservable } from "mobx";
+import { flow, makeAutoObservable } from 'mobx';
 
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { JWTToken } from "@/types/jwt";
-import { UserData } from "@/types/store";
+import { SiteApi } from '@/services/siteApi/apiClient';
+import { JWTToken } from '@/types/jwt';
+import { UserData } from '@/types/store';
 
 class AuthStore {
   userData: UserData = null;
@@ -25,7 +25,7 @@ class AuthStore {
     if (this.isLoading) return;
     this.isLoading = true;
     try {
-      const payload: JWTToken = yield SiteApi.users.getJWTPayloadFromCookies();
+      const payload: JWTToken = yield SiteApi.users.getJWTPayload();
       if (!payload) {
         SiteApi.users.removeCookiePayload();
         this.userData = null;
