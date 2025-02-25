@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, PropsWithChildren, useRef } from "react";
+import { PropsWithChildren, useRef } from "react";
 
 import { authStore } from "@/shared/store/authStore";
 import { UserData } from "@/types/store";
@@ -9,10 +9,10 @@ import { AuthProvider } from "./authProvider";
 import { QueryProvider } from "./queryProvider";
 
 interface Props extends PropsWithChildren {
-  userData: UserData;
+  userData: UserData | null;
 }
 
-export const Providers: FC<Props> = ({ children, userData }) => {
+export const Providers = ({ children, userData }: Props) => {
   const isInitialized = useRef(false);
   if (!isInitialized.current) {
     authStore.userData = userData;

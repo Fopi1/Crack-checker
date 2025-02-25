@@ -1,42 +1,40 @@
 "use client";
 
-import { FC, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { SiteApiRoutes } from "@/constants";
-import { getApiError } from "@/lib/utils";
-import { axiosSiteInstance } from "@/services/instance";
-import { useToast } from "@/shadcn/hooks";
-import { FormTemplate } from "@/shared/components/page/profile/formTemplate";
-import { authStore } from "@/shared/store/authStore";
-import { UserData } from "@/types/store";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { SiteApiRoutes } from '@/constants';
+import { getApiFormError } from '@/lib/utils';
+import { axiosSiteInstance } from '@/services/instance';
+import { useToast } from '@/shadcn/hooks';
+import { FormTemplate } from '@/shared/components/page/profile/formTemplate';
+import { authStore } from '@/shared/store/authStore';
+import { UserData } from '@/types/store';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { userInfoFields, userInfoSchema, UserInfoSchema } from "./constants";
+import { userInfoFields, userInfoSchema, UserInfoSchema } from './constants';
 
 interface Props {
   userData: UserData;
 }
 
-export const UserInfo: FC<Props> = ({ userData }) => {
+export const UserInfo = ({ userData }: Props) => {
   const [isChecking, setIsChecking] = useState(false);
   const { toast } = useToast();
   const form = useForm<UserInfoSchema>({
     mode: "onChange",
     resolver: zodResolver(userInfoSchema),
-    defaultValues: { name: userData?.name, email: userData?.email },
+    defaultValues: { name: userData.name, email: userData.email },
   });
   const serverError = form.formState.errors.root;
   const onSubmit: SubmitHandler<UserInfoSchema> = async (data) => {
     try {
       setIsChecking(true);
-      await axiosSiteInstance.put(SiteApiRoutes.USER, {
-        ...data,
-      });
+      await axiosSiteInstance.patch(SiteApiRoutes.USER(userData.id), data);
       authStore.checkAuth();
       toast({ description: "Saved." });
     } catch (error) {
-      const { errorField, errorMessage } = getApiError(error);
+      const { errorField, errorMessage } = getApiFormError(error);
       form.setError(errorField, { message: errorMessage });
     } finally {
       setIsChecking(false);

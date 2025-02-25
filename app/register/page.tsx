@@ -1,4 +1,4 @@
-import { AuthLinks } from "@/shared/components/auth";
+import { AuthLinks } from "@/shared/components/page/auth";
 import { Container } from "@/shared/components/shared";
 
 import { RegisterForm } from "./registerForm";

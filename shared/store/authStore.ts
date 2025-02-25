@@ -1,11 +1,11 @@
-import { flow, makeAutoObservable } from 'mobx';
+import { flow, makeAutoObservable } from "mobx";
 
-import { SiteApi } from '@/services/siteApi/apiClient';
-import { JWTToken } from '@/types/jwt';
-import { UserData } from '@/types/store';
+import { SiteApi } from "@/services/siteApi/apiClient";
+import { JWTToken } from "@/types/jwt";
+import { UserData } from "@/types/store";
 
 class AuthStore {
-  userData: UserData = null;
+  userData: UserData | null = null;
   isRememberMe = false;
   isLoading = false;
 

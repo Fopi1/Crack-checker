@@ -9,15 +9,15 @@ export const AppRoutes = {
   GAME: (slug: string) => `/game/${slug}`,
 } as const;
 
-export enum SiteApiRoutes {
-  GAMES = "/games",
-  GAME = "/games/[slug]",
-  REGISTER = "/auth/register",
-  LOGIN = "/auth/login",
-  LOGOUT = "/auth/logout",
-  USER = "/update/user",
-  PASSWORD = "/update/password",
-}
+export const SiteApiRoutes = {
+  GAMES: "/games",
+  GAME: (slug: string) => `/games/${slug}`,
+  REGISTER: "/auth/register",
+  LOGIN: "/auth/login",
+  LOGOUT: "/auth/logout",
+  USER: (id: number) => `/users/${id}`,
+  PASSWORD: (id: number) => `/users/${id}/password`,
+} as const;
 
 export enum ExternalApiRoutes {
   SEARCH = "/search_title/",

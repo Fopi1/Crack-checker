@@ -16,8 +16,15 @@ const passwordApiFormError = (
   args: Parameters<typeof responseApiFormError<PasswordInfoSchema>>[0]
 ) => responseApiFormError<PasswordInfoSchema>(args);
 
-export async function PUT(req: NextRequest) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
+    const userId = parseInt(params.id, 10);
+    if (!userId) {
+      return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
+    }
     const body = await req.json();
     const parseResult = passwordInfoSchema.safeParse(body);
     if (!parseResult.success) {
@@ -26,19 +33,10 @@ export async function PUT(req: NextRequest) {
         { status: 400 }
       );
     }
-    const payload = await SiteApi.users.getJWTPayload();
-    if (!payload) {
-      return passwordApiFormError({
-        field: "root",
-        error: "Unathorized",
-        status: 401,
-      });
-    }
-    const { email } = payload;
     const { password, currentPassword } = parseResult.data;
 
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { id: userId },
     });
     if (!user) {
       return passwordApiFormError({
@@ -63,7 +61,7 @@ export async function PUT(req: NextRequest) {
     }
     const hashedPassword = await SiteApi.users.hashPassword(password);
     const newUser = await prisma.user.update({
-      where: { email },
+      where: { id: userId },
       data: {
         password: hashedPassword,
       },

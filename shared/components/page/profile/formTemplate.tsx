@@ -26,7 +26,7 @@ export const FormTemplate = <T extends Record<string, any>>({
 }: Props<T>) => {
   return (
     <div className="w-full bg-[--background-profile] rounded-md shadow-xl">
-      <div className="flex flex-col gap-3 p-6">
+      <div className="flex flex-col gap-3 p-6 w-[40rem]">
         <h2 className="font-medium text-lg">{title}</h2>
         <p className="font-normal text-sm">{description}</p>
         <Form {...form}>
@@ -37,7 +37,7 @@ export const FormTemplate = <T extends Record<string, any>>({
             onSubmit={form.handleSubmit(onSubmit)}
           >
             {serverError && <Error>{serverError.message}</Error>}
-            <FormFields fields={formFields} form={form} className="w-[30rem]" />
+            <FormFields fields={formFields} form={form} />
             <div className="flex gap-5">
               <FormButton disabled={isChecking}>save</FormButton>
             </div>

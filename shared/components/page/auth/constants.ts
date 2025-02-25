@@ -1,4 +1,4 @@
-import { Discord, Google } from "../icons";
+import { Discord, Google } from '../../icons';
 
 export const hoverColor = "#fff";
 export const iconProps = {

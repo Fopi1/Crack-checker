@@ -1,7 +1,7 @@
 "use client";
 
-import { TransitionLink } from '../shared';
-import { hoverColor, iconProps, loginLinks } from './constants';
+import { TransitionLink } from "../../shared";
+import { hoverColor, iconProps, loginLinks } from "./constants";
 
 export const AuthLinks = () => {
   return (

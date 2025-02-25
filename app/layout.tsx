@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import './globals.css';
 
-import scandia from "next/font/local";
+import scandia from 'next/font/local';
 
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { Toaster } from "@/shadcn/components";
-import { Footer } from "@/shared/components";
-import { Header } from "@/shared/components/header";
-import { Providers } from "@/shared/components/providers";
-import { Background } from "@/shared/components/shared";
+import { SiteApi } from '@/services/siteApi/apiClient';
+import { Toaster } from '@/shadcn/components';
+import { Footer } from '@/shared/components';
+import { Header } from '@/shared/components/header';
+import { Providers } from '@/shared/components/providers';
+import { Background } from '@/shared/components/shared';
 
 const Scandia = scandia({
   src: [

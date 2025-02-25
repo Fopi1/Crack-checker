@@ -4,11 +4,12 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { SiteApiRoutes } from "@/constants";
-import { getApiError } from "@/lib/utils";
+import { getApiFormError } from "@/lib/utils";
 import { axiosSiteInstance } from "@/services/instance";
 import { useToast } from "@/shadcn/hooks";
 import { FormTemplate } from "@/shared/components/page/profile/formTemplate";
 import { authStore } from "@/shared/store/authStore";
+import { UserData } from "@/types/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -17,7 +18,11 @@ import {
   PasswordInfoSchema,
 } from "./constants";
 
-export const PasswordInfo = () => {
+interface Props {
+  userData: UserData;
+}
+
+export const PasswordInfo = ({ userData }: Props) => {
   const [isChecking, setIsChecking] = useState(false);
   const { toast } = useToast();
   const form = useForm<PasswordInfoSchema>({
@@ -33,14 +38,12 @@ export const PasswordInfo = () => {
   const onSubmit: SubmitHandler<PasswordInfoSchema> = async (data) => {
     try {
       setIsChecking(true);
-      await axiosSiteInstance.put(SiteApiRoutes.PASSWORD, {
-        ...data,
-      });
+      await axiosSiteInstance.patch(SiteApiRoutes.PASSWORD(userData.id), data);
       form.reset();
       authStore.checkAuth();
       toast({ description: "Saved." });
     } catch (error) {
-      const { errorField, errorMessage } = getApiError(error);
+      const { errorField, errorMessage } = getApiFormError(error);
       form.setError(errorField, { message: errorMessage });
     } finally {
       setIsChecking(false);
