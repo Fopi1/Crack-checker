@@ -4,15 +4,29 @@ import { Redis } from "@upstash/redis";
 
 import { getUserAgent, getUserIP } from "./utils";
 
+const REDIS_UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+if (!REDIS_UPSTASH_TOKEN || !REDIS_UPSTASH_URL) {
+  throw new Error("UPSTASH_REDIS_REST is not defined in environment variables");
+}
+
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  url: REDIS_UPSTASH_URL,
+  token: REDIS_UPSTASH_TOKEN,
 });
 
-export async function rateLimit(req: NextRequest, limit = 5, timeWindow = 60) {
+export async function rateLimit(
+  req: NextRequest,
+  keyPrefix: string,
+  limit = 10,
+  timeWindow = 60
+) {
   const ip = getUserIP(req);
   const userAgent = getUserAgent(req);
-  const key = ip ? `rate_limit:${ip}` : `rate_limit:ua:${userAgent}`;
+  const key = ip
+    ? `rate_limit:${keyPrefix}:${ip}`
+    : `rate_limit:${keyPrefix}:ua:${userAgent}`;
 
   const current = (await redis.get<number>(key)) ?? 0;
 

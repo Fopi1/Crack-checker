@@ -11,3 +11,10 @@ export const FormFieldsLength = {
     minLength: 8,
   },
 } as const;
+
+export const rateLimiterPrefixes = {
+  LOGIN: "login",
+  REGISTER: "register",
+  INFO: "info",
+  PASSWORD: "password",
+} as const;
