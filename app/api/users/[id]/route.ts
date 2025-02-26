@@ -3,8 +3,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { UserInfoSchema, userInfoSchema } from "@/app/profile/constants";
-import { CookieToken } from "@/constants";
+import { CookieToken, rateLimiterPrefixes } from "@/constants";
 import { generateAccessToken } from "@/lib/jwt";
+import { rateLimit } from "@/lib/redis";
 import { responseApiFormError, setLaxCookie } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
@@ -17,6 +18,9 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
+    const limitError = await rateLimit(req, rateLimiterPrefixes.INFO);
+    if (limitError) return limitError;
+
     const userId = parseInt(params.id, 10);
     if (!userId) {
       return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
@@ -89,6 +93,7 @@ export async function DELETE(
     if (!userId) {
       return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
     }
+
     await prisma.user.delete({
       where: { id: userId },
     });

@@ -6,12 +6,21 @@ import {
   RegisterFormSchema,
   registerFormSchema,
 } from "@/app/register/constants";
+import { rateLimiterPrefixes } from "@/constants";
+import { rateLimit } from "@/lib/redis";
 import { responseApiFormError } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
 
 export async function POST(req: NextRequest) {
   try {
+    const limitError = await rateLimit(
+      req,
+      rateLimiterPrefixes.REGISTER,
+      10,
+      120
+    );
+    if (limitError) return limitError;
     const body = await req.json();
     const parseResult = registerFormSchema.safeParse(body);
     if (!parseResult.success) {

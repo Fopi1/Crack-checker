@@ -1,16 +1,19 @@
 "use server";
 
-import bcrypt from 'bcrypt';
-import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from "bcrypt";
+import { NextRequest, NextResponse } from "next/server";
 
-import { LoginFormSchema, loginFormSchema } from '@/app/login/constants';
-import { CookieToken } from '@/constants/constants';
-import { generateAccessToken } from '@/lib/jwt';
-import { responseApiFormError, setLaxCookie } from '@/lib/utils';
-import { prisma } from '@/prisma/prismaClient';
+import { LoginFormSchema, loginFormSchema } from "@/app/login/constants";
+import { CookieToken, rateLimiterPrefixes } from "@/constants/constants";
+import { generateAccessToken } from "@/lib/jwt";
+import { rateLimit } from "@/lib/redis";
+import { responseApiFormError, setLaxCookie } from "@/lib/utils";
+import { prisma } from "@/prisma/prismaClient";
 
 export async function POST(req: NextRequest) {
   try {
+    const limitError = await rateLimit(req, rateLimiterPrefixes.LOGIN, 10, 600);
+    if (limitError) return limitError;
     const body = await req.json();
     const parseResult = loginFormSchema.safeParse(body);
     if (!parseResult.success) {
