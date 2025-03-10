@@ -2,37 +2,17 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { getApiParams } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { AddValue } from "@/types/api";
 
-export async function GET(req: NextRequest) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const params = getApiParams(req.nextUrl.searchParams);
-    const { slug } = params;
-    const game = await prisma.game.findFirst({
-      where: {
-        slug,
-      },
-      include: {
-        likes: true,
-      },
-    });
-    if (!game) {
-      return NextResponse.json({ error: "Game not found" }, { status: 401 });
-    }
-    return NextResponse.json(game);
-  } catch (error) {
-    console.error("Error fetching game", error);
-    return NextResponse.json({ error: error }, { status: 401 });
-  }
-}
-
-export async function PUT(req: NextRequest) {
-  try {
-    const { addValue, gameId }: { addValue: AddValue; gameId: string } =
-      await req.json();
+    const { id: gameId } = params;
+    const { addValue }: { addValue: AddValue } = await req.json();
 
     if (!gameId) {
       return NextResponse.json(
@@ -69,7 +49,7 @@ export async function PUT(req: NextRequest) {
           where: {
             id: userId,
           },
-          include: { likes: true },
+          include: { likes: { select: { id: true } } },
         });
         const alreadyLiked = user?.likes.some((game) => game.id === gameId);
         await prisma.user.update({

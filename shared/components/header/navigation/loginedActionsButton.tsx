@@ -24,7 +24,7 @@ export const LoginedActionsButton = observer(() => {
 
   const logOut = async () => {
     await axiosSiteInstance.post(SiteApiRoutes.LOGOUT);
-    authStore.userData = null;
+    authStore.setUserData(null);
     if (pathname === AppRoutes.MAIN) {
       await authStore.checkAuth();
     } else {

@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FC, memo, useState } from "react";
+import { memo } from "react";
 
 import { AppRoutes } from "@/constants/routes";
 import { performActionOnGame } from "@/services/siteApi/games";
 import { cn } from "@/shadcn";
 import { useCrackStatus } from "@/shared/hooks";
 import { processingActionsStore } from "@/shared/store/processingActionsStore";
-import { GameWithLikes } from "@/types/api";
+import { FullGame } from "@/types/api";
 
 import {
   CrackBell,
@@ -22,12 +22,12 @@ import {
   CrackViews,
 } from "../ui";
 
-interface Props extends GameWithLikes {
+interface Props {
   className?: string;
-  isLiked: boolean;
+  game: FullGame;
 }
 
-const GameCardComponent: FC<Props> = (props, { className }) => {
+const GameCardComponent = ({ className, game }: Props) => {
   const {
     title,
     id,
@@ -37,12 +37,8 @@ const GameCardComponent: FC<Props> = (props, { className }) => {
     releaseDate,
     shortImage,
     hackedGroups,
-    likes,
     views,
-    isLiked = false,
-  } = props;
-  const [stateIsLiked, setStateIsLiked] = useState(isLiked);
-  const [likesNumber, setLikesNumber] = useState(likes.length);
+  } = game;
 
   const { crackedBy, crackStatus } = useCrackStatus({
     releaseDate,
@@ -54,12 +50,6 @@ const GameCardComponent: FC<Props> = (props, { className }) => {
   const crackTextColor = crackDate
     ? "text-crack-light-green"
     : "text-crack-red";
-
-  const handleToggleLike = (likesNumber: number, isLiked: boolean) => {
-    setLikesNumber(likesNumber);
-    setStateIsLiked(isLiked);
-  };
-
   const addView = async () => {
     if (processingActionsStore.hasAction(id, "view")) return;
     processingActionsStore.addAction(id, "view");
@@ -88,7 +78,7 @@ const GameCardComponent: FC<Props> = (props, { className }) => {
           <Image
             src={shortImage}
             fill
-            sizes="(max-width: 1200px) 50vw, 25vw"
+            sizes="300px"
             alt="Game image"
             loading="lazy"
             quality={25}
@@ -106,13 +96,7 @@ const GameCardComponent: FC<Props> = (props, { className }) => {
               </h2>
               <div className="flex gap-1">
                 <CrackBell />
-                <CrackLike
-                  gameId={id}
-                  isLiked={stateIsLiked}
-                  likesNumber={likesNumber}
-                  handleClick={handleToggleLike}
-                  slug={slug}
-                />
+                <CrackLike game={game} />
               </div>
             </div>
           </div>

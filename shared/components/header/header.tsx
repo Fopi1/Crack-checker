@@ -1,19 +1,19 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
-import Image from "next/image";
-import Link from "next/link";
-import { FC, useEffect, useRef, useState } from "react";
+import { observer } from 'mobx-react-lite';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FC, useEffect, useRef, useState } from 'react';
 
-import { AppRoutes } from "@/constants/routes";
-import logo from "@/public/logo.png";
-import { cn } from "@/shadcn";
-import { authStore } from "@/shared/store/authStore";
+import { AppRoutes } from '@/constants/routes';
+import logo from '@/public/logo.png';
+import { cn } from '@/shadcn';
+import { authStore } from '@/shared/store/authStore';
 
-import { SearchForm } from "../shared/searchForm";
-import { HeaderMenu } from "./headerMenu";
-import { LoginedActionsButton } from "./navigation";
-import { NavLinks } from "./navigation/navLinks";
+import { HeaderMenu } from './headerMenu';
+import { LoginedActionsButton } from './navigation';
+import { NavLinks } from './navigation/navLinks';
+import { SearchForm } from './searchForm';
 
 interface Props {
   className?: string;

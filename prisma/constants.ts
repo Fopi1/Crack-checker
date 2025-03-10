@@ -1,6 +1,18 @@
 import z from "zod";
 
-export const categories = [
+export type CategoryTitles =
+  | "Popular games"
+  | "Last cracked games"
+  | "Hot games"
+  | "Most liked"
+  | "Unreleased games";
+interface Categories {
+  id: number;
+  title: CategoryTitles;
+  icon: string;
+}
+
+export const categories: Categories[] = [
   {
     id: 1,
     title: "Popular games",
@@ -42,3 +54,16 @@ export const GameSchema = z.object({
   user_score: z.number().nullable(),
   mata_score: z.number().nullable(),
 });
+
+export type AllGameData = z.infer<typeof GameSchema>;
+
+export type ReleasedGamesData = {
+  id: string;
+  slug: string;
+  title: string;
+  is_AAA: boolean;
+  release_date: string;
+  crack_date: string | null;
+  short_image: string;
+  steam_prod_id: number | null;
+};

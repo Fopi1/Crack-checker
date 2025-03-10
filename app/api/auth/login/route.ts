@@ -1,18 +1,18 @@
 "use server";
 
-import bcrypt from "bcrypt";
-import { NextRequest, NextResponse } from "next/server";
+import bcrypt from 'bcrypt';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { LoginFormSchema, loginFormSchema } from "@/app/login/constants";
-import { CookieToken, rateLimiterPrefixes } from "@/constants/constants";
-import { generateAccessToken } from "@/lib/jwt";
-import { rateLimit } from "@/lib/redis";
-import { responseApiFormError, setLaxCookie } from "@/lib/utils";
-import { prisma } from "@/prisma/prismaClient";
+import { LoginFormSchema, loginFormSchema } from '@/app/login/constants';
+import { CookieToken, rateLimiterPrefixes } from '@/constants/constants';
+import { generateAccessToken } from '@/lib/jwt';
+import { rateLimit } from '@/lib/redis';
+import { responseApiFormError, setLaxCookie } from '@/lib/utils';
+import { prisma } from '@/prisma/prismaClient';
 
 export async function POST(req: NextRequest) {
   try {
-    const limitError = await rateLimit(req, rateLimiterPrefixes.LOGIN, 10, 600);
+    const limitError = await rateLimit(req, rateLimiterPrefixes.LOGIN, 10, 300);
     if (limitError) return limitError;
     const body = await req.json();
     const parseResult = loginFormSchema.safeParse(body);
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    const { email, password, isRememberMe } = parseResult.data;
+    const { email, password } = parseResult.data;
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return responseApiFormError<LoginFormSchema>({

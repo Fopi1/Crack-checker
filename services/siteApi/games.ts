@@ -1,5 +1,5 @@
 import { SiteApiRoutes } from "@/constants/routes";
-import { AddValue, GameWithLikes } from "@/types/api";
+import { AddValue, FullGame } from "@/types/api";
 import { SortBy, SortOrder, TakeGames } from "@/types/store";
 
 import { axiosSiteInstance } from "../instance";
@@ -10,8 +10,8 @@ export const getByParams = async (
   sortBy: SortBy,
   sortOrder: SortOrder,
   isAAA: boolean
-): Promise<GameWithLikes[]> => {
-  const { data } = await axiosSiteInstance.get<GameWithLikes[]>(
+): Promise<FullGame[]> => {
+  const { data } = await axiosSiteInstance.get<FullGame[]>(
     SiteApiRoutes.GAMES,
     {
       params: {
@@ -26,26 +26,25 @@ export const getByParams = async (
   return data;
 };
 
-const sortFunctions: Record<
-  SortBy,
-  (a: GameWithLikes, b: GameWithLikes) => number
-> = {
+const sortFunctions: Record<SortBy, (a: FullGame, b: FullGame) => number> = {
   views: (a, b) => a.views - b.views,
   likes: (a, b) => a.likes.length - b.likes.length,
   releaseDate: (a, b) => Date.parse(a.releaseDate) - Date.parse(b.releaseDate),
   crackDate: (a, b) => {
-    const a_crackDate = a.crackDate === null ? "0" : a.crackDate;
-    const b_crackDate = b.crackDate === null ? "0" : b.crackDate;
-    return Date.parse(a_crackDate) - Date.parse(b_crackDate);
+    const a_crackDate =
+      a.crackDate === null ? Infinity : Date.parse(a.crackDate);
+    const b_crackDate =
+      b.crackDate === null ? Infinity : Date.parse(b.crackDate);
+    return a_crackDate - b_crackDate;
   },
 };
 
 export const sortGames = (
-  games: GameWithLikes[],
+  games: FullGame[],
   sortBy: SortBy,
   order: SortOrder,
   isAAAOption: boolean
-): GameWithLikes[] => {
+): FullGame[] => {
   const filteredGames = isAAAOption
     ? games.filter((game) => game.isAAA)
     : [...games];
@@ -56,11 +55,9 @@ export const sortGames = (
   });
 };
 
-export const getGameBySlug = async (
-  slug: string
-): Promise<GameWithLikes | null> => {
-  const { data: game } = await axiosSiteInstance.get<GameWithLikes>(
-    SiteApiRoutes.GAME,
+export const getGameBySlug = async (slug: string): Promise<FullGame | null> => {
+  const { data: game } = await axiosSiteInstance.get<FullGame>(
+    SiteApiRoutes.GAME(slug),
     {
       params: {
         slug,
@@ -78,8 +75,7 @@ export const performActionOnGame = async (
   addValue: AddValue
 ) => {
   try {
-    await axiosSiteInstance.put(SiteApiRoutes.GAME, {
-      gameId,
+    await axiosSiteInstance.put(SiteApiRoutes.GAME(gameId), {
       addValue,
     });
   } catch (error) {

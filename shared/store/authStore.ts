@@ -17,7 +17,7 @@ class AuthStore {
     this.isRememberMe = !this.isRememberMe;
   };
 
-  setAuthState = (userData: typeof this.userData) => {
+  setUserData = (userData: typeof this.userData) => {
     this.userData = userData;
   };
 

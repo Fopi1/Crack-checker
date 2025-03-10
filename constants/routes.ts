@@ -11,12 +11,13 @@ export const AppRoutes = {
 
 export const SiteApiRoutes = {
   GAMES: "/games",
-  GAME: (slug: string) => `/games/${slug}`,
+  GAME: (id: string) => `/games/${id}`,
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
   LOGOUT: "/auth/logout",
   USER: (id: number) => `/users/${id}`,
   PASSWORD: (id: number) => `/users/${id}/password`,
+  SEARCH_GAME: (query: string) => `/games?query=${query}`,
 } as const;
 
 export enum ExternalApiRoutes {

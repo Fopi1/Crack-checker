@@ -1,7 +1,7 @@
 import FPIBank from "@/public/FPI.webp";
-import { GameWithLikes } from "@/types/api";
+import { FullGame } from "@/types/api";
 
-export const coolPlaceholder: GameWithLikes = {
+export const coolPlaceholder: FullGame = {
   id: "$FPI",
   slug: "fpi-bank",
   title: "FPI BANK",

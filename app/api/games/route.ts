@@ -2,6 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
+import { SEARCH_QUERY_LENGTH } from "@/constants";
 import { getApiParams } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
 import { SiteApi } from "@/services/siteApi/apiClient";
@@ -9,16 +10,56 @@ import { SortBy, SortOrder } from "@/types/store";
 
 export async function GET(req: NextRequest) {
   try {
+    const searchParams = getApiParams(req.nextUrl.searchParams);
+    const { query } = searchParams;
+    if (query) {
+      if (query.length > SEARCH_QUERY_LENGTH) {
+        const games = await prisma.game.findMany({
+          include: {
+            likes: {
+              select: {
+                id: true,
+              },
+            },
+            categories: {
+              select: {
+                title: true,
+              },
+            },
+          },
+          where: {
+            title: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+        });
+
+        return NextResponse.json(games);
+      } else {
+        return NextResponse.json([]);
+      }
+    }
+
     const {
       category = "",
       sortBy = "views",
       sortOrder = "descending",
       take = 25,
       isAAA = false,
-    } = getApiParams(req.nextUrl.searchParams);
+    } = searchParams;
     const games = await prisma.game.findMany({
       include: {
-        likes: true,
+        likes: {
+          select: {
+            id: true,
+          },
+        },
+        categories: {
+          select: {
+            title: true,
+          },
+        },
       },
       where: {
         categories: {

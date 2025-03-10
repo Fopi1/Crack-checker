@@ -18,7 +18,6 @@ import {
 } from "@/shared/components/shared/formPieces";
 import { authStore } from "@/shared/store/authStore";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 
 import { loginFormFields, loginFormSchema, LoginFormSchema } from "./constants";
 
@@ -27,8 +26,6 @@ interface Props {
 }
 
 export const LoginForm: FC<Props> = observer(({ className }) => {
-  const queryClient = useQueryClient();
-
   const [isLogining, setIsLogining] = useState(false);
 
   const { replace } = useRouter();
@@ -50,11 +47,7 @@ export const LoginForm: FC<Props> = observer(({ className }) => {
         ...data,
         isRememberMe: authStore.isRememberMe,
       });
-      await Promise.all([
-        authStore.checkAuth(),
-        queryClient.refetchQueries({ queryKey: ["likedGames"] }),
-        queryClient.refetchQueries({ queryKey: ["games"] }),
-      ]);
+      await authStore.checkAuth();
       replace("/");
     } catch (error) {
       const { errorField, errorMessage } = getApiFormError(error);

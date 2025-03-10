@@ -1,3 +1,3 @@
-export { GamesGroup } from "./gamesGroup";
-export { GameCard } from "./gameCard";
+export { GamesTable } from "./gamesTable";
+export { GameCard } from "../shared/gameCard";
 export { GamesByCategories } from "./gamesByCategories";

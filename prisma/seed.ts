@@ -1,11 +1,10 @@
-import pLimit from "p-limit";
+import pLimit from 'p-limit';
 
-import { AllGameData, ReleasedGamesData } from "@/types/api";
-import { Game } from "@prisma/client";
+import { Game } from '@prisma/client';
 
-import { GameStatusApi } from "../services/externalApi/apiClient";
-import { categories, GameSchema } from "./constants";
-import { prisma } from "./prismaClient";
+import { GameStatusApi } from '../services/externalApi/apiClient';
+import { AllGameData, categories, GameSchema, ReleasedGamesData } from './constants';
+import { prisma } from './prismaClient';
 
 const limit = pLimit(10);
 

@@ -29,7 +29,7 @@ export const removeCookiePayload = async () => {
   cookies().delete(CookieToken.AUTH_TOKEN);
 };
 
-export const getLikedGames = async (): Promise<string[] | null> => {
+export const getLikedGames = async (): Promise<string[]> => {
   try {
     const payload = await getJWTPayload();
     const userId = payload?.id;
@@ -49,6 +49,6 @@ export const getLikedGames = async (): Promise<string[] | null> => {
     return gameIds;
   } catch (error) {
     console.error(error);
-    return null;
+    return [];
   }
 };

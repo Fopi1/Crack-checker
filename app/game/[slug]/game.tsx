@@ -2,7 +2,6 @@
 
 import { Users } from "lucide-react";
 import Image from "next/image";
-import { FC, useState } from "react";
 
 import { Meta, Steam } from "@/shared/components/icons";
 import { Blurred, Container, TransitionLink } from "@/shared/components/shared";
@@ -18,36 +17,25 @@ import {
   CrackViews,
 } from "@/shared/components/ui";
 import { useCrackStatus } from "@/shared/hooks";
-import { GameWithLikes } from "@/types/api";
+import { FullGame } from "@/types/api";
 
-interface Props extends GameWithLikes {
-  isLiked?: boolean;
+interface Props {
+  game: FullGame;
 }
 
-export const Game: FC<Props> = (gameProps) => {
+export const Game = ({ game }: Props) => {
   const {
-    id,
     title,
     crackDate,
     protections,
     releaseDate,
     shortImage,
     hackedGroups,
-    likes,
     views,
     metaScore,
     userScore,
     steamId,
-    isLiked = false,
-  } = gameProps;
-
-  const [likesNumber, setLikesNumber] = useState(likes.length);
-  const [stateIsLiked, setStateIsLiked] = useState(isLiked);
-
-  const handleToggleLike = (likesNumber: number, isLiked: boolean) => {
-    setLikesNumber(likesNumber);
-    setStateIsLiked(isLiked);
-  };
+  } = game;
 
   const { crackedBy, crackStatus } = useCrackStatus({
     releaseDate,
@@ -72,7 +60,7 @@ export const Game: FC<Props> = (gameProps) => {
                 width={1000}
                 height={0}
                 priority
-                className="rounded-[20px]"
+                className="rounded-[20px] z-10"
               />
             </div>
           </div>
@@ -122,13 +110,7 @@ export const Game: FC<Props> = (gameProps) => {
             </div>
             <div className="flex flex-col justify-between gap-3 font-bold">
               <div className="flex items-center gap-4">
-                <CrackLike
-                  className="p-5"
-                  gameId={id}
-                  likesNumber={likesNumber}
-                  isLiked={stateIsLiked}
-                  handleClick={handleToggleLike}
-                />
+                <CrackLike className="p-5" game={game} />
                 <CrackBell className="p-6" />
               </div>
               <TransitionLink
