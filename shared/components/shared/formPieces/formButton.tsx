@@ -1,7 +1,7 @@
-import { ButtonHTMLAttributes, FC, PropsWithChildren } from 'react';
+import { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-import { cn } from '@/shadcn';
-import { Button } from '@/shadcn/components/ui';
+import { cn } from "@/shadcn";
+import { Button } from "@/shadcn/components/ui";
 
 interface Props
   extends ButtonHTMLAttributes<HTMLButtonElement>,
@@ -9,7 +9,7 @@ interface Props
   className?: string;
 }
 
-export const FormButton: FC<Props> = ({ className, children, ...props }) => {
+export const FormButton = ({ className, children, ...props }: Props) => {
   return (
     <Button
       {...props}

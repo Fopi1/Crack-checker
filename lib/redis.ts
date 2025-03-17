@@ -1,3 +1,5 @@
+"use server";
+
 import { NextRequest, NextResponse } from "next/server";
 
 import { Redis } from "@upstash/redis";
@@ -16,12 +18,12 @@ const redis = new Redis({
   token: REDIS_UPSTASH_TOKEN,
 });
 
-export async function rateLimit(
+export const rateLimit = async (
   req: NextRequest,
   keyPrefix: string,
   limit = 10,
   timeWindow = 60
-) {
+) => {
   const ip = getUserIP(req);
   const userAgent = getUserAgent(req);
   const key = ip
@@ -36,4 +38,4 @@ export async function rateLimit(
 
   await redis.set(key, current + 1, { ex: timeWindow });
   return null;
-}
+};

@@ -1,13 +1,13 @@
 "use client";
 
-import { FC } from "react";
+import { FC } from 'react';
 
-import { categories } from "@/prisma/constants";
-import { cn } from "@/shadcn";
+import { categories } from '@/prisma/constants';
+import { cn } from '@/shadcn';
+import { Container } from '@/shared/components/shared';
 
-import { Container } from "../shared/container";
-import { GamesTable } from "./gamesTable";
-import { GameFilterHeader } from "./header/gameFilterHeader";
+import { GameFilter } from './gameFilter';
+import { GamesTable } from './gamesTable';
 
 interface Props {
   className?: string;
@@ -19,7 +19,7 @@ export const GamesByCategories: FC<Props> = ({ className }) => {
     <>
       {gameCategories.map((category) => (
         <div
-          key={category.id}
+          key={category.title}
           className="flex justify-center [&:nth-child(even)]:bg-secondary-foreground"
         >
           <Container
@@ -28,7 +28,7 @@ export const GamesByCategories: FC<Props> = ({ className }) => {
               className
             )}
           >
-            <GameFilterHeader title={category.title} icon={category.icon} />
+            <GameFilter title={category.title} />
             <GamesTable category={category.title} />
           </Container>
         </div>

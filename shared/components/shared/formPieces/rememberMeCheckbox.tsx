@@ -1,7 +1,6 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { FC } from "react";
 
 import { cn } from "@/shadcn";
 import { Checkbox, Label } from "@/shadcn/components/ui";
@@ -11,7 +10,7 @@ interface Props {
   className?: string;
 }
 
-export const RememberMeCheckbox: FC<Props> = observer(({ className }) => {
+export const RememberMeCheckbox = observer(({ className }: Props) => {
   const handleToggleIsRememberMe = () => {
     authStore.toggleIsRememberMe();
   };

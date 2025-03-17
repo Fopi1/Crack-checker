@@ -1,13 +1,12 @@
 "use server";
 
-import bcrypt from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { LoginFormSchema, loginFormSchema } from '@/app/login/constants';
 import { CookieToken, rateLimiterPrefixes } from '@/constants/constants';
 import { generateAccessToken } from '@/lib/jwt';
 import { rateLimit } from '@/lib/redis';
-import { responseApiFormError, setLaxCookie } from '@/lib/utils';
+import { comparePassword, responseApiFormError, setLaxCookie } from '@/lib/utils';
 import { prisma } from '@/prisma/prismaClient';
 
 export async function POST(req: NextRequest) {
@@ -24,7 +23,7 @@ export async function POST(req: NextRequest) {
     }
     const { email, password } = parseResult.data;
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user || !(await comparePassword(password, user.password))) {
       return responseApiFormError<LoginFormSchema>({
         field: "root",
         error: "Invalid email or password",

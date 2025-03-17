@@ -1,31 +1,24 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
-import { useRouter } from "next/navigation";
-import { FC, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { AppRoutes, SiteApiRoutes } from "@/constants/routes";
-import { getApiFormError } from "@/lib/utils";
-import { axiosSiteInstance } from "@/services/instance";
-import { Form } from "@/shadcn/components/ui";
-import { Error } from "@/shared/components/shared";
+import { AppRoutes } from '@/constants/routes';
+import { SiteApi } from '@/services/siteApi/apiClient';
+import { Form } from '@/shadcn/components/ui';
+import { Error } from '@/shared/components/shared';
 import {
-  FormButton,
-  FormFields,
-  FormTextLink,
-  RememberMeCheckbox,
-} from "@/shared/components/shared/formPieces";
-import { authStore } from "@/shared/store/authStore";
-import { zodResolver } from "@hookform/resolvers/zod";
+    FormButton, FormFields, FormTextLink, RememberMeCheckbox
+} from '@/shared/components/shared/formPieces';
+import { authStore } from '@/shared/store/authStore';
+import { getApiFormError } from '@/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { loginFormFields, loginFormSchema, LoginFormSchema } from "./constants";
+import { loginFormFields, loginFormSchema, LoginFormSchema } from './constants';
 
-interface Props {
-  className?: string;
-}
-
-export const LoginForm: FC<Props> = observer(({ className }) => {
+export const LoginForm = observer(() => {
   const [isLogining, setIsLogining] = useState(false);
 
   const { replace } = useRouter();
@@ -43,10 +36,7 @@ export const LoginForm: FC<Props> = observer(({ className }) => {
   const onSubmit: SubmitHandler<LoginFormSchema> = async (data) => {
     try {
       setIsLogining(true);
-      await axiosSiteInstance.post(SiteApiRoutes.LOGIN, {
-        ...data,
-        isRememberMe: authStore.isRememberMe,
-      });
+      await SiteApi.auth.loginUser(data);
       await authStore.checkAuth();
       replace("/");
     } catch (error) {
@@ -66,11 +56,7 @@ export const LoginForm: FC<Props> = observer(({ className }) => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         {serverError && <Error>{serverError.message}</Error>}
-        <FormFields
-          fields={loginFormFields}
-          form={form}
-          className={className}
-        />
+        <FormFields fields={loginFormFields} form={form} />
         <RememberMeCheckbox />
         <div className="flex items-center gap-5 justify-end">
           <FormTextLink href={AppRoutes.FORGOT_PASSWORD}>

@@ -1,7 +1,7 @@
-import { ExternalApiRoutes } from "@/constants/routes";
-import { AllGameData, ReleasedGamesData } from "@/types/api";
+import { ExternalApiRoutes } from '../../constants/routes';
+import { axiosGameStatusInstance } from '../../lib/axios';
 
-import { axiosGameStatusInstance } from "../instance";
+import type { AllGameData, ReleasedGamesData } from "../../prisma/constants";
 
 export const getGameDetailsByTitle = async (
   title: string

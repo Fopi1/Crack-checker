@@ -1,6 +1,4 @@
-import { FC } from 'react';
-
-import { cn } from '@/shadcn/lib';
+import { cn } from "@/shadcn/lib";
 
 interface Props {
   className?: string;
@@ -8,11 +6,11 @@ interface Props {
   crackStatus: string;
 }
 
-export const CrackStatus: FC<Props> = ({
+export const CrackStatus = ({
   className,
   crackBackgroundColor,
   crackStatus,
-}) => {
+}: Props) => {
   return (
     <div
       className={cn(

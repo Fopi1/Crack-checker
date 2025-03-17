@@ -1,6 +1,4 @@
-import { FC } from 'react';
-
-import { cn } from '@/shadcn/lib';
+import { cn } from "@/shadcn/lib";
 
 interface Props {
   className?: string;
@@ -8,11 +6,11 @@ interface Props {
   crackedBy: string;
 }
 
-export const CrackCracker: FC<Props> = ({
+export const CrackCracker = ({
   className,
   crackTextColor,
   crackedBy,
-}) => {
+}: Props) => {
   return (
     <div className={cn("flex gap-1", className)}>
       <p>Cracked by:</p>

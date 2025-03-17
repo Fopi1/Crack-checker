@@ -4,12 +4,12 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { SiteApiRoutes } from "@/constants";
-import { getApiFormError } from "@/lib/utils";
-import { axiosSiteInstance } from "@/services/instance";
+import { axiosSiteInstance } from "@/lib/axios";
 import { useToast } from "@/shadcn/hooks";
 import { FormTemplate } from "@/shared/components/page/profile/formTemplate";
 import { authStore } from "@/shared/store/authStore";
 import { UserData } from "@/types/store";
+import { getApiFormError } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {

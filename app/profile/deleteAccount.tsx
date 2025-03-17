@@ -2,22 +2,34 @@
 
 import { useRouter } from "next/navigation";
 
-import { AppRoutes, SiteApiRoutes } from "@/constants";
-import { axiosSiteInstance } from "@/services/instance";
+import { AppRoutes } from "@/constants";
+import { SiteApi } from "@/services/siteApi/apiClient";
 import { Button, useToast } from "@/shadcn";
 import { UserData } from "@/types/store";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   userData: UserData;
 }
 
 export const DeleteAccount = ({ userData }: Props) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { toast } = useToast();
   const handleDeleteUser = async () => {
-    await axiosSiteInstance.delete(SiteApiRoutes.USER(userData.id));
-    toast({ description: "Successfully deleted account" });
-    router.replace(AppRoutes.MAIN);
+    try {
+      await SiteApi.users.deleteUser(userData.id);
+      await queryClient.refetchQueries({ queryKey: ["games"] });
+      queryClient.invalidateQueries({ queryKey: ["game"] });
+      toast({ description: "Successfully deleted account." });
+      router.replace(AppRoutes.MAIN);
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        description: "Something unexpected happened... Try again later.",
+      });
+    }
   };
   return (
     <div className="w-full bg-[--background-profile] rounded-md shadow-xl">

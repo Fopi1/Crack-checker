@@ -1,6 +1,6 @@
-import { LucideProps } from "lucide-react";
-import { ForwardRefExoticComponent, RefAttributes, SVGProps } from "react";
-import { Message } from "react-hook-form";
+import type { LucideProps } from "lucide-react";
+import type { ForwardRefExoticComponent, RefAttributes, SVGProps } from "react";
+import type { Message } from "react-hook-form";
 
 export type IconProps = SVGProps<SVGSVGElement>;
 

@@ -1,5 +1,5 @@
-import { JwtPayload } from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
 
-import { UserData } from "./store";
+import type { UserData } from "./store";
 
 export type JWTToken = JwtPayload & UserData;

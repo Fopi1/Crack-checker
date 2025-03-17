@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { SEARCH_QUERY_LENGTH } from "@/constants";
 import { getApiParams } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
-import { SiteApi } from "@/services/siteApi/apiClient";
 import { SortBy, SortOrder } from "@/types/store";
 
 export async function GET(req: NextRequest) {
@@ -43,40 +42,28 @@ export async function GET(req: NextRequest) {
 
     const {
       category = "",
-      sortBy = "views",
-      sortOrder = "descending",
-      take = 25,
-      isAAA = false,
+      sortBy = "views" as SortBy,
+      sortOrder = "descending" as SortOrder,
+      take = "25",
+      isAAA = "false",
     } = searchParams;
+    const replacedSortBy = sortBy.replaceAll(" ", "");
     const games = await prisma.game.findMany({
       include: {
-        likes: {
-          select: {
-            id: true,
-          },
-        },
-        categories: {
-          select: {
-            title: true,
-          },
-        },
+        likes: { select: { id: true } },
+        categories: { select: { title: true } },
       },
       where: {
-        categories: {
-          some: {
-            title: category,
-          },
-        },
+        categories: { some: { title: category } },
+        ...(isAAA === "true" ? { isAAA: true } : {}),
       },
       take: Number(take),
+      orderBy:
+        replacedSortBy === "likes"
+          ? { likes: { _count: sortOrder === "descending" ? "desc" : "asc" } }
+          : { [replacedSortBy]: sortOrder === "descending" ? "desc" : "asc" },
     });
-    const sortedGames = SiteApi.games.sortGames(
-      games,
-      sortBy.replaceAll(" ", "") as SortBy,
-      sortOrder as SortOrder,
-      isAAA === "true"
-    );
-    return NextResponse.json(sortedGames);
+    return NextResponse.json(games);
   } catch (error) {
     console.error(error);
     return NextResponse.json(

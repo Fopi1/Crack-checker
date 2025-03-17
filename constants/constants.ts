@@ -1,9 +1,9 @@
 export const SEARCH_QUERY_LENGTH = 2;
 export const STALE_TIME = 1000 * 60 * 5;
 
-export enum CookieToken {
-  AUTH_TOKEN = "crack_token",
-}
+export const CookieToken = {
+  AUTH_TOKEN: "crack_token",
+} as const;
 
 export const FormFieldsLength = {
   name: {

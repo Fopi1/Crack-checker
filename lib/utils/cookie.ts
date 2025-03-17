@@ -2,6 +2,10 @@
 
 import { cookies } from "next/headers";
 
+export const removeCookie = (cookie: string) => {
+  cookies().delete(cookie);
+};
+
 export const setLaxCookie = (name: string, token: string) => {
   cookies().set(name, token, {
     httpOnly: true,

@@ -1,17 +1,22 @@
-import { Game } from "@prisma/client";
+import { Category, Game, User } from "@prisma/client";
 
 export type AddValue = "like" | "view";
 
 export type LikeActions = "liked" | "disliked";
 
-export interface GameWithCategories extends Game {
-  categories: { title: string }[];
-}
-export interface GameWithLikes extends Game {
-  likes: { id: number }[];
-}
+type CategoryTitle = Pick<Category, "title">;
 
-export interface FullGame extends Game {
-  likes: { id: number }[];
-  categories: { title: string }[];
-}
+type UserId = Pick<User, "id">;
+
+export type GameWithCategories = Game & {
+  categories: CategoryTitle[];
+};
+
+export type GameWithLikes = Game & {
+  likes: UserId[];
+};
+
+export type FullGame = Game & {
+  categories: CategoryTitle[];
+  likes: UserId[];
+};

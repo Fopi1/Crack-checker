@@ -1,5 +1,5 @@
-import { HTMLInputTypeAttribute } from "react";
-import { FieldValues, Path } from "react-hook-form";
+import type { HTMLInputTypeAttribute } from "react";
+import type { FieldValues, Path } from "react-hook-form";
 
 export type FieldProps<T extends FieldValues> = {
   name: Path<T>;

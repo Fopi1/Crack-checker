@@ -1,13 +1,11 @@
-import { FC } from 'react';
-
-import { cn } from '@/shadcn/lib';
+import { cn } from "@/shadcn/lib";
 
 interface Props {
   className?: string;
   protections: string;
 }
 
-export const CrackProtections: FC<Props> = ({ className, protections }) => {
+export const CrackProtections = ({ className, protections }: Props) => {
   return (
     <div className={cn("flex gap-1", className)}>
       <p>Protection:</p>

@@ -1,27 +1,21 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { memo } from "react";
+import Image from 'next/image';
+import { memo } from 'react';
 
-import { AppRoutes } from "@/constants/routes";
-import { performActionOnGame } from "@/services/siteApi/games";
-import { cn } from "@/shadcn";
-import { useCrackStatus } from "@/shared/hooks";
-import { processingActionsStore } from "@/shared/store/processingActionsStore";
-import { FullGame } from "@/types/api";
+import { AppRoutes } from '@/constants/routes';
+import { performActionOnGame } from '@/services/siteApi/games';
+import { cn } from '@/shadcn';
+import { useCrackStatus } from '@/shared/hooks';
+import { processingActionsStore } from '@/shared/store/processingActionsStore';
 
 import {
-  CrackBell,
-  CrackCracker,
-  CrackDate,
-  CrackLike,
-  CrackProtections,
-  CrackReleaseDate,
-  CrackStatus,
-  CrackViews,
-} from "../ui";
+    CrackBell, CrackCracker, CrackDate, CrackLike, CrackProtections, CrackReleaseDate, CrackStatus,
+    CrackViews
+} from '../ui';
+import { ProtectedLink } from './protectedLink';
 
+import type { FullGame } from "@/types/api";
 interface Props {
   className?: string;
   game: FullGame;
@@ -69,7 +63,7 @@ const GameCardComponent = ({ className, game }: Props) => {
         className
       )}
     >
-      <Link
+      <ProtectedLink
         href={AppRoutes.GAME(slug)}
         onClick={addView}
         className="cursor-pointer flex flex-col flex-shrink w-[100%] rounded-2xl"
@@ -101,7 +95,7 @@ const GameCardComponent = ({ className, game }: Props) => {
             </div>
           </div>
         </figure>
-      </Link>
+      </ProtectedLink>
       <section className="flex flex-col items-start">
         <div className="flex flex-col pt-2">
           <CrackReleaseDate releaseDate={releaseDate} />

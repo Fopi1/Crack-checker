@@ -1,12 +1,11 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { observer } from "mobx-react-lite";
 
-import { SiteApiRoutes } from "@/constants";
-import { axiosSiteInstance } from "@/services/instance";
+import { SiteApi } from "@/services/siteApi/apiClient";
 import { cn, Input, Label } from "@/shadcn";
-import { FullGame } from "@/types/api";
+import { searchStore } from "@/shared/store/searchStore";
 import { useAsyncEffect, useDebounceFn } from "@reactuses/core";
 
 interface Props {
@@ -14,21 +13,17 @@ interface Props {
   id: string;
 }
 
-export const SearchForm = ({ className, id }: Props) => {
-  const [userInput, setUserInput] = useState("");
+export const SearchForm = observer(({ className, id }: Props) => {
+  const { userInput } = searchStore;
   const debounceValue = useDebounceFn((input: string) => {
-    setUserInput(input);
+    searchStore.setUserInput(input);
   }, 500);
 
   useAsyncEffect(
     async () => {
       if (userInput.length > 2) {
-        const games = (
-          await axiosSiteInstance.get<FullGame[] | []>(
-            SiteApiRoutes.SEARCH_GAME(userInput)
-          )
-        ).data;
-        console.log(games);
+        const games = await SiteApi.games.searchGame(userInput);
+        searchStore.setSearchedGames(games);
       }
     },
     () => {},
@@ -51,4 +46,4 @@ export const SearchForm = ({ className, id }: Props) => {
       </div>
     </search>
   );
-};
+});

@@ -1,18 +1,19 @@
 "use client";
 
-import { PropsWithChildren, useRef, useState } from "react";
+import { PropsWithChildren, useRef, useState } from 'react';
 
-import { authStore } from "@/shared/store/authStore";
-import { UserData } from "@/types/store";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { authStore } from '@/shared/store/authStore';
+import { likedGamesStore } from '@/shared/store/likedGamesStore';
+import { UserData } from '@/types/store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import { AuthProvider } from "./authProvider";
-import { GlobalQueriesProvider } from "./globalQueriesProvider";
+import { AuthProvider } from './authProvider';
+import { LikedGamesProvider } from './likedGamesProvider';
 
 interface Props extends PropsWithChildren {
   userData: UserData | null;
-  likedGames: string[];
+  likedGames: string[] | null;
 }
 
 export const Providers = ({ children, userData, likedGames }: Props) => {
@@ -30,7 +31,7 @@ export const Providers = ({ children, userData, likedGames }: Props) => {
   const isInitialized = useRef(false);
   if (!isInitialized.current) {
     authStore.setUserData(userData);
-    queryClient.setQueryData(["likedGames"], likedGames);
+    likedGamesStore.setLikedGames(likedGames || []);
     isInitialized.current = true;
   }
 
@@ -40,7 +41,7 @@ export const Providers = ({ children, userData, likedGames }: Props) => {
         <ReactQueryDevtools initialIsOpen={false} />
       )}
       <AuthProvider>
-        <GlobalQueriesProvider>{children}</GlobalQueriesProvider>
+        <LikedGamesProvider>{children}</LikedGamesProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -1,46 +1,26 @@
-import z from "zod";
+import z from 'zod';
 
-export type CategoryTitles =
-  | "Popular games"
-  | "Last cracked games"
-  | "Hot games"
-  | "Most liked"
-  | "Unreleased games";
-interface Categories {
-  id: number;
-  title: CategoryTitles;
-  icon: string;
-}
+import { Category } from '@prisma/client';
 
-export const categories: Categories[] = [
+export const categories: Category[] = [
   {
-    id: 1,
     title: "Popular games",
-    icon: "Users",
   },
   {
-    id: 2,
     title: "Last cracked games",
-    icon: "AlarmClockCheck",
   },
   {
-    id: 3,
     title: "Hot games",
-    icon: "Flame",
   },
   {
-    id: 4,
     title: "Most liked",
-    icon: "ThumbsUp",
   },
   {
-    id: 5,
     title: "Unreleased games",
-    icon: "Clock",
   },
 ];
 
-export const GameSchema = z.object({
+export const AllGameDataSchema = z.object({
   id: z.string(),
   slug: z.string(),
   title: z.string(),
@@ -55,7 +35,7 @@ export const GameSchema = z.object({
   mata_score: z.number().nullable(),
 });
 
-export type AllGameData = z.infer<typeof GameSchema>;
+export type AllGameData = z.infer<typeof AllGameDataSchema>;
 
 export type ReleasedGamesData = {
   id: string;

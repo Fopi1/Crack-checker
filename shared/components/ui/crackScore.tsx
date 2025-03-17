@@ -1,6 +1,6 @@
-import { FC, ReactElement } from 'react';
+import { ReactElement } from "react";
 
-import { cn } from '@/shadcn/lib';
+import { cn } from "@/shadcn/lib";
 
 interface Props {
   className?: string;
@@ -8,7 +8,7 @@ interface Props {
   score: number | null;
 }
 
-export const CrackScore: FC<Props> = ({ className, image, score }) => {
+export const CrackScore = ({ className, image, score }: Props) => {
   return (
     <div className={cn("flex items-center gap-1 font-bold", className)}>
       {image}

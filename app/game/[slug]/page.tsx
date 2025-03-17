@@ -1,24 +1,15 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
-import { prisma } from "@/prisma/prismaClient";
-import { FullGame } from "@/types/api";
+import { prisma } from '@/prisma/prismaClient';
 
-import FPI from "./default";
-import { Game } from "./game";
+import FPI from './default';
+import GameClient from './page.client';
 
 interface Props {
   params: { slug: string };
 }
 
-const cache = new Map<string, FullGame | null>();
-
 const fetchGame = async (slug: string) => {
-  const isCached = cache.has(slug);
-  if (isCached) {
-    console.log(`Кэш для ${slug} найден`);
-    const game = cache.get(slug);
-    return game;
-  }
   const game = await prisma.game.findFirst({
     where: { slug },
     include: {
@@ -27,7 +18,6 @@ const fetchGame = async (slug: string) => {
     },
   });
 
-  cache.set(slug, game);
   return game;
 };
 
@@ -51,5 +41,5 @@ export default async function GameServer({ params }: Props) {
   if (!game) {
     return <FPI />;
   }
-  return <Game game={game} />;
+  return <GameClient initialData={game} />;
 }

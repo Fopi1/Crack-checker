@@ -111,4 +111,30 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .custom-scrollbar {
+    /* Firefox */
+    scrollbar-width: thin; /* Делает скроллбар тонким */
+    scrollbar-color: #4a90e2 #1a1a1a; /* Цвет ползунка и фона (thumb и track) */
+  }
+
+  /* WebKit (Chrome, Safari, Edge) */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* Ширина скроллбара */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #1a1a1a; /* Цвет фона трека */
+    border-radius: 4px; /* Закругляем трек */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4a90e2; /* Цвет ползунка */
+    border-radius: 4px; /* Закругляем ползунок */
+    border: 1px solid #1a1a1a; /* Добавляем обводку для контраста */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #357abd; /* Цвет при наведении */
+  }
 }

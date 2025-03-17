@@ -1,9 +1,10 @@
-import { flow, makeAutoObservable } from "mobx";
+import { flow, makeAutoObservable } from 'mobx';
 
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { JWTToken } from "@/types/jwt";
-import { UserData } from "@/types/store";
+import { getJWTPayload } from '@/lib/utils';
+import { SiteApi } from '@/services/siteApi/apiClient';
 
+import type { JWTToken } from "@/types/jwt";
+import type { UserData } from "@/types/store";
 class AuthStore {
   userData: UserData | null = null;
   isRememberMe = false;
@@ -25,9 +26,9 @@ class AuthStore {
     if (this.isLoading) return;
     this.isLoading = true;
     try {
-      const payload: JWTToken = yield SiteApi.users.getJWTPayload();
+      const payload: JWTToken = yield getJWTPayload();
       if (!payload) {
-        SiteApi.users.removeCookiePayload();
+        SiteApi.auth.logout();
         this.userData = null;
         return null;
       }
@@ -39,8 +40,8 @@ class AuthStore {
       return payload;
     } catch (error) {
       console.error("Auth check error:", error);
+      SiteApi.auth.logout();
       this.userData = null;
-      SiteApi.users.removeCookiePayload();
     } finally {
       this.isLoading = false;
     }

@@ -1,19 +1,21 @@
 "use client";
 
-import { observer } from 'mobx-react-lite';
-import Image from 'next/image';
-import Link from 'next/link';
-import { FC, useEffect, useRef, useState } from 'react';
+import { observer } from "mobx-react-lite";
+import Image from "next/image";
+import { FC, useEffect, useRef, useState } from "react";
 
-import { AppRoutes } from '@/constants/routes';
-import logo from '@/public/logo.png';
-import { cn } from '@/shadcn';
-import { authStore } from '@/shared/store/authStore';
+import { AppRoutes } from "@/constants/routes";
+import logo from "@/public/logo.png";
+import { cn } from "@/shadcn";
+import { authStore } from "@/shared/store/authStore";
+import { searchStore } from "@/shared/store/searchStore";
 
-import { HeaderMenu } from './headerMenu';
-import { LoginedActionsButton } from './navigation';
-import { NavLinks } from './navigation/navLinks';
-import { SearchForm } from './searchForm';
+import { ProtectedLink } from "../shared/protectedLink";
+import { HeaderMenu } from "./headerMenu";
+import { LoginedActionsButton } from "./navigation";
+import { NavLinks } from "./navigation/navLinks";
+import { SearchedGames } from "./searchedGames";
+import { SearchForm } from "./searchForm";
 
 interface Props {
   className?: string;
@@ -48,7 +50,7 @@ export const Header: FC<Props> = observer(({ className }) => {
     >
       <nav className="relative mx-auto flex justify-between items-center p-2 responsive flex-col lg:flex-row">
         <div className="flex items-center justify-between w-full gap-2 lg:justify-normal lg:w-auto xl:gap-6">
-          <Link href={AppRoutes.MAIN} className="flex items-center">
+          <ProtectedLink href={AppRoutes.MAIN} className="flex items-center">
             <Image
               priority
               src={logo}
@@ -59,7 +61,7 @@ export const Header: FC<Props> = observer(({ className }) => {
             <h1 className="text-base font-black hidden md:inline-block 2xl:text-2xl">
               CrackChecker
             </h1>
-          </Link>
+          </ProtectedLink>
           <SearchForm id="desktop-search" className="hidden lg:flex" />
           <HeaderMenu className="lg:hidden" />
         </div>
@@ -68,6 +70,7 @@ export const Header: FC<Props> = observer(({ className }) => {
           <NavLinks />
           {authStore.userData && <LoginedActionsButton />}
         </div>
+        {searchStore.userInput && <SearchedGames />}
       </nav>
     </header>
   );

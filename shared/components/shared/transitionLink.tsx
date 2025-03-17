@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ComponentType, FC, MouseEvent, PropsWithChildren } from "react";
+import { ComponentType, MouseEvent, PropsWithChildren } from "react";
 
 import { cn } from "@/shadcn";
 import { IconProps } from "@/types/components";
@@ -14,7 +14,7 @@ interface Props extends PropsWithChildren {
   iconProps?: Partial<IconProps>;
 }
 
-export const TransitionLink: FC<Props> = ({
+export const TransitionLink = ({
   className,
   href,
   backgroundColor,
@@ -23,7 +23,7 @@ export const TransitionLink: FC<Props> = ({
   children,
   iconProps = {},
   sameSite = false,
-}) => {
+}: Props) => {
   const IconComponent = icon;
   const commonProps = {
     style: { backgroundColor },

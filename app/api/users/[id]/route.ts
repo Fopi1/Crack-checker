@@ -1,14 +1,13 @@
 "use server";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-import { UserInfoSchema, userInfoSchema } from "@/app/profile/constants";
-import { CookieToken, rateLimiterPrefixes } from "@/constants";
-import { generateAccessToken } from "@/lib/jwt";
-import { rateLimit } from "@/lib/redis";
-import { responseApiFormError, setLaxCookie } from "@/lib/utils";
-import { prisma } from "@/prisma/prismaClient";
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { UserInfoSchema, userInfoSchema } from '@/app/profile/constants';
+import { CookieToken, rateLimiterPrefixes } from '@/constants';
+import { generateAccessToken } from '@/lib/jwt';
+import { rateLimit } from '@/lib/redis';
+import { removeCookie, responseApiFormError, setLaxCookie } from '@/lib/utils';
+import { prisma } from '@/prisma/prismaClient';
 
 const userApiFormError = (
   args: Parameters<typeof responseApiFormError<UserInfoSchema>>[0]
@@ -97,7 +96,7 @@ export async function DELETE(
     await prisma.user.delete({
       where: { id: userId },
     });
-    SiteApi.users.removeCookiePayload();
+    removeCookie(CookieToken.AUTH_TOKEN);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete user error: ", error);

@@ -2,14 +2,42 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
+import { getJWTPayload } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
-import { SiteApi } from "@/services/siteApi/apiClient";
 import { AddValue } from "@/types/api";
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+interface Params {
+  params: { id: string };
+}
+
+export async function GET(req: NextRequest, { params }: Params) {
+  try {
+    const { id } = params;
+
+    const game = await prisma.game.findUnique({
+      where: { id },
+      include: {
+        likes: { select: { id: true } },
+        categories: { select: { title: true } },
+      },
+    });
+    if (!game) {
+      return NextResponse.json(
+        { error: "Game with this id doesnt exist" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(game);
+  } catch (error) {
+    console.error("Error while adding views or likes", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: NextRequest, { params }: Params) {
   try {
     const { id: gameId } = params;
     const { addValue }: { addValue: AddValue } = await req.json();
@@ -37,7 +65,7 @@ export async function PUT(
         });
         return NextResponse.json({ success: true });
       case "like":
-        const payload = await SiteApi.users.getJWTPayload();
+        const payload = await getJWTPayload();
         const userId = payload?.id;
         if (!userId) {
           return NextResponse.json(

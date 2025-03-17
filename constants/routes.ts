@@ -18,9 +18,10 @@ export const SiteApiRoutes = {
   USER: (id: number) => `/users/${id}`,
   PASSWORD: (id: number) => `/users/${id}/password`,
   SEARCH_GAME: (query: string) => `/games?query=${query}`,
+  LIKED_GAMES: "/users/liked-games",
 } as const;
 
-export enum ExternalApiRoutes {
-  SEARCH = "/search_title/",
-  RELEASED_GAMES = "/releasedgame/",
-}
+export const ExternalApiRoutes = {
+  SEARCH: "/search_title/",
+  RELEASED_GAMES: "/releasedgame/",
+} as const;

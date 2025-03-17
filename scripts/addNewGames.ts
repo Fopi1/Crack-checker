@@ -1,8 +1,8 @@
-import pLimit from "p-limit";
+import pLimit from 'p-limit';
 
-import { GameSchema } from "@/prisma/constants";
-import { prisma } from "@/prisma/prismaClient";
-import { GameStatusApi } from "@/services/externalApi/apiClient";
+import { AllGameDataSchema } from '@/prisma/constants';
+import { prisma } from '@/prisma/prismaClient';
+import { GameStatusApi } from '@/services/externalApi/apiClient';
 
 const limit = pLimit(10);
 
@@ -29,7 +29,7 @@ const addNewGames = async () => {
           const gameDetails = await GameStatusApi.games.getGameDetailsByTitle(
             game.title
           );
-          const validation = GameSchema.safeParse(gameDetails);
+          const validation = AllGameDataSchema.safeParse(gameDetails);
           if (!validation.success) {
             console.error("Invalid game data:", validation.error);
             return null;

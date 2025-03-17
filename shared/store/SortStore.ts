@@ -1,7 +1,8 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from 'mobx';
 
-import { categories } from "@/prisma/constants";
-import { SortBy, SortOrder, TakeGames } from "@/types/store";
+import { categories } from '@/prisma/constants';
+
+import type { SortBy, SortOrder, TakeGames } from "@/types/store";
 
 type SortOptions = {
   sortBy: SortBy;

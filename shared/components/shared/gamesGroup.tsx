@@ -1,6 +1,6 @@
-import { FullGame } from "@/types/api";
+import type { FullGame } from "@/types/api";
 
-import { GameCard } from "../gamesGroup";
+import { GameCard } from "./gameCard";
 
 interface Props {
   games: FullGame[];

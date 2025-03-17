@@ -43,9 +43,7 @@ model Game {
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  title String @unique
-  icon  String
+  title String @id
   games Game[]
 }
 

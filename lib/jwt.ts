@@ -1,3 +1,5 @@
+"use server";
+
 import { jwtVerify, SignJWT } from "jose";
 
 import { JWTToken } from "@/types/jwt";

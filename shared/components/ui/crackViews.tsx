@@ -1,14 +1,13 @@
-import { Eye } from 'lucide-react';
-import { FC } from 'react';
+import { Eye } from "lucide-react";
 
-import { cn } from '@/shadcn/lib';
+import { cn } from "@/shadcn/lib";
 
 interface Props {
   className?: string;
   views: number;
 }
 
-export const CrackViews: FC<Props> = ({ className, views }) => {
+export const CrackViews = ({ className, views }: Props) => {
   return (
     <div
       className={cn(

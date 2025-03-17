@@ -1,14 +1,13 @@
-import { Calendar } from 'lucide-react';
-import { FC } from 'react';
+import { Calendar } from "lucide-react";
 
-import { cn } from '@/shadcn/lib';
+import { cn } from "@/shadcn/lib";
 
 interface Props {
   className?: string;
   releaseDate: string;
 }
 
-export const CrackReleaseDate: FC<Props> = ({ className, releaseDate }) => {
+export const CrackReleaseDate = ({ className, releaseDate }: Props) => {
   return (
     <div className={cn("flex gap-1", className)}>
       <p>Release Date:</p>

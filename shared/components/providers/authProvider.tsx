@@ -1,21 +1,19 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { PropsWithChildren, useRef } from "react";
+import { PropsWithChildren } from "react";
 
+import { usePathnames } from "@/shared/hooks/usePathnames";
 import { authStore } from "@/shared/store/authStore";
 import { useAsyncEffect } from "@reactuses/core";
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const newPathname = usePathname();
-  const oldPathname = useRef(newPathname);
-  const isNewPath = oldPathname.current !== newPathname;
+  const { newPathname, oldPathname } = usePathnames();
+  const isNewPath = oldPathname !== newPathname;
   useAsyncEffect(
     async () => {
       if (isNewPath) {
         authStore.checkAuth();
       }
-      oldPathname.current = newPathname;
     },
     () => {},
     [newPathname]

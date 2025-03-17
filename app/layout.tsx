@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import './globals.css';
 
-import scandia from "next/font/local";
+import scandia from 'next/font/local';
 
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { Toaster } from "@/shadcn/components";
-import { Footer } from "@/shared/components";
-import { Header } from "@/shared/components/header";
-import { Providers } from "@/shared/components/providers";
-import { Background } from "@/shared/components/shared";
+import { getJWTPayload, getLikedGames } from '@/lib/utils';
+import { Toaster } from '@/shadcn/components';
+import { Footer } from '@/shared/components';
+import { Header } from '@/shared/components/header';
+import { Providers } from '@/shared/components/providers';
+import { Background } from '@/shared/components/shared';
 
 const Scandia = scandia({
   src: [
@@ -40,12 +40,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const payload = await SiteApi.users.getJWTPayload();
+  const payload = await getJWTPayload();
   const userData = payload
     ? { id: payload.id, name: payload.name, email: payload.email }
     : null;
 
-  const likedGames = await SiteApi.users.getLikedGames();
+  const likedGames = await getLikedGames();
 
   return (
     <html lang="en" className={Scandia.className}>

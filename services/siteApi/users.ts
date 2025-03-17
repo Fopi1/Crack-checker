@@ -1,54 +1,23 @@
-"use server";
+import { SiteApiRoutes } from '@/constants';
+import { axiosSiteInstance } from '@/lib';
 
-import bcrypt from "bcrypt";
-import { cookies } from "next/headers";
-
-import { CookieToken } from "@/constants/constants";
-import { verifyAccessToken } from "@/lib/jwt";
-import { prisma } from "@/prisma/prismaClient";
-
-export const hashPassword = async (password: string) =>
-  await bcrypt.hash(password, 10);
-
-export const getUserByEmail = async (email: string) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
-  return user;
-};
-
-export const getJWTPayload = async () => {
-  const token = cookies().get(CookieToken.AUTH_TOKEN)?.value;
-  const payload = token ? await verifyAccessToken(token) : null;
-  return payload;
-};
-
-export const removeCookiePayload = async () => {
-  cookies().delete(CookieToken.AUTH_TOKEN);
-};
-
-export const getLikedGames = async (): Promise<string[]> => {
+export const getLikedGames = async () => {
   try {
-    const payload = await getJWTPayload();
-    const userId = payload?.id;
-    if (!userId) {
-      throw new Error("Cannot find user id");
-    }
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      include: { likes: true },
-    });
-    if (!user) {
-      throw new Error("Cannot find user");
-    }
-    const gameIds = user.likes.map((game) => game.id);
-    return gameIds;
+    const { data } = await axiosSiteInstance.get<string[]>(
+      SiteApiRoutes.LIKED_GAMES
+    );
+    return data;
   } catch (error) {
-    console.error(error);
-    return [];
+    console.error("Cannot get liked games: ", error);
+    return null;
+  }
+};
+
+export const deleteUser = async (userId: number) => {
+  try {
+    await axiosSiteInstance.delete(SiteApiRoutes.USER(userId));
+  } catch (error) {
+    console.error(`Cannot delete user with ${userId} id: ${error}`);
+    throw error;
   }
 };

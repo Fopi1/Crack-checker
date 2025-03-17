@@ -1,35 +1,24 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useRouter } from 'next/navigation';
+import { FC, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { AppRoutes, SiteApiRoutes } from "@/constants/routes";
-import { getApiFormError } from "@/lib/utils";
-import { axiosSiteInstance } from "@/services/instance";
-import { SiteApi } from "@/services/siteApi/apiClient";
-import { Form } from "@/shadcn/components/ui";
-import { Error } from "@/shared/components/shared";
-import {
-  FormButton,
-  FormFields,
-  FormTextLink,
-} from "@/shared/components/shared/formPieces";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { AppRoutes } from '@/constants/routes';
+import { SiteApi } from '@/services/siteApi/apiClient';
+import { Form } from '@/shadcn/components/ui';
+import { Error } from '@/shared/components/shared';
+import { FormButton, FormFields, FormTextLink } from '@/shared/components/shared/formPieces';
+import { getApiFormError } from '@/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import {
-  registerFormFields,
-  registerFormSchema,
-  RegisterFormSchema,
-} from "./constants";
+import { registerFormFields, registerFormSchema, RegisterFormSchema } from './constants';
 
 interface Props {
   className?: string;
 }
 
 export const RegisterForm: FC<Props> = ({ className }) => {
-  const queryClient = useQueryClient();
   const [isCheckingData, setIsCheckingData] = useState(false);
   const { replace } = useRouter();
 
@@ -62,24 +51,11 @@ export const RegisterForm: FC<Props> = ({ className }) => {
   const onSubmit: SubmitHandler<RegisterFormSchema> = async (data) => {
     try {
       setIsCheckingData(true);
-      const isEmailExist = Boolean(
-        await SiteApi.users.getUserByEmail(data.email)
-      );
-      if (isEmailExist) {
-        setError("email", {
-          message: "User with this email already exists",
-        });
-        return;
-      }
-      await axiosSiteInstance.post(SiteApiRoutes.REGISTER, {
-        ...data,
-      });
-      await axiosSiteInstance.post(SiteApiRoutes.LOGIN, {
+      await SiteApi.auth.registerUser(data);
+      await SiteApi.auth.loginUser({
         email: data.email,
         password: data.password,
-        isRememberMe: true,
       });
-      await queryClient.invalidateQueries({ queryKey: ["likedGames"] });
       replace("/");
     } catch (error) {
       const { errorField, errorMessage } = getApiFormError(error);

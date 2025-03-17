@@ -8,9 +8,8 @@ import {
 } from "@/app/register/constants";
 import { rateLimiterPrefixes } from "@/constants";
 import { rateLimit } from "@/lib/redis";
-import { responseApiFormError } from "@/lib/utils";
+import { hashPassword, responseApiFormError } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
-import { SiteApi } from "@/services/siteApi/apiClient";
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,7 +39,7 @@ export async function POST(req: NextRequest) {
         status: 409,
       });
     }
-    const hashedPassword = await SiteApi.users.hashPassword(password);
+    const hashedPassword = await hashPassword(password);
     await prisma.user.create({
       data: {
         name,

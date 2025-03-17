@@ -1,4 +1,4 @@
-import { FieldValues, UseFormReturn } from "react-hook-form";
+import type { FieldValues, UseFormReturn } from "react-hook-form";
 
 import { cn } from "@/shadcn";
 import {
@@ -9,7 +9,8 @@ import {
   FormMessage,
   Input,
 } from "@/shadcn/components/ui";
-import { FieldProps } from "@/types/form";
+
+import type { FieldProps } from "@/types/form";
 
 interface Props<T extends FieldValues> {
   fields: FieldProps<T>[];

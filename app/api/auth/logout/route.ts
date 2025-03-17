@@ -2,17 +2,13 @@
 
 import { NextResponse } from "next/server";
 
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { CookieToken } from "@/constants";
+import { removeCookie } from "@/lib/utils";
 
 export async function POST() {
-  try {
-    await SiteApi.users.removeCookiePayload();
-    return NextResponse.json(
-      { message: "Logged out successfully" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Logout error:", error);
-    return NextResponse.json({ error: "Logout failed" }, { status: 500 });
-  }
+  removeCookie(CookieToken.AUTH_TOKEN);
+  return NextResponse.json(
+    { message: "Logged out successfully" },
+    { status: 200 }
+  );
 }

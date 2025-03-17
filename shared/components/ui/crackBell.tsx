@@ -1,15 +1,18 @@
-import { Bell } from 'lucide-react';
-import { FC, MouseEvent } from 'react';
+import { Bell } from "lucide-react";
+import { MouseEvent } from "react";
 
-import { cn } from '@/shadcn/lib';
-
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../shadcn/components/ui';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/shadcn/components/ui";
+import { cn } from "@/shadcn/lib";
 
 interface Props {
   className?: string;
 }
 
-export const CrackBell: FC<Props> = ({ className }) => {
+export const CrackBell = ({ className }: Props) => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();

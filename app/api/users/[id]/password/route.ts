@@ -1,4 +1,5 @@
 "use server";
+
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,9 +10,8 @@ import {
 import { CookieToken, rateLimiterPrefixes } from "@/constants";
 import { generateAccessToken } from "@/lib/jwt";
 import { rateLimit } from "@/lib/redis";
-import { responseApiFormError, setLaxCookie } from "@/lib/utils";
+import { hashPassword, responseApiFormError, setLaxCookie } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
-import { SiteApi } from "@/services/siteApi/apiClient";
 
 const passwordApiFormError = (
   args: Parameters<typeof responseApiFormError<PasswordInfoSchema>>[0]
@@ -63,7 +63,7 @@ export async function PATCH(
         status: 409,
       });
     }
-    const hashedPassword = await SiteApi.users.hashPassword(password);
+    const hashedPassword = await hashPassword(password);
     const newUser = await prisma.user.update({
       where: { id: userId },
       data: {

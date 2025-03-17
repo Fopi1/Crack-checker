@@ -1,18 +1,15 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
-import { usePathname, useRouter } from "next/navigation";
+import { observer } from 'mobx-react-lite';
+import { usePathname, useRouter } from 'next/navigation';
 
-import { AppRoutes, SiteApiRoutes } from "@/constants/routes";
-import { axiosSiteInstance } from "@/services/instance";
+import { AppRoutes } from '@/constants/routes';
+import { SiteApi } from '@/services/siteApi/apiClient';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/shadcn/components/ui";
-import { authStore } from "@/shared/store/authStore";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
+} from '@/shadcn/components/ui';
+import { authStore } from '@/shared/store/authStore';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 
 export const LoginedActionsButton = observer(() => {
   const router = useRouter();
@@ -23,7 +20,7 @@ export const LoginedActionsButton = observer(() => {
   };
 
   const logOut = async () => {
-    await axiosSiteInstance.post(SiteApiRoutes.LOGOUT);
+    await SiteApi.auth.logout();
     authStore.setUserData(null);
     if (pathname === AppRoutes.MAIN) {
       await authStore.checkAuth();
