@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import './globals.css';
+import "./globals.css";
 
-import scandia from 'next/font/local';
+import scandia from "next/font/local";
 
-import { getJWTPayload, getLikedGames } from '@/lib/utils';
-import { Toaster } from '@/shadcn/components';
-import { Footer } from '@/shared/components';
-import { Header } from '@/shared/components/header';
-import { Providers } from '@/shared/components/providers';
-import { Background } from '@/shared/components/shared';
-import { Overlay } from '@/shared/components/shared/overlay';
+import { getJWTPayload, getLikedGames } from "@/lib/utils";
+import { Toaster } from "@/shadcn/components";
+import { Footer } from "@/shared/components";
+import { Header } from "@/shared/components/header";
+import { Providers } from "@/shared/components/providers";
+import { Background } from "@/shared/components/shared";
+import { Overlay } from "@/shared/components/shared/overlay";
 
 const Scandia = scandia({
   src: [
@@ -38,8 +38,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   const payload = await getJWTPayload();
   const userData = payload
@@ -61,6 +63,7 @@ export default async function RootLayout({
             <Background />
             <Header />
             <main>{children}</main>
+            {modal}
             <Footer />
           </div>
         </Providers>

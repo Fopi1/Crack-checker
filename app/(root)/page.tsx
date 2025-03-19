@@ -1,6 +1,6 @@
-import { GamesByCategories } from "./home";
+import { GamesByCategories } from './games';
 
-export default function Home() {
+export default function Games() {
   return (
     <div className="flex flex-col h-full">
       <GamesByCategories />
