@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   RegisterFormSchema,
   registerFormSchema,
-} from "@/app/register/constants";
+} from "@/app/(user)/register/constants";
 import { rateLimiterPrefixes } from "@/constants";
 import { rateLimit } from "@/lib/redis";
 import { hashPassword, responseApiFormError } from "@/lib/utils";

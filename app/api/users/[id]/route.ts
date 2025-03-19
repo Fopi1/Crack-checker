@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { UserInfoSchema, userInfoSchema } from "@/app/profile/constants";
+import { UserInfoSchema, userInfoSchema } from "@/app/(user)/profile/constants";
 import { CookieToken, rateLimiterPrefixes } from "@/constants";
 import { generateAccessToken } from "@/lib/jwt";
 import { rateLimit } from "@/lib/redis";

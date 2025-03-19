@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   PasswordInfoSchema,
   passwordInfoSchema,
-} from "@/app/profile/constants";
+} from "@/app/(user)/profile/constants";
 import { rateLimiterPrefixes } from "@/constants";
 import { rateLimit } from "@/lib/redis";
 import { hashPassword, responseApiFormError } from "@/lib/utils";

@@ -1,7 +1,7 @@
-import { LoginFormSchema } from '@/app/login/constants';
-import { RegisterFormSchema } from '@/app/register/constants';
-import { SiteApiRoutes } from '@/constants';
-import { axiosSiteInstance } from '@/lib';
+import { LoginFormSchema } from "@/app/(user)/login/constants";
+import { RegisterFormSchema } from "@/app/(user)/register/constants";
+import { SiteApiRoutes } from "@/constants";
+import { axiosSiteInstance } from "@/lib";
 
 export const registerUser = async (data: RegisterFormSchema) => {
   try {

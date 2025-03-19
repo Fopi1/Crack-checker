@@ -1,4 +1,4 @@
-import { GamesByCategories } from './home';
+import { GamesByCategories } from "./home";
 
 export default function Home() {
   return (

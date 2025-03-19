@@ -30,7 +30,7 @@
     ".next/types/**/*.ts",
     "shared/components/shared/header/desktop-wrapper.tsx",
     "shared/components/shared/formPieces/formActions.tsx",
-    "app/login/constants.ts"
+    "app/(user)/login/constants.ts"
   ],
   "exclude": ["node_modules"]
 }
