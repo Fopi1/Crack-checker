@@ -9,6 +9,7 @@ import { Footer } from '@/shared/components';
 import { Header } from '@/shared/components/header';
 import { Providers } from '@/shared/components/providers';
 import { Background } from '@/shared/components/shared';
+import { Overlay } from '@/shared/components/shared/overlay';
 
 const Scandia = scandia({
   src: [
@@ -54,11 +55,14 @@ export default async function RootLayout({
       </head>
       <body className="flex flex-col overflow-x-hidden selection:bg-red-500 text-white">
         <Providers userData={userData} likedGames={likedGames}>
-          <Background />
-          <Header />
-          <main>{children}</main>
-          <Footer />
           <Toaster />
+          <div>
+            <Overlay />
+            <Background />
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

@@ -1,9 +1,10 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from 'mobx';
 
-import { FullGame } from "@/types/api";
+import { FullGame } from '@/types/api';
 
 class SearchStore {
   userInput = "";
+  isOpened = false;
   searchedGames: FullGame[] = [];
 
   constructor() {
@@ -16,6 +17,10 @@ class SearchStore {
 
   setUserInput(newInput: string) {
     this.userInput = newInput;
+  }
+
+  setIsOpened(value: boolean) {
+    this.isOpened = value;
   }
 }
 

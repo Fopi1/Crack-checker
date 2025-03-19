@@ -1,27 +1,26 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
-import Image from "next/image";
-import { FC, useEffect, useRef, useState } from "react";
+import { observer } from 'mobx-react-lite';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
-import { AppRoutes } from "@/constants/routes";
-import logo from "@/public/logo.png";
-import { cn } from "@/shadcn";
-import { authStore } from "@/shared/store/authStore";
-import { searchStore } from "@/shared/store/searchStore";
+import { AppRoutes } from '@/constants/routes';
+import logo from '@/public/logo.png';
+import { cn } from '@/shadcn';
+import { authStore } from '@/shared/store/authStore';
+import { overlayStore } from '@/shared/store/overlayStore';
+import { searchStore } from '@/shared/store/searchStore';
 
-import { ProtectedLink } from "../shared/protectedLink";
-import { HeaderMenu } from "./headerMenu";
-import { LoginedActionsButton } from "./navigation";
-import { NavLinks } from "./navigation/navLinks";
-import { SearchedGames } from "./searchedGames";
-import { SearchForm } from "./searchForm";
+import { ProtectedLink } from '../shared/protectedLink';
+import { HeaderMenu } from './headerMenu';
+import { LoginedActionsButton } from './navigation';
+import { NavLinks } from './navigation/navLinks';
+import { SearchedGames } from './searchedGames';
+import { SearchForm } from './searchForm';
 
-interface Props {
-  className?: string;
-}
-
-export const Header: FC<Props> = observer(({ className }) => {
+export const Header = observer(() => {
+  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
 
@@ -40,12 +39,37 @@ export const Header: FC<Props> = observer(({ className }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleOverlayClick = () => {
+    searchStore.setIsOpened(false);
+    overlayStore.setIsAppeared(false);
+    overlayStore.setOnOverlayClick(null);
+  };
+
+  const handleSearchFocus = () => {
+    if (searchStore.userInput) {
+      searchStore.setIsOpened(true);
+      overlayStore.setIsAppeared(true);
+      overlayStore.setOnOverlayClick(handleOverlayClick);
+    }
+  };
+
+  useEffect(() => {
+    if (overlayStore.isAppeared && searchStore.userInput.length > 2) {
+      overlayStore.setOnOverlayClick(handleOverlayClick);
+    } else {
+      overlayStore.setOnOverlayClick(null);
+    }
+  }, [overlayStore.isAppeared, searchStore.userInput]);
+
+  useEffect(() => {
+    handleOverlayClick();
+  }, [pathname]);
+
   return (
     <header
       className={cn(
-        "uppercase bg-slate-900 sticky top-0 shadow-2xl z-30 text-wrap transition-transform duration-300",
-        isVisible ? "translate-y-0" : "-translate-y-full",
-        className
+        "uppercase bg-slate-900 sticky top-0 shadow-2xl z-[3] text-wrap transition-transform duration-300",
+        isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
       <nav className="relative mx-auto flex justify-between items-center p-2 responsive flex-col lg:flex-row">
@@ -62,15 +86,25 @@ export const Header: FC<Props> = observer(({ className }) => {
               CrackChecker
             </h1>
           </ProtectedLink>
-          <SearchForm id="desktop-search" className="hidden lg:flex" />
+          <SearchForm
+            id="desktop-search"
+            className="hidden lg:flex"
+            onFocus={handleSearchFocus}
+          />
           <HeaderMenu className="lg:hidden" />
         </div>
-        <SearchForm id="mobile-search" className="w-full flex lg:hidden" />
+        <SearchForm
+          id="mobile-search"
+          className="w-full flex lg:hidden"
+          onFocus={handleSearchFocus}
+        />
         <div className="leading-[21px] pr-2 hidden gap-5 lg:flex xl:gap-10">
           <NavLinks />
           {authStore.userData && <LoginedActionsButton />}
         </div>
-        {searchStore.userInput && <SearchedGames />}
+        {searchStore.isOpened && searchStore.userInput.length > 2 && (
+          <SearchedGames />
+        )}
       </nav>
     </header>
   );

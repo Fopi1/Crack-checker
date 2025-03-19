@@ -1,23 +1,16 @@
 "use client";
 
-import { Users } from "lucide-react";
-import Image from "next/image";
+import { Users } from 'lucide-react';
+import Image from 'next/image';
 
-import { Meta, Steam } from "@/shared/components/icons";
-import { Blurred, Container, TransitionLink } from "@/shared/components/shared";
+import { Meta, Steam } from '@/shared/components/icons';
+import { Blurred, Container, TransitionLink } from '@/shared/components/shared';
 import {
-  CrackBell,
-  CrackCracker,
-  CrackDate,
-  CrackLike,
-  CrackProtections,
-  CrackReleaseDate,
-  CrackScore,
-  CrackStatus,
-  CrackViews,
-} from "@/shared/components/ui";
-import { useCrackStatus } from "@/shared/hooks";
-import { FullGame } from "@/types/api";
+    CrackBell, CrackCracker, CrackDate, CrackLike, CrackProtections, CrackReleaseDate, CrackScore,
+    CrackStatus, CrackViews
+} from '@/shared/components/ui';
+import { useCrackStatus } from '@/shared/hooks';
+import { FullGame } from '@/types/api';
 
 interface Props {
   game: FullGame;
@@ -60,7 +53,7 @@ export const Game = ({ game }: Props) => {
                 width={1000}
                 height={0}
                 priority
-                className="rounded-[20px] z-10"
+                className="rounded-[20px] z-[2]"
               />
             </div>
           </div>
