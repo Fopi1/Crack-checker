@@ -7,10 +7,11 @@ import { prisma } from "@/prisma/prismaClient";
 import { AddValue } from "@/types/api";
 
 interface Params {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export async function GET(req: NextRequest, { params }: Params) {
+export async function GET(req: NextRequest, props: Params) {
+  const params = await props.params;
   try {
     const { id } = params;
 
@@ -37,7 +38,8 @@ export async function GET(req: NextRequest, { params }: Params) {
   }
 }
 
-export async function PUT(req: NextRequest, { params }: Params) {
+export async function PUT(req: NextRequest, props: Params) {
+  const params = await props.params;
   try {
     const { id: gameId } = params;
     const { addValue }: { addValue: AddValue } = await req.json();

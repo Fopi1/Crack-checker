@@ -1,21 +1,22 @@
 "use server";
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-import { UserInfoSchema, userInfoSchema } from '@/app/profile/constants';
-import { CookieToken, rateLimiterPrefixes } from '@/constants';
-import { generateAccessToken } from '@/lib/jwt';
-import { rateLimit } from '@/lib/redis';
-import { removeCookie, responseApiFormError, setLaxCookie } from '@/lib/utils';
-import { prisma } from '@/prisma/prismaClient';
+import { UserInfoSchema, userInfoSchema } from "@/app/profile/constants";
+import { CookieToken, rateLimiterPrefixes } from "@/constants";
+import { generateAccessToken } from "@/lib/jwt";
+import { rateLimit } from "@/lib/redis";
+import { removeCookie, responseApiFormError, setLaxCookie } from "@/lib/utils";
+import { prisma } from "@/prisma/prismaClient";
 
 const userApiFormError = (
   args: Parameters<typeof responseApiFormError<UserInfoSchema>>[0]
 ) => responseApiFormError<UserInfoSchema>(args);
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
+  const params = await props.params;
   try {
     const limitError = await rateLimit(req, rateLimiterPrefixes.INFO);
     if (limitError) return limitError;
@@ -72,7 +73,7 @@ export async function PATCH(
       updatedUser.email
     );
     const response = NextResponse.json({ success: true, user: updatedUser });
-    setLaxCookie(CookieToken.AUTH_TOKEN, token);
+    await setLaxCookie(CookieToken.AUTH_TOKEN, token);
     return response;
   } catch (error) {
     console.error("Update user data error: ", error);
@@ -85,8 +86,9 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
+  const params = await props.params;
   try {
     const userId = parseInt(params.id, 10);
     if (!userId) {

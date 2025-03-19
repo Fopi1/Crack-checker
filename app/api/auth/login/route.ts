@@ -1,13 +1,17 @@
 "use server";
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-import { LoginFormSchema, loginFormSchema } from '@/app/login/constants';
-import { CookieToken, rateLimiterPrefixes } from '@/constants/constants';
-import { generateAccessToken } from '@/lib/jwt';
-import { rateLimit } from '@/lib/redis';
-import { comparePassword, responseApiFormError, setLaxCookie } from '@/lib/utils';
-import { prisma } from '@/prisma/prismaClient';
+import { LoginFormSchema, loginFormSchema } from "@/app/login/constants";
+import { CookieToken, rateLimiterPrefixes } from "@/constants/constants";
+import { generateAccessToken } from "@/lib/jwt";
+import { rateLimit } from "@/lib/redis";
+import {
+  comparePassword,
+  responseApiFormError,
+  setLaxCookie,
+} from "@/lib/utils";
+import { prisma } from "@/prisma/prismaClient";
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,7 +36,7 @@ export async function POST(req: NextRequest) {
     }
     const { token } = await generateAccessToken(user.id, user.name, user.email);
 
-    setLaxCookie(CookieToken.AUTH_TOKEN, token);
+    await setLaxCookie(CookieToken.AUTH_TOKEN, token);
     return NextResponse.json({ success: true, userId: user.id });
   } catch (error) {
     console.error("Login error", error);

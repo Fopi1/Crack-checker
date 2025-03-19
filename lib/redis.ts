@@ -24,8 +24,8 @@ export const rateLimit = async (
   limit = 10,
   timeWindow = 60
 ) => {
-  const ip = getUserIP(req);
-  const userAgent = getUserAgent(req);
+  const ip = await getUserIP(req);
+  const userAgent = await getUserAgent(req);
   const key = ip
     ? `rate_limit:${keyPrefix}:${ip}`
     : `rate_limit:${keyPrefix}:ua:${userAgent}`;

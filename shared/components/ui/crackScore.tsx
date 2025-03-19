@@ -4,7 +4,7 @@ import { cn } from "@/shadcn/lib";
 
 interface Props {
   className?: string;
-  image: ReactElement;
+  image: ReactElement<any>;
   score: number | null;
 }
 

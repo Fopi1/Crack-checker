@@ -6,7 +6,7 @@ import FPI from './default';
 import GameClient from './page.client';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 const fetchGame = async (slug: string) => {
@@ -21,7 +21,8 @@ const fetchGame = async (slug: string) => {
   return game;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const game = await fetchGame(params.slug);
   if (!game) {
     return {
@@ -35,7 +36,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function GameServer({ params }: Props) {
+export default async function GameServer(props: Props) {
+  const params = await props.params;
   const game = await fetchGame(params.slug);
 
   if (!game) {

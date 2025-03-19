@@ -7,10 +7,9 @@ import {
   PasswordInfoSchema,
   passwordInfoSchema,
 } from "@/app/profile/constants";
-import { CookieToken, rateLimiterPrefixes } from "@/constants";
-import { generateAccessToken } from "@/lib/jwt";
+import { rateLimiterPrefixes } from "@/constants";
 import { rateLimit } from "@/lib/redis";
-import { hashPassword, responseApiFormError, setLaxCookie } from "@/lib/utils";
+import { hashPassword, responseApiFormError } from "@/lib/utils";
 import { prisma } from "@/prisma/prismaClient";
 
 const passwordApiFormError = (
@@ -19,8 +18,9 @@ const passwordApiFormError = (
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
+  const params = await props.params;
   try {
     const limitError = await rateLimit(req, rateLimiterPrefixes.PASSWORD);
     if (limitError) return limitError;
@@ -64,20 +64,13 @@ export async function PATCH(
       });
     }
     const hashedPassword = await hashPassword(password);
-    const newUser = await prisma.user.update({
+    await prisma.user.update({
       where: { id: userId },
       data: {
         password: hashedPassword,
       },
     });
-    const { token } = await generateAccessToken(
-      newUser.id,
-      newUser.name,
-      newUser.email
-    );
-    const response = NextResponse.json({ success: true, user: newUser });
-    setLaxCookie(CookieToken.AUTH_TOKEN, token);
-    return response;
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Update user password error: ", error);
     return NextResponse.json(
