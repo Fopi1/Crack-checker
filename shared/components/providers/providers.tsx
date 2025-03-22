@@ -1,22 +1,21 @@
 "use client";
 
+import { Session } from 'next-auth';
+import { SessionProvider } from 'next-auth/react';
 import { PropsWithChildren, useRef, useState } from 'react';
 
-import { authStore } from '@/shared/store/authStore';
 import { likedGamesStore } from '@/shared/store/likedGamesStore';
-import { UserData } from '@/types/store';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import { AuthProvider } from './authProvider';
 import { LikedGamesProvider } from './likedGamesProvider';
 
 interface Props extends PropsWithChildren {
-  userData: UserData | null;
+  session: Session | null | undefined;
   likedGames: string[] | null;
 }
 
-export const Providers = ({ children, userData, likedGames }: Props) => {
+export const Providers = ({ children, session, likedGames }: Props) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -30,7 +29,6 @@ export const Providers = ({ children, userData, likedGames }: Props) => {
   );
   const isInitialized = useRef(false);
   if (!isInitialized.current) {
-    authStore.setUserData(userData);
     likedGamesStore.setLikedGames(likedGames || []);
     isInitialized.current = true;
   }
@@ -40,9 +38,9 @@ export const Providers = ({ children, userData, likedGames }: Props) => {
       {process.env.NODE_ENV === "development" && (
         <ReactQueryDevtools initialIsOpen={false} />
       )}
-      <AuthProvider>
+      <SessionProvider session={session}>
         <LikedGamesProvider>{children}</LikedGamesProvider>
-      </AuthProvider>
+      </SessionProvider>
     </QueryClientProvider>
   );
 };

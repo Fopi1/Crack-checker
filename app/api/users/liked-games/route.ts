@@ -1,8 +1,8 @@
 "use server";
 
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-import { getLikedGames } from '@/lib/utils';
+import { getLikedGames } from "@/lib/utils";
 
 export async function GET() {
   try {

@@ -1,4 +1,4 @@
-import { Category, Game, User } from "@prisma/client";
+import { Category, Game, User } from '@prisma/client';
 
 export type AddValue = "like" | "view";
 

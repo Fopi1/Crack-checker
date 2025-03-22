@@ -1,25 +1,26 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { observer } from 'mobx-react-lite';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
-import { AppRoutes } from "@/constants/routes";
-import logo from "@/public/logo.png";
-import { cn } from "@/shadcn";
-import { authStore } from "@/shared/store/authStore";
-import { overlayStore } from "@/shared/store/overlayStore";
-import { searchStore } from "@/shared/store/searchStore";
+import { AppRoutes } from '@/constants/routes';
+import logo from '@/public/logo.png';
+import { cn } from '@/shadcn';
+import { overlayStore } from '@/shared/store/overlayStore';
+import { searchStore } from '@/shared/store/searchStore';
 
-import { ProtectedLink } from "../shared/protectedLink";
-import { HeaderMenu } from "./headerMenu";
-import { LoginedActionsButton } from "./navigation";
-import { NavLinks } from "./navigation/navLinks";
-import { SearchedGames } from "./searchedGames";
-import { SearchForm } from "./searchForm";
+import { ProtectedLink } from '../shared/protectedLink';
+import { HeaderMenu } from './headerMenu';
+import { LoginedActionsButton } from './navigation';
+import { NavLinks } from './navigation/navLinks';
+import { SearchedGames } from './searchedGames';
+import { SearchForm } from './searchForm';
 
 export const Header = observer(() => {
+  const { data } = useSession();
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
@@ -100,7 +101,7 @@ export const Header = observer(() => {
         />
         <div className="leading-[21px] pr-2 hidden gap-5 lg:flex xl:gap-10 uppercase">
           <NavLinks />
-          {authStore.userData && <LoginedActionsButton />}
+          {data && <LoginedActionsButton user={data.user} />}
         </div>
         {searchStore.isOpened && searchStore.userInput.length > 2 && (
           <SearchedGames />

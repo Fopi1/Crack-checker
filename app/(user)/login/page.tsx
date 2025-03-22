@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { AuthLinks } from "@/shared/components/page/auth";
-import { Container } from "@/shared/components/shared";
+import { AuthLinks } from '@/shared/components/page/auth';
+import { Container } from '@/shared/components/shared';
 
-import { LoginForm } from "./loginForm";
+import { LoginForm } from './loginForm';
 
 export default function Login() {
   return (

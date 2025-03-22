@@ -3,7 +3,8 @@ import "./globals.css";
 
 import scandia from "next/font/local";
 
-import { getJWTPayload, getLikedGames } from "@/lib/utils";
+import { auth } from "@/auth";
+import { getLikedGames } from "@/lib/utils";
 import { Toaster } from "@/shadcn/components";
 import { Footer } from "@/shared/components";
 import { Header } from "@/shared/components/header";
@@ -43,10 +44,7 @@ export default async function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
-  const payload = await getJWTPayload();
-  const userData = payload
-    ? { id: payload.id, name: payload.name, email: payload.email }
-    : null;
+  const session = await auth();
 
   const likedGames = await getLikedGames();
 
@@ -56,7 +54,7 @@ export default async function RootLayout({
         <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
       </head>
       <body className="flex flex-col overflow-x-hidden selection:bg-red-500 text-white">
-        <Providers userData={userData} likedGames={likedGames}>
+        <Providers session={session} likedGames={likedGames}>
           <Toaster />
           <div>
             <Overlay />

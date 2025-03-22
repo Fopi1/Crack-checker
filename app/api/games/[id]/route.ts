@@ -2,8 +2,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { getJWTPayload } from "@/lib/utils";
-import { prisma } from "@/prisma/prismaClient";
+import { auth } from "@/auth";
+import { prisma } from "@/prisma/prisma";
 import { AddValue } from "@/types/api";
 
 interface Params {
@@ -67,8 +67,8 @@ export async function PUT(req: NextRequest, props: Params) {
         });
         return NextResponse.json({ success: true });
       case "like":
-        const payload = await getJWTPayload();
-        const userId = payload?.id;
+        const session = await auth();
+        const userId = session?.user.id;
         if (!userId) {
           return NextResponse.json(
             { error: "You're not logged in" },

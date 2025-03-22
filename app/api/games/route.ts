@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { SEARCH_QUERY_LENGTH } from "@/constants";
 import { getApiParams } from "@/lib/utils";
-import { prisma } from "@/prisma/prismaClient";
+import { prisma } from "@/prisma/prisma";
 import { SortBy, SortOrder } from "@/types/store";
 
 export async function GET(req: NextRequest) {

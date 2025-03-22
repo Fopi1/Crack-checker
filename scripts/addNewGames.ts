@@ -1,7 +1,7 @@
 import pLimit from 'p-limit';
 
 import { AllGameDataSchema } from '@/prisma/constants';
-import { prisma } from '@/prisma/prismaClient';
+import { prisma } from '@/prisma/prisma';
 import { GameStatusApi } from '@/services/externalApi/apiClient';
 
 const limit = pLimit(10);

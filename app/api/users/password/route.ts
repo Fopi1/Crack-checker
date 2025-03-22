@@ -1,31 +1,35 @@
 "use server";
 
-import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
 import {
   PasswordInfoSchema,
   passwordInfoSchema,
 } from "@/app/(user)/profile/constants";
+import { auth } from "@/auth";
 import { rateLimiterPrefixes } from "@/constants";
 import { rateLimit } from "@/lib/redis";
-import { hashPassword, responseApiFormError } from "@/lib/utils";
-import { prisma } from "@/prisma/prismaClient";
+import {
+  comparePassword,
+  hashPassword,
+  responseApiFormError,
+} from "@/lib/utils";
+import { prisma } from "@/prisma/prisma";
 
 const passwordApiFormError = (
   args: Parameters<typeof responseApiFormError<PasswordInfoSchema>>[0]
 ) => responseApiFormError<PasswordInfoSchema>(args);
 
-export async function PATCH(
-  req: NextRequest,
-  props: { params: Promise<{ id: string }> }
-) {
-  const params = await props.params;
+export async function PATCH(req: NextRequest) {
   try {
     const limitError = await rateLimit(req, rateLimiterPrefixes.PASSWORD);
     if (limitError) return limitError;
 
-    const userId = parseInt(params.id, 10);
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = session?.user.id;
     if (!userId) {
       return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
     }
@@ -49,7 +53,7 @@ export async function PATCH(
         status: 401,
       });
     }
-    if (!(await bcrypt.compare(currentPassword, user.password))) {
+    if (!(await comparePassword(currentPassword, user.password))) {
       return passwordApiFormError({
         field: "currentPassword",
         error: "Invalid password",

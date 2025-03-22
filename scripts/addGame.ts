@@ -1,6 +1,6 @@
 import type { AllGameData } from "@/prisma/constants";
-import { prisma } from "@/prisma/prismaClient";
-import { GameStatusApi } from "@/services/externalApi/apiClient";
+import { prisma } from '@/prisma/prisma';
+import { GameStatusApi } from '@/services/externalApi/apiClient';
 
 const addGame = async (title: string) => {
   try {

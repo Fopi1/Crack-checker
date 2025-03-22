@@ -3,25 +3,25 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { UserInfoSchema, userInfoSchema } from "@/app/(user)/profile/constants";
-import { CookieToken, rateLimiterPrefixes } from "@/constants";
-import { generateAccessToken } from "@/lib/jwt";
+import { auth, signOut } from "@/auth";
+import { rateLimiterPrefixes } from "@/constants";
 import { rateLimit } from "@/lib/redis";
-import { removeCookie, responseApiFormError, setLaxCookie } from "@/lib/utils";
-import { prisma } from "@/prisma/prismaClient";
+import { responseApiFormError } from "@/lib/utils";
+import { prisma } from "@/prisma/prisma";
 
 const userApiFormError = (
   args: Parameters<typeof responseApiFormError<UserInfoSchema>>[0]
 ) => responseApiFormError<UserInfoSchema>(args);
-export async function PATCH(
-  req: NextRequest,
-  props: { params: Promise<{ id: string }> }
-) {
-  const params = await props.params;
+export async function PATCH(req: NextRequest) {
   try {
     const limitError = await rateLimit(req, rateLimiterPrefixes.INFO);
     if (limitError) return limitError;
 
-    const userId = parseInt(params.id, 10);
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = session?.user.id;
     if (!userId) {
       return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
     }
@@ -66,15 +66,12 @@ export async function PATCH(
         name: newName,
         email: newEmail,
       },
+      select: {
+        name: true,
+        email: true,
+      },
     });
-    const { token } = await generateAccessToken(
-      updatedUser.id,
-      updatedUser.name,
-      updatedUser.email
-    );
-    const response = NextResponse.json({ success: true, user: updatedUser });
-    await setLaxCookie(CookieToken.AUTH_TOKEN, token);
-    return response;
+    return NextResponse.json({ success: true, user: updatedUser });
   } catch (error) {
     console.error("Update user data error: ", error);
     return NextResponse.json(
@@ -84,13 +81,13 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  props: { params: Promise<{ id: string }> }
-) {
-  const params = await props.params;
+export async function DELETE() {
   try {
-    const userId = parseInt(params.id, 10);
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = session?.user.id;
     if (!userId) {
       return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
     }
@@ -98,7 +95,7 @@ export async function DELETE(
     await prisma.user.delete({
       where: { id: userId },
     });
-    removeCookie(CookieToken.AUTH_TOKEN);
+    await signOut({ redirect: false });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete user error: ", error);

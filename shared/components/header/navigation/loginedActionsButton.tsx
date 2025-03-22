@@ -1,17 +1,23 @@
 "use client";
 
-import { observer } from 'mobx-react-lite';
-import { usePathname, useRouter } from 'next/navigation';
+import { User } from "next-auth";
+import { signOut } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
 
-import { AppRoutes } from '@/constants/routes';
-import { SiteApi } from '@/services/siteApi/apiClient';
+import { AppRoutes } from "@/constants/routes";
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
-} from '@/shadcn/components/ui';
-import { authStore } from '@/shared/store/authStore';
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/shadcn/components/ui";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
-export const LoginedActionsButton = observer(() => {
+interface Props {
+  user: { id: string } & User;
+}
+
+export const LoginedActionsButton = ({ user }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -20,16 +26,11 @@ export const LoginedActionsButton = observer(() => {
   };
 
   const logOut = async () => {
-    await SiteApi.auth.logout();
-    authStore.setUserData(null);
-    if (pathname === AppRoutes.MAIN) {
-      await authStore.checkAuth();
-    } else {
+    await signOut({ redirect: false });
+    if (pathname !== AppRoutes.MAIN) {
       router.replace(AppRoutes.MAIN);
     }
   };
-
-  const user = authStore.userData;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex gap-2 h-9 w-fit items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm font-medium shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
@@ -47,4 +48,4 @@ export const LoginedActionsButton = observer(() => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-});
+};

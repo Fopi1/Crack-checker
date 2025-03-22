@@ -1,15 +1,12 @@
 "use server";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-import {
-  RegisterFormSchema,
-  registerFormSchema,
-} from "@/app/(user)/register/constants";
-import { rateLimiterPrefixes } from "@/constants";
-import { rateLimit } from "@/lib/redis";
-import { hashPassword, responseApiFormError } from "@/lib/utils";
-import { prisma } from "@/prisma/prismaClient";
+import { RegisterFormSchema, registerFormSchema } from '@/app/(user)/register/constants';
+import { rateLimiterPrefixes } from '@/constants';
+import { rateLimit } from '@/lib/redis';
+import { hashPassword, responseApiFormError } from '@/lib/utils';
+import { prisma } from '@/prisma/prisma';
 
 export async function POST(req: NextRequest) {
   try {

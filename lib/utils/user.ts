@@ -1,11 +1,9 @@
 "use server";
 
-import { cookies } from "next/headers";
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
-import { CookieToken } from "@/constants/constants";
-import { verifyAccessToken } from "@/lib/jwt";
-import { prisma } from "@/prisma/prismaClient";
+import { auth } from '@/auth';
+import { prisma } from '@/prisma/prisma';
 
 export const getUserIP = async (req: NextRequest) => {
   const forwardedFor = req.headers.get("x-forwarded-for");
@@ -22,18 +20,20 @@ export const getUserByEmail = async (email: string) => {
   return await prisma.user.findUnique({ where: { email } });
 };
 
-export const getJWTPayload = async () => {
-  const token = (await cookies()).get(CookieToken.AUTH_TOKEN)?.value;
-  return token ? await verifyAccessToken(token) : null;
-};
-
 export const getLikedGames = async () => {
-  const payload = await getJWTPayload();
-  const userId = payload?.id;
-  if (!userId) return null;
+  const session = await auth(); 
+  if (!session || !session.user.id) {
+    return null;
+  }
+  const userId = session.user.id;
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: { likes: true },
   });
-  return user ? user.likes.map((game) => game.id) : null;
+
+  if (!user) {
+    return null;
+  }
+  const likedGames = user.likes.map((game) => game.id);
+  return likedGames;
 };

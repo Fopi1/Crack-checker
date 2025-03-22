@@ -4,7 +4,7 @@ import { Game } from '@prisma/client';
 
 import { GameStatusApi } from '../services/externalApi/apiClient';
 import { AllGameData, AllGameDataSchema, categories, ReleasedGamesData } from './constants';
-import { prisma } from './prismaClient';
+import { prisma } from './prisma';
 
 const limit = pLimit(10);
 

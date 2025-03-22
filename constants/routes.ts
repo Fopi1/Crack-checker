@@ -12,12 +12,12 @@ export const AppRoutes = {
 export const SiteApiRoutes = {
   GAMES: "/games",
   GAME: (id: string) => `/games/${id}`,
+  SEARCH_GAME: (query: string) => `/games?query=${query}`,
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
   LOGOUT: "/auth/logout",
-  USER: (id: number) => `/users/${id}`,
-  PASSWORD: (id: number) => `/users/${id}/password`,
-  SEARCH_GAME: (query: string) => `/games?query=${query}`,
+  USER: "/users",
+  PASSWORD: "/users/password",
   LIKED_GAMES: "/users/liked-games",
 } as const;
 

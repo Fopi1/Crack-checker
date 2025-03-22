@@ -11,7 +11,7 @@ if (!JWT_SECRET) {
 }
 
 export const generateAccessToken = async (
-  userId: number,
+  userId: string,
   userName: string,
   userEmail: string
 ) => {

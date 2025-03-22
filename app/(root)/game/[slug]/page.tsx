@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import { prisma } from '@/prisma/prismaClient';
+import { prisma } from '@/prisma/prisma';
 
 import FPI from './default';
 import GameClient from './page.client';

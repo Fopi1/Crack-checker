@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -52,10 +53,11 @@ export const RegisterForm: FC<Props> = ({ className }) => {
     try {
       setIsCheckingData(true);
       await SiteApi.auth.registerUser(data);
-      await SiteApi.auth.loginUser({
+      const loginData = {
         email: data.email,
         password: data.password,
-      });
+      };
+      await signIn("credentials", { ...loginData, redirect: false });
       replace("/");
     } catch (error) {
       const { errorField, errorMessage } = getApiFormError(error);

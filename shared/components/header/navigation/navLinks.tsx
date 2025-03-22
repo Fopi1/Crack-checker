@@ -1,12 +1,11 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FC } from "react";
 
 import { AppRoutes } from "@/constants/routes";
 import { cn } from "@/shadcn";
-import { authStore } from "@/shared/store/authStore";
 
 import { links, navLinksIconProps } from "./constants";
 
@@ -14,11 +13,12 @@ interface Props {
   className?: string;
 }
 
-export const NavLinks: FC<Props> = observer(({ className }) => {
+export const NavLinks: FC<Props> = ({ className }) => {
+  const { data } = useSession();
   return (
     <>
       {links.map((link) => {
-        if (link.href === AppRoutes.LOGIN && authStore.userData) return;
+        if (link.href === AppRoutes.LOGIN && data) return;
         const IconComponent = link.icon;
         return (
           <Link
@@ -36,4 +36,4 @@ export const NavLinks: FC<Props> = observer(({ className }) => {
       })}
     </>
   );
-});
+};

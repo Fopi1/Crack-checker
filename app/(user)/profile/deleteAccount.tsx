@@ -5,20 +5,15 @@ import { useRouter } from "next/navigation";
 import { AppRoutes } from "@/constants";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { Button, useToast } from "@/shadcn";
-import { UserData } from "@/types/store";
 import { useQueryClient } from "@tanstack/react-query";
 
-interface Props {
-  userData: UserData;
-}
-
-export const DeleteAccount = ({ userData }: Props) => {
+export const DeleteAccount = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { toast } = useToast();
   const handleDeleteUser = async () => {
     try {
-      await SiteApi.users.deleteUser(userData.id);
+      await SiteApi.users.deleteUser();
       await queryClient.refetchQueries({ queryKey: ["games"] });
       queryClient.invalidateQueries({ queryKey: ["game"] });
       toast({ description: "Successfully deleted account." });
