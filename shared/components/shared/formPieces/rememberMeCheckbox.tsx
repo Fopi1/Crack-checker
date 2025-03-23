@@ -4,20 +4,19 @@ import { observer } from "mobx-react-lite";
 
 import { cn } from "@/shadcn";
 import { Checkbox, Label } from "@/shadcn/components/ui";
-import { authStore } from "@/shared/store/authStore";
 
 interface Props {
   className?: string;
 }
 
 export const RememberMeCheckbox = observer(({ className }: Props) => {
-  const handleToggleIsRememberMe = () => {
-    authStore.toggleIsRememberMe();
-  };
+  // const handleToggleIsRememberMe = () => {
+  //   authStore.toggleIsRememberMe();
+  // };
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <Checkbox
-        onClick={handleToggleIsRememberMe}
+        // onClick={handleToggleIsRememberMe}
         className="rounded-[2px]"
         id="checkbox"
       />

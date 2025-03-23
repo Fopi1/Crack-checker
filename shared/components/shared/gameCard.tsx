@@ -1,27 +1,31 @@
 "use client";
 
-import Image from 'next/image';
-import { memo } from 'react';
+import Image from "next/image";
+import { memo } from "react";
 
-import { AppRoutes } from '@/constants/routes';
-import { performActionOnGame } from '@/services/siteApi/games';
-import { cn } from '@/shadcn';
-import { useCrackStatus } from '@/shared/hooks';
-import { processingActionsStore } from '@/shared/store/processingActionsStore';
+import { AppRoutes } from "@/constants/routes";
+import { performActionOnGame } from "@/services/siteApi/games";
+import { useCrackStatus } from "@/shared/hooks";
+import { processingActionsStore } from "@/shared/store/processingActionsStore";
 
 import {
-    CrackBell, CrackCracker, CrackDate, CrackLike, CrackProtections, CrackReleaseDate, CrackStatus,
-    CrackViews
-} from '../ui';
-import { ProtectedLink } from './protectedLink';
+  CrackBell,
+  CrackCracker,
+  CrackDate,
+  CrackLike,
+  CrackProtections,
+  CrackReleaseDate,
+  CrackStatus,
+  CrackViews,
+} from "../ui";
+import { ProtectedLink } from "./protectedLink";
 
 import type { FullGame } from "@/types/api";
 interface Props {
-  className?: string;
   game: FullGame;
 }
 
-const GameCardComponent = ({ className, game }: Props) => {
+const GameCardComponent = ({ game }: Props) => {
   const {
     title,
     id,
@@ -33,7 +37,6 @@ const GameCardComponent = ({ className, game }: Props) => {
     hackedGroups,
     views,
   } = game;
-
   const { crackedBy, crackStatus } = useCrackStatus({
     releaseDate,
     crackDate,
@@ -57,12 +60,7 @@ const GameCardComponent = ({ className, game }: Props) => {
   };
 
   return (
-    <article
-      className={cn(
-        "transition-transform duration-300 ease-in-out scale-95 hover:scale-100 hover:drop-shadow-card text-[#fff]",
-        className
-      )}
-    >
+    <article className="transition-transform duration-300 ease-in-out scale-95 hover:scale-100 hover:drop-shadow-card text-[#fff]">
       <ProtectedLink
         href={AppRoutes.GAME(slug)}
         onClick={addView}

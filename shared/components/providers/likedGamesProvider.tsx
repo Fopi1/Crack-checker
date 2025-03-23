@@ -12,7 +12,6 @@ export const LikedGamesProvider = ({ children }: PropsWithChildren) => {
   const id = data?.user.id;
   useAsyncEffect(
     async () => {
-      console.log("Reaction triggered with id:", id);
       if (id) {
         const likedGames = await SiteApi.users.getLikedGames();
         likedGamesStore.setLikedGames(likedGames || []);

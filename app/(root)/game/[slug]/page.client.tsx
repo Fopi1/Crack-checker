@@ -1,8 +1,7 @@
 "use client";
 
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { useGameById } from "@/shared/hooks";
 import { FullGame } from "@/types/api";
-import { useQuery } from "@tanstack/react-query";
 
 import FPI from "./default";
 import { Game } from "./game";
@@ -12,13 +11,8 @@ interface Props {
 }
 
 export default function GameClient({ initialData }: Props) {
-  const { data: game, isError } = useQuery({
-    queryKey: ["game", initialData.id],
-    queryFn: () => SiteApi.games.getGameById(initialData.id),
-    initialData: initialData,
-  });
-
-  if (isError || !game) {
+  const { data: game } = useGameById(initialData);
+  if (!game) {
     return <FPI />;
   }
 

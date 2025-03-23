@@ -1,14 +1,14 @@
 "use client";
 
-import { Session } from 'next-auth';
-import { SessionProvider } from 'next-auth/react';
-import { PropsWithChildren, useRef, useState } from 'react';
+import { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import { PropsWithChildren, useRef, useState } from "react";
 
-import { likedGamesStore } from '@/shared/store/likedGamesStore';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { likedGamesStore } from "@/shared/store/likedGamesStore";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import { LikedGamesProvider } from './likedGamesProvider';
+import { LikedGamesProvider } from "./likedGamesProvider";
 
 interface Props extends PropsWithChildren {
   session: Session | null | undefined;
@@ -23,6 +23,7 @@ export const Providers = ({ children, session, likedGames }: Props) => {
           queries: {
             staleTime: 1000 * 60 * 5,
             refetchOnWindowFocus: false,
+            gcTime: 1000 * 60 * 10,
           },
         },
       })

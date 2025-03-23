@@ -1,19 +1,33 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from "mobx";
+
+import { searchStore } from "./searchStore";
 
 class OverlayStore {
-  isAppeared = false;
+  isAppeared: boolean = false;
   onOverlayClick: (() => void) | null = null;
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  setIsAppeared(value: boolean) {
-    this.isAppeared = value;
+  removeOverlay() {
+    this.isAppeared = false;
+    this.onOverlayClick = null;
   }
 
-  setOnOverlayClick(handler: (() => void) | null) {
-    this.onOverlayClick = handler;
+  addOverlay(onClick?: () => void) {
+    this.isAppeared = true;
+    this.onOverlayClick = onClick || this.removeOverlay;
+  }
+
+  addSearchOverlay() {
+    this.addOverlay(this.removeSearchOverlay);
+    searchStore.setIsOpened(true);
+  }
+
+  removeSearchOverlay() {
+    this.removeOverlay();
+    searchStore.setIsOpened(false);
   }
 }
 

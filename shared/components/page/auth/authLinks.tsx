@@ -9,7 +9,7 @@ export const AuthLinks = () => {
       {loginLinks.map((link) => {
         return (
           <TransitionLink
-            key={link.href}
+            key={link.name}
             {...link}
             sameSite
             iconProps={iconProps}

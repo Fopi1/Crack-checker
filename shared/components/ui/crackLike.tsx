@@ -1,10 +1,10 @@
 "use client";
 
-import { ThumbsUp } from 'lucide-react';
-import { observer } from 'mobx-react-lite';
+import { ThumbsUp } from "lucide-react";
+import { observer } from "mobx-react-lite";
 
-import { cn } from '@/shadcn/lib';
-import { useGameLike } from '@/shared/hooks';
+import { cn } from "@/shadcn/lib";
+import { useGameLike } from "@/shared/hooks";
 
 import type { FullGame } from "@/types/api";
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const CrackLike = observer(({ className, game }: Props) => {
-  const { likesNumber, toggleLike, fillOpacity } = useGameLike(game);
+  const { likesNumber, fillOpacity, toggleLike } = useGameLike(game);
   return (
     <button
       onClick={toggleLike}

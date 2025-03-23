@@ -7,7 +7,8 @@ import { IconProps } from "@/types/components";
 interface Props extends PropsWithChildren {
   className?: string;
   sameSite?: boolean;
-  href: string;
+  onClick?: () => void;
+  href?: string;
   backgroundColor: string;
   hoverColor: string;
   icon: ComponentType<Partial<IconProps>>;
@@ -16,6 +17,7 @@ interface Props extends PropsWithChildren {
 
 export const TransitionLink = ({
   className,
+  onClick,
   href,
   backgroundColor,
   hoverColor,
@@ -43,7 +45,7 @@ export const TransitionLink = ({
   return (
     <>
       {sameSite ? (
-        <Link {...commonProps} href={href}>
+        <Link {...commonProps} onClick={onClick} href={"#"}>
           <IconComponent {...iconProps} />
           {children}
         </Link>

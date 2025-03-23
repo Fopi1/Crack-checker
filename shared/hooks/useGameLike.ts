@@ -1,12 +1,13 @@
 import { useSession } from "next-auth/react";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
-import { performActionOnGame } from "@/services/siteApi/games";
+import { SiteApi } from "@/services/siteApi/apiClient";
 import { FullGame } from "@/types/api";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { likedGamesStore } from "../store/likedGamesStore";
 import { processingActionsStore } from "../store/processingActionsStore";
+import { searchStore } from "../store/searchStore";
 
 export const useGameLike = (game: FullGame) => {
   const queryClient = useQueryClient();
@@ -17,6 +18,11 @@ export const useGameLike = (game: FullGame) => {
   );
   const [likesNumber, setLikesNumber] = useState(likes.length);
   const fillOpacity = isLiked && data?.user ? "1" : "0";
+
+  useEffect(() => {
+    setLikesNumber(game.likes.length);
+    setIsLiked(likedGamesStore.likedGames.includes(gameId));
+  }, [gameId, game.likes.length]);
 
   const toggleLike = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -33,13 +39,16 @@ export const useGameLike = (game: FullGame) => {
         setLikesNumber((prevLikes) => prevLikes + 1);
       }
       setIsLiked((prevIsLiked) => !prevIsLiked);
-
-      await performActionOnGame(gameId, "like");
-
-      game.categories.forEach((category) =>
-        queryClient.refetchQueries({ queryKey: ["games", category.title] })
-      );
-      queryClient.refetchQueries({ queryKey: ["game", gameId] });
+      await SiteApi.games.performActionOnGame(gameId, "like");
+      queryClient.refetchQueries({
+        queryKey: ["search", searchStore.debouncedUserInput],
+      });
+      await Promise.all([
+        game.categories.forEach((category) =>
+          queryClient.refetchQueries({ queryKey: ["games", category.title] })
+        ),
+        queryClient.refetchQueries({ queryKey: ["game", gameId] }),
+      ]);
     } catch (error) {
       console.error("Cannot toggle like", error);
       if (isLiked) {

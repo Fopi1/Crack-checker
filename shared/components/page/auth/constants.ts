@@ -1,4 +1,6 @@
-import { Discord, Google } from '../../icons';
+import { signIn } from "next-auth/react";
+
+import { Discord, Google } from "../../icons";
 
 export const hoverColor = "#fff";
 export const iconProps = {
@@ -13,13 +15,13 @@ export const iconProps = {
 export const loginLinks = [
   {
     name: "Google",
-    href: "/auth/google",
+    onClick: () => signIn("google", { redirect: false }),
     backgroundColor: "#4285f4",
     icon: Google,
   },
   {
     name: "Discord",
-    href: "/auth/discord",
+    onClick: () => signIn("discord", { redirect: false }),
     backgroundColor: "#7289da",
     icon: Discord,
   },

@@ -1,10 +1,10 @@
 import { makeAutoObservable } from "mobx";
 
 class ComponentsStore {
-  isOpened = false;
+  isOpened: boolean = false;
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   setIsOpened(state: boolean) {

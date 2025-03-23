@@ -1,5 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
@@ -15,6 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
   secret: process.env.AUTH_SECRET,
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -23,7 +26,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("Authorize called with:", credentials);
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Укажите email или пароль");
         }
@@ -38,7 +40,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             password: true,
           },
         });
-        console.log("User from Prisma:", user);
         if (!user || !user.password) {
           throw new Error("Пользователь не найден");
         }
@@ -48,6 +49,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
         return { id: user.id, email: user.email, name: user.name };
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID!,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET!,
     }),
   ],
   callbacks: {
@@ -70,8 +79,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (token.id) {
         session.user.id = token.id as string;
-        session.user.name = token.name as string;
-        session.user.email = token.email as string;
+        session.user.name = token.name ?? "";
+        session.user.email = token.email ?? "";
       }
       return session;
     },

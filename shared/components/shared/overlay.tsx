@@ -1,12 +1,11 @@
 "use client";
 
-import { observer } from 'mobx-react-lite';
-import { MouseEvent, PropsWithChildren, useEffect } from 'react';
+import { observer } from "mobx-react-lite";
+import { MouseEvent, PropsWithChildren, useEffect } from "react";
 
-import { overlayStore } from '@/shared/store/overlayStore';
+import { overlayStore } from "@/shared/store/overlayStore";
 
 export const Overlay = observer(({ children }: PropsWithChildren) => {
-  const onOverlayClick = overlayStore.onOverlayClick;
   const isAppeared = overlayStore.isAppeared;
 
   useEffect(() => {
@@ -20,8 +19,8 @@ export const Overlay = observer(({ children }: PropsWithChildren) => {
     };
   }, [isAppeared]);
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget && onOverlayClick) {
-      onOverlayClick();
+    if (e.target === e.currentTarget && overlayStore.onOverlayClick) {
+      overlayStore.onOverlayClick();
     }
   };
   return overlayStore.isAppeared ? (

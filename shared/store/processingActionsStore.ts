@@ -1,4 +1,4 @@
-import { makeAutoObservable, ObservableMap } from "mobx";
+import { makeAutoObservable, ObservableMap } from 'mobx';
 
 import type { AddValue } from "@/types/api";
 
@@ -6,7 +6,7 @@ class ProcessingActionsStore {
   private processingActions = new ObservableMap<string, AddValue[]>();
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this,{},{autoBind:true});
   }
 
   hasAction(gameId: string, action: AddValue): boolean {

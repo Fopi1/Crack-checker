@@ -1,27 +1,24 @@
 "use client";
 
-import { observer } from 'mobx-react-lite';
-import { useSession } from 'next-auth/react';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { observer } from "mobx-react-lite";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
-import { AppRoutes } from '@/constants/routes';
-import logo from '@/public/logo.png';
-import { cn } from '@/shadcn';
-import { overlayStore } from '@/shared/store/overlayStore';
-import { searchStore } from '@/shared/store/searchStore';
+import { AppRoutes } from "@/constants/routes";
+import logo from "@/public/logo.png";
+import { cn } from "@/shadcn";
+import { searchStore } from "@/shared/store/searchStore";
 
-import { ProtectedLink } from '../shared/protectedLink';
-import { HeaderMenu } from './headerMenu';
-import { LoginedActionsButton } from './navigation';
-import { NavLinks } from './navigation/navLinks';
-import { SearchedGames } from './searchedGames';
-import { SearchForm } from './searchForm';
+import { ProtectedLink } from "../shared/protectedLink";
+import { HeaderMenu } from "./headerMenu";
+import { LoginedActionsButton } from "./navigation";
+import { NavLinks } from "./navigation/navLinks";
+import { SearchedGames } from "./searchedGames";
+import { SearchForm } from "./searchForm";
 
 export const Header = observer(() => {
   const { data } = useSession();
-  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
 
@@ -39,32 +36,6 @@ export const Header = observer(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handleOverlayClick = () => {
-    searchStore.setIsOpened(false);
-    overlayStore.setIsAppeared(false);
-    overlayStore.setOnOverlayClick(null);
-  };
-
-  const handleSearchFocus = () => {
-    if (searchStore.userInput) {
-      searchStore.setIsOpened(true);
-      overlayStore.setIsAppeared(true);
-      overlayStore.setOnOverlayClick(handleOverlayClick);
-    }
-  };
-
-  useEffect(() => {
-    if (overlayStore.isAppeared && searchStore.userInput.length > 2) {
-      overlayStore.setOnOverlayClick(handleOverlayClick);
-    } else {
-      overlayStore.setOnOverlayClick(null);
-    }
-  }, [overlayStore.isAppeared, searchStore.userInput]);
-
-  useEffect(() => {
-    handleOverlayClick();
-  }, [pathname]);
 
   return (
     <header
@@ -87,18 +58,10 @@ export const Header = observer(() => {
               CrackChecker
             </h1>
           </ProtectedLink>
-          <SearchForm
-            id="desktop-search"
-            className="hidden lg:flex"
-            onFocus={handleSearchFocus}
-          />
+          <SearchForm id="desktop-search" className="hidden lg:flex" />
           <HeaderMenu className="lg:hidden" />
         </div>
-        <SearchForm
-          id="mobile-search"
-          className="w-full flex lg:hidden"
-          onFocus={handleSearchFocus}
-        />
+        <SearchForm id="mobile-search" className="w-full flex lg:hidden" />
         <div className="leading-[21px] pr-2 hidden gap-5 lg:flex xl:gap-10 uppercase">
           <NavLinks />
           {data && <LoginedActionsButton user={data.user} />}

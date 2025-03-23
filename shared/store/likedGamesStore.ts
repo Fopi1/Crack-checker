@@ -5,7 +5,7 @@ class LikedGamesStore {
   isPending: boolean = false;
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   setIsPending(value: boolean) {

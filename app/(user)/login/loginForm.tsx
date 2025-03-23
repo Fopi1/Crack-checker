@@ -36,7 +36,7 @@ export const LoginForm = () => {
     setIsLogining(true);
     const result = await signIn("credentials", { ...data, redirect: false });
     if (result?.error) {
-      setError("Ошибка входа: ", result.error);
+      setError(`Ошибка входа: ${result.error}`);
     } else {
       replace(AppRoutes.MAIN);
     }

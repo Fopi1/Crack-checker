@@ -15,7 +15,7 @@ class SortStore {
   categoriesSortOptions: Record<string, SortOptions> = {};
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this,{},{autoBind:true});
     categories.forEach(
       (category) =>
         (this.categoriesSortOptions[category.title] = {
