@@ -1,12 +1,12 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import DiscordProvider from "next-auth/providers/discord";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import DiscordProvider from 'next-auth/providers/discord';
+import GoogleProvider from 'next-auth/providers/google';
 
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import { PrismaAdapter } from '@auth/prisma-adapter';
 
-import { comparePassword } from "./lib/utils";
-import { prisma } from "./prisma/prisma";
+import { comparePassword } from './lib/utils';
+import { prisma } from './prisma/prisma';
 
 if (!process.env.AUTH_SECRET) {
   throw new Error("AUTH_SECRET не задан в переменных окружения");
@@ -60,6 +60,42 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google" || account?.provider === "discord") {
+        const email = profile?.email || user.email;
+        if (!email) {
+          return false;
+        }
+        const existingUser = await prisma.user.findUnique({
+          where: { email },
+          include: { accounts: true },
+        });
+        if (existingUser) {
+          const isAccountLinked = existingUser?.accounts.find(
+            (acc) =>
+              acc.provider === account.provider &&
+              acc.providerAccountId === account.providerAccountId
+          );
+          if (!isAccountLinked) {
+            await prisma.account.create({
+              data: {
+                userId: existingUser.id,
+                type: "oauth",
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+                access_token: account.access_token,
+                expires_at: account.expires_at,
+                refresh_token: account.refresh_token,
+                id_token: account.id_token,
+                scope: account.scope,
+                token_type: account.token_type,
+              },
+            });
+          }
+        }
+      }
+      return true;
+    },
     async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id;

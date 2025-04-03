@@ -45,12 +45,12 @@
     "lucide-react": "^0.441.0",
     "mobx": "^6.13.3",
     "mobx-react-lite": "^4.0.7",
-    "next": "15.2.3",
+    "next": "15.2.4",
     "next-auth": "^5.0.0-beta.25",
     "p-limit": "^6.2.0",
     "pino": "^9.6.0",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-hook-form": "^7.53.2",
     "sharp": "^0.33.5",
     "tailwind-merge": "^2.5.2",
@@ -62,10 +62,10 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
-    "@types/react": "19.0.12",
-    "@types/react-dom": "19.0.4",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1",
     "eslint": "^8",
-    "eslint-config-next": "15.2.3",
+    "eslint-config-next": "15.2.4",
     "postcss": "^8",
     "prisma": "^6.5.0",
     "tailwindcss": "^3.4.1",
@@ -73,7 +73,7 @@
     "typescript": "^5.6.2"
   },
   "overrides": {
-    "@types/react": "19.0.12",
-    "@types/react-dom": "19.0.4"
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1"
   }
 }

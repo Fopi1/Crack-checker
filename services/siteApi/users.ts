@@ -1,7 +1,9 @@
-import { UserInfoSchema } from "@/app/(user)/profile/constants";
-import { SiteApiRoutes } from "@/constants";
-import { axiosSiteInstance } from "@/lib";
-import { User } from "@prisma/client";
+import { signOut } from 'next-auth/react';
+
+import { UserInfoSchema } from '@/app/(user)/profile/constants';
+import { SiteApiRoutes } from '@/constants';
+import { axiosSiteInstance } from '@/lib';
+import { User } from '@prisma/client';
 
 export const getLikedGames = async () => {
   try {
@@ -18,6 +20,7 @@ export const getLikedGames = async () => {
 export const deleteUser = async () => {
   try {
     await axiosSiteInstance.delete(SiteApiRoutes.USER);
+    await signOut({ redirect: false });
   } catch (error) {
     console.error(`Cannot delete user with id: ${error}`);
     throw error;
