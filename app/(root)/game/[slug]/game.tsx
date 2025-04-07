@@ -104,7 +104,7 @@ export const Game = ({ game }: Props) => {
             <div className="flex flex-col justify-between gap-3 font-bold">
               <div className="flex items-center gap-4">
                 <CrackLike className="p-5" game={game} />
-                <CrackBell className="p-6" />
+                <CrackBell className="p-6" game={game} />
               </div>
               <TransitionLink
                 icon={Steam}

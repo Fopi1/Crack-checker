@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { SubmitHandler, UseFormReturn } from "react-hook-form";
 
 import { Form } from "@/shadcn/components/ui";
@@ -6,8 +7,8 @@ import { ServerError } from "@/types/components";
 import { FieldProps } from "@/types/form";
 
 interface Props<T extends Record<string, any>> {
-  title: string;
-  description: string;
+  title: ReactNode;
+  description: ReactNode;
   form: UseFormReturn<T>;
   formFields: FieldProps<T>[];
   onSubmit: SubmitHandler<T>;

@@ -2,14 +2,9 @@ import { makeAutoObservable } from "mobx";
 
 class LikedGamesStore {
   likedGames: string[] = [];
-  isPending: boolean = false;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
-  }
-
-  setIsPending(value: boolean) {
-    this.isPending = value;
   }
 
   setLikedGames(likedGames: string[]) {

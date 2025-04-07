@@ -1,6 +1,8 @@
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { MouseEvent, useEffect, useState } from "react";
 
+import { AppRoutes } from "@/constants";
 import { SiteApi } from "@/services/siteApi/apiClient";
 import { FullGame } from "@/types/api";
 import { useQueryClient } from "@tanstack/react-query";
@@ -11,57 +13,61 @@ import { searchStore } from "../store/searchStore";
 
 export const useGameLike = (game: FullGame) => {
   const queryClient = useQueryClient();
+  const { push } = useRouter();
   const { data } = useSession();
-  const { id: gameId, likes } = game;
   const [isLiked, setIsLiked] = useState(
-    likedGamesStore.likedGames.includes(gameId)
+    likedGamesStore.likedGames.includes(game.id)
   );
-  const [likesNumber, setLikesNumber] = useState(likes.length);
+  const [likesNumber, setLikesNumber] = useState(game.likes.length);
   const fillOpacity = isLiked && data?.user ? "1" : "0";
 
   useEffect(() => {
     setLikesNumber(game.likes.length);
-    setIsLiked(likedGamesStore.likedGames.includes(gameId));
-  }, [gameId, game.likes.length]);
+    setIsLiked(likedGamesStore.likedGames.includes(game.id));
+  }, [game.id, game.likes.length]);
 
   const toggleLike = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    if (processingActionsStore.hasAction(gameId, "like") || !data?.user) return;
-    processingActionsStore.addAction(gameId, "like");
-    likedGamesStore.setIsPending(true);
+
+    if (processingActionsStore.hasAction(game.id, "like")) return;
+    if (!data?.user) {
+      push(AppRoutes.LOGIN);
+      return;
+    }
+
+    processingActionsStore.addAction(game.id, "like");
     try {
       if (isLiked) {
-        likedGamesStore.removeGame(gameId);
+        likedGamesStore.removeGame(game.id);
         setLikesNumber((prevLikes) => prevLikes - 1);
       } else {
-        likedGamesStore.addGame(gameId);
+        likedGamesStore.addGame(game.id);
         setLikesNumber((prevLikes) => prevLikes + 1);
       }
       setIsLiked((prevIsLiked) => !prevIsLiked);
-      await SiteApi.games.performActionOnGame(gameId, "like");
+      await SiteApi.game.performActionOnGame(game.id, "like");
       queryClient.refetchQueries({
         queryKey: ["search", searchStore.debouncedUserInput],
       });
       await Promise.all([
-        game.categories.forEach((category) =>
+        ...game.categories.map((category) =>
           queryClient.refetchQueries({ queryKey: ["games", category.title] })
         ),
-        queryClient.refetchQueries({ queryKey: ["game", gameId] }),
+        queryClient.refetchQueries({ queryKey: ["game", game.id] }),
       ]);
     } catch (error) {
       console.error("Cannot toggle like", error);
       if (isLiked) {
-        likedGamesStore.addGame(gameId);
+        likedGamesStore.addGame(game.id);
         setLikesNumber((prev) => prev + 1);
       } else {
-        likedGamesStore.removeGame(gameId);
+        likedGamesStore.removeGame(game.id);
         setLikesNumber((prev) => prev - 1);
       }
       setIsLiked((prev) => !prev);
     } finally {
-      likedGamesStore.setIsPending(false);
-      processingActionsStore.removeAction(gameId, "like");
+      processingActionsStore.removeAction(game.id, "like");
     }
   };
   return { likesNumber, toggleLike, fillOpacity };

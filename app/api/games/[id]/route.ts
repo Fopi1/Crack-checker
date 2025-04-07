@@ -1,10 +1,11 @@
 "use server";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from 'next/server';
 
-import { auth } from "@/auth";
-import { prisma } from "@/prisma/prisma";
-import { AddValue } from "@/types/api";
+import { auth } from '@/lib/auth';
+import { jsonError, jsonResponse } from '@/lib/utils';
+import { prisma } from '@/prisma/prisma';
+import { AddValue } from '@/types/api';
 
 interface Params {
   params: Promise<{ id: string }>;
@@ -14,27 +15,21 @@ export async function GET(req: NextRequest, props: Params) {
   const params = await props.params;
   try {
     const { id } = params;
-
     const game = await prisma.game.findUnique({
       where: { id },
       include: {
-        likes: { select: { id: true } },
+        likes: { select: { gameId: true } },
         categories: { select: { title: true } },
+        subscriptions: { select: { gameId: true } },
       },
     });
     if (!game) {
-      return NextResponse.json(
-        { error: "Game with this id doesnt exist" },
-        { status: 404 }
-      );
+      return jsonError({ message: "Game not found", status: 404 });
     }
-    return NextResponse.json(game);
+    return jsonResponse({ data: game });
   } catch (error) {
     console.error("Error while adding views or likes", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return jsonError();
   }
 }
 
@@ -45,10 +40,7 @@ export async function PUT(req: NextRequest, props: Params) {
     const { addValue }: { addValue: AddValue } = await req.json();
 
     if (!gameId) {
-      return NextResponse.json(
-        { error: "gameId is required" },
-        { status: 400 }
-      );
+      return jsonError({ message: "Game id is required", status: 400 });
     }
 
     const game = await prisma.game.findUnique({
@@ -56,7 +48,12 @@ export async function PUT(req: NextRequest, props: Params) {
     });
 
     if (!game) {
-      return NextResponse.json({ error: "Game not found" }, { status: 404 });
+      return jsonError({ message: "Game not found", status: 404 });
+    }
+    const session = await auth();
+    const userId = session?.user.id;
+    if (!userId) {
+      return jsonError({ message: "You're not logined", status: 401 });
     }
 
     switch (addValue) {
@@ -65,42 +62,65 @@ export async function PUT(req: NextRequest, props: Params) {
           where: { id: gameId },
           data: { views: { increment: 1 } },
         });
-        return NextResponse.json({ success: true });
+        return jsonResponse();
       case "like":
-        const session = await auth();
-        const userId = session?.user.id;
-        if (!userId) {
-          return NextResponse.json(
-            { error: "You're not logged in" },
-            { status: 401 }
-          );
-        }
-        const user = await prisma.user.findUnique({
+        const likedUser = await prisma.user.findUnique({
           where: {
             id: userId,
           },
-          include: { likes: { select: { id: true } } },
+          include: { likes: { select: { gameId: true } } },
         });
-        const alreadyLiked = user?.likes.some((game) => game.id === gameId);
-        await prisma.user.update({
-          where: { id: userId },
-          data: {
-            likes: alreadyLiked
-              ? { disconnect: { id: game.id } }
-              : { connect: { id: game.id } },
+        if (!likedUser) {
+          return jsonError({ message: "Liked user not found", status: 404 });
+        }
+        const alreadyLiked = likedUser?.likes.some(
+          (like) => like.gameId === gameId
+        );
+        if (alreadyLiked) {
+          await prisma.like.delete({
+            where: { userId_gameId: { userId, gameId } },
+          });
+        } else {
+          await prisma.like.create({
+            data: {
+              userId,
+              gameId,
+            },
+          });
+        }
+        return jsonResponse({
+          data: { action: alreadyLiked ? "disliked" : "liked" },
+        });
+      case "subscription":
+        const subscribedUser = await prisma.user.findUnique({
+          where: {
+            id: userId,
           },
+          include: { subscriptions: { select: { gameId: true } } },
         });
-        return NextResponse.json({
-          action: alreadyLiked ? "disliked" : "liked",
+        const alreadySubscribed = subscribedUser?.subscriptions.some(
+          (subscription) => subscription.gameId === gameId
+        );
+        if (alreadySubscribed) {
+          await prisma.subscription.delete({
+            where: { userId_gameId: { userId, gameId } },
+          });
+        } else {
+          await prisma.subscription.create({
+            data: {
+              userId,
+              gameId,
+            },
+          });
+        }
+        return jsonResponse({
+          data: { action: alreadySubscribed ? "unsubscribed" : "subscribed" },
         });
       default:
-        return NextResponse.json({ error: "Unknown command" }, { status: 500 });
+        return jsonError({ message: "Unknown command", status: 400 });
     }
   } catch (error) {
-    console.error("Error while adding views or likes", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("Error while performing action on a game", error);
+    return jsonError();
   }
 }

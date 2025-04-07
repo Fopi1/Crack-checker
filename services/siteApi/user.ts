@@ -1,19 +1,19 @@
-import { signOut } from 'next-auth/react';
+import { signOut } from "next-auth/react";
 
-import { UserInfoSchema } from '@/app/(user)/profile/constants';
-import { SiteApiRoutes } from '@/constants';
-import { axiosSiteInstance } from '@/lib';
-import { User } from '@prisma/client';
+import { UserInfoSchema } from "@/app/(me)/profile/constants";
+import { SiteApiRoutes } from "@/constants";
+import { axiosSiteInstance } from "@/lib";
+import { User } from "@prisma/client";
 
 export const getLikedGames = async () => {
   try {
-    const { data } = await axiosSiteInstance.get<string[]>(
+    const { data } = await axiosSiteInstance.get<{ data: string[] }>(
       SiteApiRoutes.LIKED_GAMES
     );
-    return data;
+    return data.data;
   } catch (error) {
     console.error("Cannot get liked games: ", error);
-    return null;
+    throw error;
   }
 };
 
@@ -33,7 +33,7 @@ export const changeUserInfo = async (data: UserInfoSchema) => {
       success: boolean;
       user: Omit<User, "password" | "id">;
     }>(SiteApiRoutes.USER, data);
-    return response;
+    return response.data;
   } catch (error) {
     console.error(`Cannot update info with user: ${error}`);
     throw error;

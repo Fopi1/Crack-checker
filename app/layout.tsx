@@ -3,14 +3,15 @@ import "./globals.css";
 
 import scandia from "next/font/local";
 
-import { auth } from "@/auth";
-import { getLikedGames } from "@/lib/utils";
+import { auth } from "@/lib/auth";
+import { getLikedGames, getSubscriptions } from "@/lib/utils";
 import { Toaster } from "@/shadcn/components";
 import { Footer } from "@/shared/components";
 import { Header } from "@/shared/components/header";
 import { Providers } from "@/shared/components/providers";
 import { Background } from "@/shared/components/shared";
 import { Overlay } from "@/shared/components/shared/overlay";
+import { Panel } from "@/shared/components/shared/panel";
 
 const Scandia = scandia({
   src: [
@@ -39,14 +40,15 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
 }>) {
   const session = await auth();
 
-  const likedGames = await getLikedGames();
+  const [likedGames, subscriptions] = await Promise.all([
+    getLikedGames(),
+    getSubscriptions(),
+  ]);
 
   return (
     <html lang="en" className={Scandia.className}>
@@ -54,14 +56,18 @@ export default async function RootLayout({
         <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
       </head>
       <body className="flex flex-col overflow-x-hidden selection:bg-red-500 text-white">
-        <Providers session={session} likedGames={likedGames}>
+        <Providers
+          session={session}
+          likedGames={likedGames}
+          subscriptions={subscriptions}
+        >
           <Toaster />
           <div>
             <Overlay />
             <Background />
+            {process.env.NODE_ENV === "development" ? <Panel /> : <></>}
             <Header />
             <main>{children}</main>
-            {modal}
             <Footer />
           </div>
         </Providers>

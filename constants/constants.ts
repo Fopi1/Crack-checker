@@ -15,9 +15,13 @@ export const FormFieldsLength = {
   },
 } as const;
 
-export const rateLimiterPrefixes = {
+export const RateLimiterPrefixes = {
   LOGIN: "login",
   REGISTER: "register",
   INFO: "info",
   PASSWORD: "password",
+} as const;
+
+export const ApiHeaders = {
+  API_KEY: "x-api-key",
 } as const;

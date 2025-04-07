@@ -3,6 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { AppRoutes } from "@/constants/routes";
@@ -10,7 +11,6 @@ import logo from "@/public/logo.png";
 import { cn } from "@/shadcn";
 import { searchStore } from "@/shared/store/searchStore";
 
-import { ProtectedLink } from "../shared/protectedLink";
 import { HeaderMenu } from "./headerMenu";
 import { LoginedActionsButton } from "./navigation";
 import { NavLinks } from "./navigation/navLinks";
@@ -46,7 +46,7 @@ export const Header = observer(() => {
     >
       <nav className="relative mx-auto flex justify-between items-center p-2 responsive flex-col lg:flex-row">
         <div className="flex items-center justify-between w-full gap-2 lg:justify-normal lg:w-auto xl:gap-6">
-          <ProtectedLink href={AppRoutes.MAIN} className="flex items-center">
+          <Link href={AppRoutes.MAIN} className="flex items-center">
             <Image
               priority
               src={logo}
@@ -57,7 +57,7 @@ export const Header = observer(() => {
             <h1 className="text-base font-black hidden md:inline-block 2xl:text-2xl uppercase">
               CrackChecker
             </h1>
-          </ProtectedLink>
+          </Link>
           <SearchForm id="desktop-search" className="hidden lg:flex" />
           <HeaderMenu className="lg:hidden" />
         </div>

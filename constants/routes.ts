@@ -19,6 +19,9 @@ export const SiteApiRoutes = {
   USER: "/users",
   PASSWORD: "/users/password",
   LIKED_GAMES: "/users/liked-games",
+  SUBSCRIPTIONS: "/users/subscriptions",
+  SYNC_TRIGGER: "/admin/sync-trigger",
+  SYNC: "/admin/sync",
 } as const;
 
 export const ExternalApiRoutes = {

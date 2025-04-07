@@ -1,18 +1,21 @@
 "use server";
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-import { RegisterFormSchema, registerFormSchema } from '@/app/(user)/register/constants';
-import { rateLimiterPrefixes } from '@/constants';
-import { rateLimit } from '@/lib/redis';
-import { hashPassword, responseApiFormError } from '@/lib/utils';
-import { prisma } from '@/prisma/prisma';
+import {
+  RegisterFormSchema,
+  registerFormSchema,
+} from "@/app/(me)/register/constants";
+import { RateLimiterPrefixes } from "@/constants";
+import { rateLimit } from "@/lib/redis";
+import { hashPassword, jsonError, responseApiFormError } from "@/lib/utils";
+import { prisma } from "@/prisma/prisma";
 
 export async function POST(req: NextRequest) {
   try {
     const limitError = await rateLimit(
       req,
-      rateLimiterPrefixes.REGISTER,
+      RateLimiterPrefixes.REGISTER,
       10,
       120
     );
@@ -20,10 +23,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const parseResult = registerFormSchema.safeParse(body);
     if (!parseResult.success) {
-      return NextResponse.json(
-        { error: parseResult.error.format() },
-        { status: 400 }
-      );
+      return responseApiFormError<RegisterFormSchema>({
+        field: "root",
+        error: "Invalid data",
+        status: 400,
+      });
     }
     const { name, email, password } = parseResult.data;
     const userWithSameEmail = await prisma.user.findUnique({
@@ -47,9 +51,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {
     console.error("Catched error while creating new user", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return jsonError();
   }
 }

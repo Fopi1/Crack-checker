@@ -1,4 +1,4 @@
-import { RegisterFormSchema } from "@/app/(user)/register/constants";
+import { RegisterFormSchema } from "@/app/(me)/register/constants";
 import { SiteApiRoutes } from "@/constants";
 import { axiosSiteInstance } from "@/lib";
 

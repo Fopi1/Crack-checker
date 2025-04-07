@@ -5,13 +5,14 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   PasswordInfoSchema,
   passwordInfoSchema,
-} from "@/app/(user)/profile/constants";
-import { auth } from "@/auth";
-import { rateLimiterPrefixes } from "@/constants";
+} from "@/app/(me)/profile/constants";
+import { RateLimiterPrefixes } from "@/constants";
+import { auth } from "@/lib/auth";
 import { rateLimit } from "@/lib/redis";
 import {
   comparePassword,
   hashPassword,
+  jsonError,
   responseApiFormError,
 } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma";
@@ -22,7 +23,7 @@ const passwordApiFormError = (
 
 export async function PATCH(req: NextRequest) {
   try {
-    const limitError = await rateLimit(req, rateLimiterPrefixes.PASSWORD);
+    const limitError = await rateLimit(req, RateLimiterPrefixes.PASSWORD);
     if (limitError) return limitError;
 
     const session = await auth();
@@ -53,6 +54,13 @@ export async function PATCH(req: NextRequest) {
         status: 401,
       });
     }
+    if (!user.password) {
+      return passwordApiFormError({
+        field: "root",
+        error: "Your authorization method does not support a password.",
+        status: 422,
+      });
+    }
     if (!(await comparePassword(currentPassword, user.password))) {
       return passwordApiFormError({
         field: "currentPassword",
@@ -77,9 +85,6 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Update user password error: ", error);
-    return NextResponse.json(
-      { error: "Internal server Error" },
-      { status: 500 }
-    );
+    return jsonError();
   }
 }

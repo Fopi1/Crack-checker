@@ -17,7 +17,8 @@ model User {
   password      String?
   image         String?
 
-  likes Game[]
+  likes         Like[]
+  subscriptions Subscription[]
 
   accounts Account[]
   sessions Session[]
@@ -39,10 +40,36 @@ model Game {
   metaScore Int?
   userScore Float?
 
-  likes User[]
-  views Int    @default(0)
+  views Int @default(0)
 
   categories Category[]
+
+  likes         Like[]
+  subscriptions Subscription[]
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  userId    String
+  gameId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
+}
+
+model Subscription {
+  id        String   @id @default(uuid())
+  userId    String
+  gameId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
 }
 
 model Category {

@@ -1,9 +1,11 @@
-import * as auth from './auth';
-import * as games from './games';
-import * as users from './users';
+import * as admin from "./admin";
+import * as auth from "./auth";
+import * as game from "./game";
+import * as user from "./user";
 
 export const SiteApi = {
-  games,
-  users,
+  game,
+  user,
   auth,
+  admin,
 };

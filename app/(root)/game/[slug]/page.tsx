@@ -13,8 +13,9 @@ const fetchGame = async (slug: string) => {
   const game = await prisma.game.findFirst({
     where: { slug },
     include: {
-      likes: { select: { id: true } },
+      likes: { select: { gameId: true } },
       categories: { select: { title: true } },
+      subscriptions: { select: { gameId: true } },
     },
   });
 

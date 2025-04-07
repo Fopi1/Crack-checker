@@ -1,7 +1,8 @@
 "use server";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
+import { AnyRequest } from "@/types/lib";
 import { Redis } from "@upstash/redis";
 
 import { getUserAgent, getUserIP } from "./utils";
@@ -19,7 +20,7 @@ const redis = new Redis({
 });
 
 export const rateLimit = async (
-  req: NextRequest,
+  req: AnyRequest,
   keyPrefix: string,
   limit = 10,
   timeWindow = 60

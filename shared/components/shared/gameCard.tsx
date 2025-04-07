@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { memo } from "react";
 
 import { AppRoutes } from "@/constants/routes";
-import { performActionOnGame } from "@/services/siteApi/games";
+import { performActionOnGame } from "@/services/siteApi/game";
 import { useCrackStatus } from "@/shared/hooks";
 import { processingActionsStore } from "@/shared/store/processingActionsStore";
 
@@ -18,7 +19,6 @@ import {
   CrackStatus,
   CrackViews,
 } from "../ui";
-import { ProtectedLink } from "./protectedLink";
 
 import type { FullGame } from "@/types/api";
 interface Props {
@@ -61,7 +61,7 @@ const GameCardComponent = ({ game }: Props) => {
 
   return (
     <article className="transition-transform duration-300 ease-in-out scale-95 hover:scale-100 hover:drop-shadow-card text-[#fff]">
-      <ProtectedLink
+      <Link
         href={AppRoutes.GAME(slug)}
         onClick={addView}
         className="cursor-pointer flex flex-col flex-shrink w-[100%] rounded-2xl"
@@ -87,13 +87,13 @@ const GameCardComponent = ({ game }: Props) => {
                 {title}
               </h2>
               <div className="flex gap-1">
-                <CrackBell />
+                <CrackBell game={game} />
                 <CrackLike game={game} />
               </div>
             </div>
           </div>
         </figure>
-      </ProtectedLink>
+      </Link>
       <section className="flex flex-col items-start">
         <div className="flex flex-col pt-2">
           <CrackReleaseDate releaseDate={releaseDate} />

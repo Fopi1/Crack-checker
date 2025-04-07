@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { PropsWithChildren, useRef, useState } from "react";
 
 import { likedGamesStore } from "@/shared/store/likedGamesStore";
+import { subscriptionStore } from "@/shared/store/subscriptionsStore";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -12,10 +13,16 @@ import { LikedGamesProvider } from "./likedGamesProvider";
 
 interface Props extends PropsWithChildren {
   session: Session | null | undefined;
-  likedGames: string[] | null;
+  likedGames: string[];
+  subscriptions: string[];
 }
 
-export const Providers = ({ children, session, likedGames }: Props) => {
+export const Providers = ({
+  children,
+  session,
+  likedGames,
+  subscriptions,
+}: Props) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -30,7 +37,8 @@ export const Providers = ({ children, session, likedGames }: Props) => {
   );
   const isInitialized = useRef(false);
   if (!isInitialized.current) {
-    likedGamesStore.setLikedGames(likedGames || []);
+    likedGamesStore.setLikedGames(likedGames);
+    subscriptionStore.setSubscriptions(subscriptions);
     isInitialized.current = true;
   }
 

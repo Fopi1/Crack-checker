@@ -2,11 +2,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { UserInfoSchema, userInfoSchema } from "@/app/(user)/profile/constants";
-import { auth, signOut } from "@/auth";
-import { rateLimiterPrefixes } from "@/constants";
+import { UserInfoSchema, userInfoSchema } from "@/app/(me)/profile/constants";
+import { RateLimiterPrefixes } from "@/constants";
+import { auth, signOut } from "@/lib/auth";
 import { rateLimit } from "@/lib/redis";
-import { responseApiFormError } from "@/lib/utils";
+import { jsonError, responseApiFormError } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma";
 
 const userApiFormError = (
@@ -14,24 +14,33 @@ const userApiFormError = (
 ) => responseApiFormError<UserInfoSchema>(args);
 export async function PATCH(req: NextRequest) {
   try {
-    const limitError = await rateLimit(req, rateLimiterPrefixes.INFO);
+    const limitError = await rateLimit(req, RateLimiterPrefixes.INFO);
     if (limitError) return limitError;
 
     const session = await auth();
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return userApiFormError({
+        field: "root",
+        error: "Unathorized",
+        status: 401,
+      });
     }
     const userId = session?.user.id;
     if (!userId) {
-      return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
+      return userApiFormError({
+        field: "root",
+        error: "Invalid user",
+        status: 400,
+      });
     }
     const body = await req.json();
     const parseResult = userInfoSchema.safeParse(body);
     if (!parseResult.success) {
-      return NextResponse.json(
-        { error: parseResult.error.format() },
-        { status: 400 }
-      );
+      return userApiFormError({
+        field: "root",
+        error: "Invalid data",
+        status: 400,
+      });
     }
     const { name: newName, email: newEmail } = parseResult.data;
 
@@ -57,7 +66,11 @@ export async function PATCH(req: NextRequest) {
     }
 
     if (newName === user.name && newEmail === user.email) {
-      return NextResponse.json({ success: true });
+      return userApiFormError({
+        field: "root",
+        error: "Nothing to update",
+        status: 422,
+      });
     }
 
     const updatedUser = await prisma.user.update({
@@ -74,10 +87,7 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ success: true, user: updatedUser });
   } catch (error) {
     console.error("Update user data error: ", error);
-    return NextResponse.json(
-      { error: "Internal server Error" },
-      { status: 500 }
-    );
+    return jsonError();
   }
 }
 
@@ -85,11 +95,19 @@ export async function DELETE() {
   try {
     const session = await auth();
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return userApiFormError({
+        field: "root",
+        error: "Unathorized",
+        status: 401,
+      });
     }
     const userId = session?.user.id;
     if (!userId) {
-      return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
+      return userApiFormError({
+        field: "root",
+        error: "Invalid user",
+        status: 400,
+      });
     }
 
     await prisma.user.delete({
@@ -99,9 +117,6 @@ export async function DELETE() {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete user error: ", error);
-    return NextResponse.json(
-      { error: "Internal server Error" },
-      { status: 500 }
-    );
+    return jsonError();
   }
 }

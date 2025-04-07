@@ -1,11 +1,11 @@
 "use server";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from 'next/server';
 
-import { SEARCH_QUERY_LENGTH } from "@/constants";
-import { getApiParams } from "@/lib/utils";
-import { prisma } from "@/prisma/prisma";
-import { SortBy, SortOrder } from "@/types/store";
+import { SEARCH_QUERY_LENGTH } from '@/constants';
+import { getApiParams, jsonError, jsonResponse } from '@/lib/utils';
+import { prisma } from '@/prisma/prisma';
+import { SortBy, SortOrder } from '@/types/store';
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,12 +17,17 @@ export async function GET(req: NextRequest) {
           include: {
             likes: {
               select: {
-                id: true,
+                gameId: true,
               },
             },
             categories: {
               select: {
                 title: true,
+              },
+            },
+            subscriptions: {
+              select: {
+                gameId: true,
               },
             },
           },
@@ -34,9 +39,9 @@ export async function GET(req: NextRequest) {
           },
         });
 
-        return NextResponse.json(games);
+        return jsonResponse({ data: games });
       } else {
-        return NextResponse.json([]);
+        return jsonResponse({ data: [] });
       }
     }
 
@@ -50,8 +55,9 @@ export async function GET(req: NextRequest) {
     const replacedSortBy = sortBy.replaceAll(" ", "");
     const games = await prisma.game.findMany({
       include: {
-        likes: { select: { id: true } },
+        likes: { select: { gameId: true } },
         categories: { select: { title: true } },
+        subscriptions: { select: { gameId: true } },
       },
       where: {
         categories: { some: { title: category } },
@@ -63,12 +69,9 @@ export async function GET(req: NextRequest) {
           ? { likes: { _count: sortOrder === "descending" ? "desc" : "asc" } }
           : { [replacedSortBy]: sortOrder === "descending" ? "desc" : "asc" },
     });
-    return NextResponse.json(games);
+    return jsonResponse({ data: games });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Failed to fetch games" },
-      { status: 500 }
-    );
+    return jsonError();
   }
 }

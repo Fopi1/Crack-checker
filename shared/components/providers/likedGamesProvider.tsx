@@ -13,7 +13,7 @@ export const LikedGamesProvider = ({ children }: PropsWithChildren) => {
   useAsyncEffect(
     async () => {
       if (id) {
-        const likedGames = await SiteApi.users.getLikedGames();
+        const likedGames = await SiteApi.user.getLikedGames();
         likedGamesStore.setLikedGames(likedGames || []);
       } else {
         likedGamesStore.setLikedGames([]);
