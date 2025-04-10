@@ -22,6 +22,7 @@ export const SiteApiRoutes = {
   SUBSCRIPTIONS: "/users/subscriptions",
   SYNC_TRIGGER: "/admin/sync-trigger",
   SYNC: "/admin/sync",
+  NOTIFY_CRACKED_GAMES: "/admin/notify-cracked-games",
 } as const;
 
 export const ExternalApiRoutes = {

@@ -61,10 +61,11 @@ model Like {
 }
 
 model Subscription {
-  id        String   @id @default(uuid())
-  userId    String
-  gameId    String
-  createdAt DateTime @default(now())
+  id              String   @id @default(uuid())
+  userId          String
+  gameId          String
+  createdAt       DateTime @default(now())
+  notifiedOnCrack Boolean  @default(false)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)

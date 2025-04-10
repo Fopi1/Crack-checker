@@ -18,6 +18,15 @@ export const Panel = () => {
       throw new Error("Admin pidoras");
     }
   };
+
+  const handleNotify = async () => {
+    try {
+      await SiteApi.admin.notifyCrackedGames();
+    } catch (error) {
+      console.error("Admin hyesos");
+      throw new Error("Admin hyesos");
+    }
+  };
   return (
     <div className="absolute top-0 left-0 h-screen w-36 z-50">
       <div className="relative w-full h-full">
@@ -28,11 +37,12 @@ export const Panel = () => {
           {text}
         </button>
         <div
-          className={`w-full h-full bg-slate-700 py-10 ${
+          className={`w-full h-full flex flex-col gap-5 bg-slate-700 py-10 ${
             isShowed ? "block" : "hidden"
           }`}
         >
           <button onClick={handleSync}>Sync</button>
+          <button onClick={handleNotify}>Notify</button>
         </div>
       </div>
     </div>
