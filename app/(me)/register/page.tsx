@@ -5,7 +5,7 @@ import { RegisterForm } from "./registerForm";
 
 export default function Register() {
   return (
-    <section className="w-full h-full bg-secondary-foreground">
+    <section className="w-full h-full bg-crack-secondary">
       <Container className="py-14 w-3/4 lg:w-[900px]">
         <h2 className="text-[28px] font-medium text-center">Register</h2>
         <div className="pt-14">

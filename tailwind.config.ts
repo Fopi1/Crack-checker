@@ -74,6 +74,11 @@ const config: Config = {
       boxShadow: {
         padding: "inset 0 0 0 3px rgba(0,0,0,1)",
       },
+      backgroundColor: {
+        crack: "var(--crack-background)",
+        "crack-secondary": "var(--crack-background-secondary)",
+        "crack-profile": "var(--crack-background-profile)",
+      },
     },
   },
   plugins: [tailwindAnimate],

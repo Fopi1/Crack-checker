@@ -64,11 +64,12 @@ export default async function RootLayout({
           <Toaster />
           <div>
             <Overlay />
-            <Background />
-            {process.env.NODE_ENV === "development" ? <PanelServer /> : <></>}
-            <Header />
-            <main>{children}</main>
-            <Footer />
+            <Background>
+              {process.env.NODE_ENV === "development" ? <PanelServer /> : <></>}
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </Background>
           </div>
         </Providers>
       </body>

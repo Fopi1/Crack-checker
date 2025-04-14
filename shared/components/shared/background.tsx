@@ -1,5 +1,5 @@
-export const Background = () => {
-  return (
-    <div className="fixed inset-0 bg-image pointer-events-none z-[1]"></div>
-  );
+import { PropsWithChildren } from "react";
+
+export const Background = ({ children }: PropsWithChildren) => {
+  return <div className="bg-image bg-repeat z-[1]">{children}</div>;
 };

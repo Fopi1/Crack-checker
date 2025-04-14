@@ -7,7 +7,7 @@ import { Telegram } from "./icons/telegram";
 export const Footer = () => {
   const currentDate = new Date().getFullYear();
   return (
-    <div className="bg-secondary-foreground px-10 pt-10 pb-5 flex flex-col gap-5 ">
+    <div className="bg-crack-secondary px-10 pt-10 pb-5 flex flex-col gap-5 ">
       <div className="flex flex-col items-center gap-2">
         <h1 className="font-bold text-xl">
           Special thanks to{" "}

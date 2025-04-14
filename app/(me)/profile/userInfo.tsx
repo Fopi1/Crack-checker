@@ -29,8 +29,8 @@ export const UserInfo = () => {
   const onSubmit: SubmitHandler<UserInfoSchema> = async (data) => {
     try {
       setIsChecking(true);
-      const response = await SiteApi.users.changeUserInfo(data);
-      const updatedUser = response.data.user;
+      const response = await SiteApi.user.changeUserInfo(data);
+      const updatedUser = response.user;
 
       await update({
         name: updatedUser.name,

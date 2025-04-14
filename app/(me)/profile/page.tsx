@@ -6,7 +6,7 @@ import { UserInfo } from "./userInfo";
 
 export default function Profile() {
   return (
-    <section className="bg-secondary-foreground">
+    <section className="bg-crack-secondary">
       <Container className="py-10 flex flex-col gap-12">
         <UserInfo />
         <PasswordInfo />
