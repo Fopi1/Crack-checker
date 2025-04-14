@@ -1,25 +1,26 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-import { auth } from "@/lib/auth";
+import { auth } from '@/lib/nextAuth';
 
-import { AppRoutes, SiteApiRoutes } from "./constants";
+import { AppRoutes } from './constants';
 
 export default auth((req) => {
-  const isLoggedIn = Boolean(req.auth);
+  const session = req.auth;
+  const isAdmin = session?.user.role === "admin";
   const path = req.nextUrl.pathname;
 
-  if (!isLoggedIn && path === AppRoutes.PROFILE) {
+  if (path.startsWith("/api/admin") && !isAdmin) {
+    return NextResponse.redirect(new URL(AppRoutes.MAIN, req.url));
+  }
+  if (!session && path === AppRoutes.PROFILE) {
     return NextResponse.redirect(new URL(AppRoutes.LOGIN, req.url));
   }
-  if (isLoggedIn && path === AppRoutes.LOGIN) {
+  if (session && path === AppRoutes.LOGIN) {
     return NextResponse.redirect(new URL(AppRoutes.MAIN, req.url));
   }
 
-  if (path === SiteApiRoutes.SYNC) {
-    return NextResponse.redirect(new URL(AppRoutes.MAIN, req.url));
-  }
   return NextResponse.next();
 });
 export const config = {
-  matcher: ["/profile", "/login", "/api/sync"],
+  matcher: ["/profile", "/login", "/api/admin/:path*"],
 };

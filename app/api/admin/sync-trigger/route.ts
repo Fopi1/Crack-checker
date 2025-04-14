@@ -6,11 +6,9 @@ import { jsonError, jsonResponse } from "@/lib/utils";
 export async function POST() {
   const apiKey = process.env.SYNC_API_KEY;
   const siteUrl = process.env.BASE_URL;
-
   if (!apiKey || !siteUrl) {
     return jsonError({ message: "Missing config" });
   }
-
   try {
     await axios.post(
       `${siteUrl}${process.env.NEXT_PUBLIC_SITE_API_URL}${SiteApiRoutes.SYNC}`,
@@ -19,6 +17,7 @@ export async function POST() {
         headers: {
           [ApiHeaders.API_KEY]: apiKey,
         },
+        withCredentials: true,
       }
     );
     return jsonResponse({ data: "Sync triggered" });

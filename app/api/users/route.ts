@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { UserInfoSchema, userInfoSchema } from "@/app/(me)/profile/constants";
 import { RateLimiterPrefixes } from "@/constants";
-import { auth, signOut } from "@/lib/auth";
+import { auth, signOut } from "@/lib/nextAuth";
 import { rateLimit } from "@/lib/redis";
 import { jsonError, responseApiFormError } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma";

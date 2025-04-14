@@ -7,3 +7,4 @@ export { CrackCracker } from "./crackCracker";
 export { CrackDate } from "./crackDate";
 export { CrackViews } from "./crackViews";
 export { CrackScore } from "./crackScore";
+export { CrackButton } from "./crackButton";

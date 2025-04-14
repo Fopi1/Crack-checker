@@ -1,11 +1,11 @@
 "use server";
 
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
 
-import { auth } from '@/lib/auth';
-import { jsonError, jsonResponse } from '@/lib/utils';
-import { prisma } from '@/prisma/prisma';
-import { AddValue } from '@/types/api';
+import { auth } from "@/lib/nextAuth";
+import { jsonError, jsonResponse } from "@/lib/utils";
+import { prisma } from "@/prisma/prisma";
+import { AddValue } from "@/types/api";
 
 interface Params {
   params: Promise<{ id: string }>;

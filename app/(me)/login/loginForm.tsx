@@ -9,11 +9,11 @@ import { AppRoutes } from "@/constants/routes";
 import { Form } from "@/shadcn/components/ui";
 import { Error } from "@/shared/components/shared";
 import {
-  FormButton,
   FormFields,
   FormTextLink,
   RememberMeCheckbox,
 } from "@/shared/components/shared/formPieces";
+import { CrackButton } from "@/shared/components/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { loginFormFields, loginFormSchema, LoginFormSchema } from "./constants";
@@ -57,7 +57,9 @@ export const LoginForm = () => {
           <FormTextLink href={AppRoutes.FORGOT_PASSWORD}>
             forgot your password?
           </FormTextLink>
-          <FormButton disabled={isLogining}>log in</FormButton>
+          <CrackButton type="submit" disabled={isLogining}>
+            log in
+          </CrackButton>
         </div>
       </form>
     </Form>

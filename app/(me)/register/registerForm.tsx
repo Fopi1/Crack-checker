@@ -1,19 +1,27 @@
 "use client";
 
-import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { FC, useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { FC, useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-import { AppRoutes } from '@/constants/routes';
-import { SiteApi } from '@/services/siteApi/apiClient';
-import { Form } from '@/shadcn/components/ui';
-import { Error } from '@/shared/components/shared';
-import { FormButton, FormFields, FormTextLink } from '@/shared/components/shared/formPieces';
-import { getApiFormError } from '@/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { AppRoutes } from "@/constants/routes";
+import { SiteApi } from "@/services/siteApi/apiClient";
+import { Form } from "@/shadcn/components/ui";
+import { Error } from "@/shared/components/shared";
+import {
+  FormFields,
+  FormTextLink,
+} from "@/shared/components/shared/formPieces";
+import { CrackButton } from "@/shared/components/ui";
+import { getApiFormError } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { registerFormFields, registerFormSchema, RegisterFormSchema } from './constants';
+import {
+  registerFormFields,
+  registerFormSchema,
+  RegisterFormSchema,
+} from "./constants";
 
 interface Props {
   className?: string;
@@ -84,7 +92,9 @@ export const RegisterForm: FC<Props> = ({ className }) => {
           <FormTextLink href={AppRoutes.LOGIN}>
             alreadry registered?
           </FormTextLink>
-          <FormButton disabled={isCheckingData}>register</FormButton>
+          <CrackButton type="submit" disabled={isCheckingData}>
+            register
+          </CrackButton>
         </div>
       </form>
     </Form>

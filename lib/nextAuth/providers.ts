@@ -43,6 +43,7 @@ export const authProviders: NextAuthConfig["providers"] = [
           email: true,
           name: true,
           password: true,
+          role: true,
         },
       });
       if (!user || !user.password) {
@@ -52,7 +53,12 @@ export const authProviders: NextAuthConfig["providers"] = [
       if (!isPasswordValid) {
         throw new Error("Invalid email or password");
       }
-      return { id: user.id, email: user.email, name: user.name };
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      };
     },
   }),
   GoogleProvider({

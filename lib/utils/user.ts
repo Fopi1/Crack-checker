@@ -1,8 +1,8 @@
 "use server";
 
-import { auth } from '@/lib/auth';
-import { prisma } from '@/prisma/prisma';
-import { AnyRequest } from '@/types/lib';
+import { auth } from "@/lib/nextAuth";
+import { prisma } from "@/prisma/prisma";
+import { AnyRequest } from "@/types/lib";
 
 export const getUserIP = async (req: AnyRequest) => {
   const forwardedFor = req.headers.get("x-forwarded-for");

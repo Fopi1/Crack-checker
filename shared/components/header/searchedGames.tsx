@@ -20,7 +20,7 @@ export const SearchedGames = observer(() => {
   };
 
   return (
-    <div className="absolute top-full mt-5 w-full bg-[--background-secondary] h-fit max-h-[500px] xl:max-h-[800px] rounded-lg border-2 border-white overscroll-none z-40">
+    <div className="absolute top-full mt-5 w-full bg-[--background-secondary] h-fit max-h-[500px] xl:max-h-[800px] rounded-lg border-2 border-white overscroll-none">
       <div className="sticky top-0 w-full bg-[--background-secondary] z-50 p-5 pb-0">
         <Button className="rounded-sm" onClick={handleOnClick}>
           <X strokeWidth={3} />

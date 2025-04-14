@@ -1,4 +1,4 @@
-import { Category, Game, Like } from '@prisma/client';
+import { Category, Game, Like } from "@prisma/client";
 
 export type StatusCodeType =
   | 200

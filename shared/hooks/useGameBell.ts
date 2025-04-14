@@ -1,15 +1,17 @@
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { MouseEvent, useEffect, useState } from 'react';
+"use client";
 
-import { AppRoutes } from '@/constants';
-import { SiteApi } from '@/services/siteApi/apiClient';
-import { FullGame } from '@/types/api';
-import { useQueryClient } from '@tanstack/react-query';
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { MouseEvent, useEffect, useState } from "react";
 
-import { processingActionsStore } from '../store/processingActionsStore';
-import { searchStore } from '../store/searchStore';
-import { subscriptionStore } from '../store/subscriptionsStore';
+import { AppRoutes } from "@/constants";
+import { SiteApi } from "@/services/siteApi/apiClient";
+import { FullGame } from "@/types/api";
+import { useQueryClient } from "@tanstack/react-query";
+
+import { processingActionsStore } from "../store/processingActionsStore";
+import { searchStore } from "../store/searchStore";
+import { subscriptionStore } from "../store/subscriptionsStore";
 
 export const useGameBell = (game: FullGame) => {
   const queryClient = useQueryClient();

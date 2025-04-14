@@ -7,7 +7,7 @@ import {
   passwordInfoSchema,
 } from "@/app/(me)/profile/constants";
 import { RateLimiterPrefixes } from "@/constants";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/nextAuth";
 import { rateLimit } from "@/lib/redis";
 import {
   comparePassword,

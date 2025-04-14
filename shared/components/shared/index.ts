@@ -4,3 +4,4 @@ export { Blurred } from "./blurred";
 export { TransitionLink } from "./transitionLink";
 export { Error } from "./error";
 export * from "./formPieces";
+export * from "./panel";

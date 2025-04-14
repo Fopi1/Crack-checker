@@ -1,6 +1,7 @@
-import { NextAuthConfig } from 'next-auth';
+import { NextAuthConfig } from "next-auth";
 
-import { prisma } from '@/prisma/prisma';
+import { prisma } from "@/prisma/prisma";
+import { Role } from "@prisma/client";
 
 export const authCallbacks: Partial<NextAuthConfig["callbacks"]> = {
   async signIn({ user, account, profile }) {
@@ -42,15 +43,19 @@ export const authCallbacks: Partial<NextAuthConfig["callbacks"]> = {
   async jwt({ token, user, trigger }) {
     if (user) {
       token.id = user.id;
+      token.name = user.name;
+      token.email = user.email;
+      token.role = user.role;
     }
     if (trigger === "update") {
       const freshUser = await prisma.user.findUnique({
         where: { id: token.id as string },
-        select: { id: true, name: true, email: true },
+        select: { name: true, email: true, role: true },
       });
       if (freshUser) {
         token.name = freshUser.name;
         token.email = freshUser.email;
+        token.role = freshUser.role;
       }
     }
     return token;
@@ -60,6 +65,7 @@ export const authCallbacks: Partial<NextAuthConfig["callbacks"]> = {
       session.user.id = token.id as string;
       session.user.name = token.name ?? "";
       session.user.email = token.email ?? "";
+      session.user.role = token.role as Role;
     }
     return session;
   },

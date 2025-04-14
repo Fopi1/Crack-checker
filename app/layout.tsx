@@ -3,7 +3,7 @@ import "./globals.css";
 
 import scandia from "next/font/local";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/nextAuth";
 import { getLikedGames, getSubscriptions } from "@/lib/utils";
 import { Toaster } from "@/shadcn/components";
 import { Footer } from "@/shared/components";
@@ -11,7 +11,7 @@ import { Header } from "@/shared/components/header";
 import { Providers } from "@/shared/components/providers";
 import { Background } from "@/shared/components/shared";
 import { Overlay } from "@/shared/components/shared/overlay";
-import { Panel } from "@/shared/components/shared/panel";
+import { PanelServer } from "@/shared/components/shared/panel/panelServer";
 
 const Scandia = scandia({
   src: [
@@ -65,7 +65,7 @@ export default async function RootLayout({
           <div>
             <Overlay />
             <Background />
-            {process.env.NODE_ENV === "development" ? <Panel /> : <></>}
+            {process.env.NODE_ENV === "development" ? <PanelServer /> : <></>}
             <Header />
             <main>{children}</main>
             <Footer />
