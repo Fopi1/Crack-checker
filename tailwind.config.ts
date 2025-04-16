@@ -78,6 +78,10 @@ const config: Config = {
         crack: "var(--crack-background)",
         "crack-secondary": "var(--crack-background-secondary)",
         "crack-profile": "var(--crack-background-profile)",
+        "crack-theader": "var(--crack-background-theader)",
+      },
+      borderColor: {
+        "crack-theader": "var(--crack-border-theader)",
       },
     },
   },

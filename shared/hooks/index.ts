@@ -5,3 +5,4 @@ export { useGamesByCategory } from "./useGamesByCategory";
 export { usePathnames } from "./usePathnames";
 export { useSearchGames } from "./useSearchGames";
 export { useGameById } from "./useGameById";
+export { useCalendar } from "./useCalendar";
