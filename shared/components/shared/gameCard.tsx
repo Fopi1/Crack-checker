@@ -5,7 +5,7 @@ import Link from "next/link";
 import { memo } from "react";
 
 import { AppRoutes } from "@/constants/routes";
-import { performActionOnGame } from "@/services/siteApi/game";
+import { performActionOnGame } from "@/services/game";
 import { useCrackStatus } from "@/shared/hooks";
 import { processingActionsStore } from "@/shared/store/processingActionsStore";
 

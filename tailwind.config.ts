@@ -55,9 +55,9 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
-        "crack-green": "#008000",
-        "crack-light-green": "#28a745",
-        "crack-red": "#ff0000c9",
+        "crack-green": "var(--crack-green)",
+        "crack-light-green": "var(--crack-light-green)",
+        "crack-red": "var(--crack-red)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -79,6 +79,7 @@ const config: Config = {
         "crack-secondary": "var(--crack-background-secondary)",
         "crack-profile": "var(--crack-background-profile)",
         "crack-theader": "var(--crack-background-theader)",
+        "crack-search": "var(--crack-background-search)",
       },
       borderColor: {
         "crack-theader": "var(--crack-border-theader)",

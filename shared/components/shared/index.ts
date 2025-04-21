@@ -3,5 +3,8 @@ export { Container } from "./container";
 export { Blurred } from "./blurred";
 export { TransitionLink } from "./transitionLink";
 export { Error } from "./error";
+export { GamesGroup } from "./gamesGroup";
+export { VirtualizedGamesGroup } from "./virtualizedGamesGroup";
+export { GameCard } from "./gameCard";
 export * from "./formPieces";
 export * from "./panel";

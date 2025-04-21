@@ -10,9 +10,9 @@ export const AppRoutes = {
 } as const;
 
 export const SiteApiRoutes = {
-  GAMES: "/games",
+  GAMES: "/games/main",
   GAME: (id: string) => `/games/${id}`,
-  SEARCH_GAME: (query: string) => `/games?query=${query}`,
+  SEARCH_GAME: (query: string) => `/games/search?query=${query}`,
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
   LOGOUT: "/auth/logout",
@@ -20,9 +20,10 @@ export const SiteApiRoutes = {
   PASSWORD: "/users/password",
   LIKED_GAMES: "/users/liked-games",
   SUBSCRIPTIONS: "/users/subscriptions",
-  SYNC_TRIGGER: "/admin/sync-trigger",
   SYNC: "/admin/sync",
   NOTIFY_CRACKED_GAMES: "/admin/notify-cracked-games",
+  STEAM_GAMES: "/admin/steam",
+  TRIGGER: "/admin/trigger",
 } as const;
 
 export const ExternalApiRoutes = {

@@ -1,4 +1,4 @@
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { SiteApi } from "@/services/apiClient";
 import { useQuery } from "@tanstack/react-query";
 
 import { sortStore } from "../store/sortStore";

@@ -1,8 +1,9 @@
-import pLimit from "p-limit";
+import pLimit from 'p-limit';
 
-import { AllGameDataSchema } from "@/prisma/constants";
-import { GameStatusApi } from "@/services/externalApi/apiClient";
-import { Game } from "@prisma/client";
+import { AllGameDataSchema } from '@/prisma/constants';
+import { Game } from '@prisma/client';
+
+import { fetchGameDetailsByTitle } from '../gamestatusAPI';
 
 const limit = pLimit(10);
 
@@ -12,9 +13,7 @@ export const normalizeGames = async (
   const gamesPromises = games.map((game) =>
     limit(async () => {
       try {
-        const gameDetails = await GameStatusApi.games.getGameDetailsByTitle(
-          game.title
-        );
+        const gameDetails = await fetchGameDetailsByTitle(game.title);
         const validation = AllGameDataSchema.safeParse(gameDetails);
         if (!validation.success) {
           console.error("Invalid game data:", validation.error);

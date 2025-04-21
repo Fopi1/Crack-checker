@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { MouseEvent, useEffect, useState } from "react";
 
 import { AppRoutes } from "@/constants";
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { SiteApi } from "@/services/apiClient";
 import { FullGame } from "@/types/api";
 import { useQueryClient } from "@tanstack/react-query";
 

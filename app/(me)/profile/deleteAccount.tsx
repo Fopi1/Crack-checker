@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { AppRoutes } from "@/constants";
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { SiteApi } from "@/services/apiClient";
 import { Button, useToast } from "@/shadcn";
 import { useQueryClient } from "@tanstack/react-query";
 

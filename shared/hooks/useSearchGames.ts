@@ -1,5 +1,5 @@
 import { SEARCH_QUERY_LENGTH } from "@/constants";
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { SiteApi } from "@/services/apiClient";
 import { useQuery } from "@tanstack/react-query";
 
 export const useSearchGames = (query: string) => {

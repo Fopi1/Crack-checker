@@ -1,13 +1,20 @@
 "use server";
 
-import { checkIsAdmin } from "@/lib/auth";
-import { notifyAboutCrackedGames } from "@/lib/mailer";
-import { jsonError, jsonResponse } from "@/lib/utils";
+import { NextRequest } from 'next/server';
 
-export async function POST() {
-  const isAdmin = await checkIsAdmin();
-  if (!isAdmin) {
-    return jsonError({ message: "Not enough rights", status: 403 });
+import { ApiHeaders } from '@/constants';
+import { notifyAboutCrackedGames } from '@/lib/mailer';
+import { jsonError, jsonResponse } from '@/lib/utils';
+
+export async function POST(req: NextRequest) {
+  const validKey = process.env.API_KEY;
+  if (!validKey) {
+    return jsonError({ message: "API key is not set", status: 500 });
+  }
+  const authHeader = req.headers.get(ApiHeaders.API_KEY);
+
+  if (authHeader !== validKey) {
+    return jsonError({ message: "Unathorized access to API", status: 401 });
   }
   try {
     await notifyAboutCrackedGames();

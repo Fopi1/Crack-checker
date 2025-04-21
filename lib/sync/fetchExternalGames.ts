@@ -1,9 +1,10 @@
 import { prisma } from "@/prisma/prisma";
-import { GameStatusApi } from "@/services/externalApi/apiClient";
+
+import { fetchReleasedGames } from "../gamestatusAPI";
 
 export const fetchExternalGames = async () => {
   try {
-    const releasedGames = await GameStatusApi.games.getReleasedGames();
+    const releasedGames = await fetchReleasedGames();
     if (!releasedGames.length) {
       console.log("No released games found from external API");
       return [];

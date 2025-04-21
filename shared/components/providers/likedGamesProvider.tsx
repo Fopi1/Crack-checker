@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { PropsWithChildren } from "react";
 
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { SiteApi } from "@/services/apiClient";
 import { likedGamesStore } from "@/shared/store/likedGamesStore";
 import { useAsyncEffect } from "@reactuses/core";
 

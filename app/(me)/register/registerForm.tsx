@@ -6,7 +6,7 @@ import { FC, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { AppRoutes } from "@/constants/routes";
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { SiteApi } from "@/services/apiClient";
 import { Form } from "@/shadcn/components/ui";
 import { Error } from "@/shared/components/shared";
 import {

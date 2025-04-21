@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { SiteApi } from "@/services/apiClient";
 import { useToast } from "@/shadcn/hooks";
 import { FormTemplate } from "@/shared/components/page/profile/formTemplate";
 import { getApiFormError } from "@/utils";

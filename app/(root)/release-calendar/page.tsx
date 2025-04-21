@@ -3,9 +3,12 @@
 import { Container } from '@/shared/components/shared';
 import { CrackButton } from '@/shared/components/ui';
 import { useCalendar } from '@/shared/hooks';
+import { useQuery } from '@tanstack/react-query';
 
 import { daysOfWeek, monthNames } from './constants';
 
+// ЧАТ ПРЕДЛОЖИЛ ХОРОШУЮ ИДЕЮ ПАРСИТЬ ИГРЫ ИЗ СВОЕЙ БАЗЫ ДАННЫХ, ВМЕСТО ТОГО ЧТОБЫ ПОЛАГАТЬСЯ НА СТОРОННИЙ API
+// НАПИСАТЬ НАДО ФУНКЦИЮ КОТОРАЯ ОТБИРАЕТ ИГРЫ ПО МЕСЯЦУ И ВОЗВРАЩАЕТ СПИСОК ПО ДНЯМ
 export default function ReleaseCalendar() {
   const {
     currentDate,
@@ -21,6 +24,7 @@ export default function ReleaseCalendar() {
     month === monthNames[currentDate.getMonth()]
       ? true
       : false;
+  const data = useQuery({queryKey:["calendar",month],queryFn: () => {}})
   return (
     <section className="pt-20 bg-crack-secondary min-h-fit">
       <Container className="bg-[#1e1e2033] backdrop-blur-[10px] rounded-lg">

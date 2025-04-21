@@ -1,4 +1,4 @@
-import { SiteApi } from "@/services/siteApi/apiClient";
+import { SiteApi } from "@/services/apiClient";
 import { FullGame } from "@/types/api";
 import { useQuery } from "@tanstack/react-query";
 

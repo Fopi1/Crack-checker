@@ -1,18 +1,13 @@
 "use server";
 
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
 
-import { ApiHeaders } from '@/constants';
-import { syncGames } from '@/lib';
-import { checkIsAdmin } from '@/lib/auth';
-import { jsonError, jsonResponse } from '@/lib/utils';
+import { ApiHeaders } from "@/constants";
+import { syncGames } from "@/lib";
+import { jsonError, jsonResponse } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
-  const isAdmin = await checkIsAdmin();
-  if (!isAdmin) {
-    return jsonError({ message: "Not enough rights", status: 403 });
-  }
-  const validKey = process.env.SYNC_API_KEY;
+  const validKey = process.env.API_KEY;
   if (!validKey) {
     return jsonError({ message: "API key is not set", status: 500 });
   }

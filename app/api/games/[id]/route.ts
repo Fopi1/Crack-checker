@@ -1,11 +1,11 @@
 "use server";
 
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
-import { auth } from "@/lib/nextAuth";
-import { jsonError, jsonResponse } from "@/lib/utils";
-import { prisma } from "@/prisma/prisma";
-import { AddValue } from "@/types/api";
+import { auth } from '@/lib/nextAuth';
+import { jsonError, jsonResponse } from '@/lib/utils';
+import { prisma } from '@/prisma/prisma';
+import { AddValue } from '@/types/api';
 
 interface Params {
   params: Promise<{ id: string }>;
@@ -52,9 +52,6 @@ export async function PUT(req: NextRequest, props: Params) {
     }
     const session = await auth();
     const userId = session?.user.id;
-    if (!userId) {
-      return jsonError({ message: "You're not logined", status: 401 });
-    }
 
     switch (addValue) {
       case "view":
@@ -64,6 +61,9 @@ export async function PUT(req: NextRequest, props: Params) {
         });
         return jsonResponse();
       case "like":
+        if (!userId) {
+          return jsonError({ message: "You're not logined", status: 401 });
+        }
         const likedUser = await prisma.user.findUnique({
           where: {
             id: userId,
@@ -92,6 +92,9 @@ export async function PUT(req: NextRequest, props: Params) {
           data: { action: alreadyLiked ? "disliked" : "liked" },
         });
       case "subscription":
+        if (!userId) {
+          return jsonError({ message: "You're not logined", status: 401 });
+        }
         const subscribedUser = await prisma.user.findUnique({
           where: {
             id: userId,

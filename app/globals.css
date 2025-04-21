@@ -15,11 +15,15 @@ html {
   --crack-background-secondary: #111c2e8c;
   --crack-background-profile: #30204f3b;
   --crack-background-theader: #7d5ac20d;
+  --crack-background-search: #111c2e;
   --crack-border-theader: #b4b4b414;
-  --text-primary: #e9e9e9;
+  --crack-green: #008000;
+  --crack-light-green: #28a745;
+  --crack-red: #ff0000c9;
+  --text-gamestatus: #006600;
   --text-secondary: #bb3af6;
   --text-information: #c9a4d6;
-  --text-gamestatus: #006600;
+  --text-primary: #e9e9e9;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -115,28 +119,26 @@ body {
   }
 
   .custom-scrollbar {
-    /* Firefox */
-    scrollbar-width: thin; /* Делает скроллбар тонким */
-    scrollbar-color: #4a90e2 #1a1a1a; /* Цвет ползунка и фона (thumb и track) */
+    scrollbar-width: thin;
+    scrollbar-color: #4a90e2 #1a1a1a;
   }
 
-  /* WebKit (Chrome, Safari, Edge) */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 8px; /* Ширина скроллбара */
+    width: 8px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #1a1a1a; /* Цвет фона трека */
-    border-radius: 4px; /* Закругляем трек */
+    background: #1a1a1a;
+    border-radius: 4px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #4a90e2; /* Цвет ползунка */
-    border-radius: 4px; /* Закругляем ползунок */
-    border: 1px solid #1a1a1a; /* Добавляем обводку для контраста */
+    background: #4a90e2;
+    border-radius: 4px;
+    border: 1px solid #1a1a1a;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #357abd; /* Цвет при наведении */
+    background: #357abd;
   }
 }
