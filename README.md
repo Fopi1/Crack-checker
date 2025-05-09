@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎮 Crack Checker
 
-## Getting Started
+Fullstack веб-приложение для поиска и отслеживания информации об играх, полученной напрямую со Steam и сторонних API. Поддерживает авторизацию, подписки, лайки, админ-панель и многое другое.
 
-First, run the development server:
+## 🚀 Функционал
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 🔐 Авторизация через Credentials, Google и Discord (Auth.js)
+- 🔎 Поиск игр по названию
+- ❤️ Возможность лайкать игры
+- 📩 Подписка на e-mail-уведомления о новых релизах
+- 🧑‍💻 Админ-панель для управления базой данных
+- 🗃️ Интеграция с Steam (через Puppeteer и внешний API)
+- 🔄 Планируемые cron-задачи для автообновления базы игр
+- ⚙️ Адаптивный дизайн и плавная клиентская логика
+- 💾 Использование Redis (в заделе) для кэширования
+
+## 🛠 Технологии
+
+- **Frontend:** Next.js 15 (App Router), React, TailwindCSS, TypeScript, MobX
+- **Backend:** Next.js API Routes, Prisma ORM, PostgreSQL, Zod, Auth.js
+- **Инфраструктура:** Redis, Puppeteer, Vercel (планируемый деплой)
+
+## 🧩 Архитектура
+
+Приложение построено по принципам модульности и читаемости:
+
+```
+├── app/                # App Router
+├── lib/                # Бизнес-логика и утилиты
+├── services/           # Работа с API и базой
+├── shared/             # Переиспользуемые компоненты и хуки
+├── types/              # Общие типы
+├── utils/              # Утилитарные функции
+├── middleware.ts       # Middleware для защиты маршрутов
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📦 Установка и запуск
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# 1. Клонируем репозиторий
+git clone https://github.com/Fopi1/Crack-checker.git
+cd Crack-checker
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 2. Устанавливаем зависимости
+npm install
 
-## Learn More
+# 3. Настраиваем .env
+cp .env.example .env
+# (заполнить нужные переменные окружения)
 
-To learn more about Next.js, take a look at the following resources:
+# 4. Запускаем dev-сервер
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧪 TODO / В процессе
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] Адаптивный дизайн
+- [ ] Автосинхронизация через cron-задачи
+- [ ] Расширенные фильтры и сортировки
+- [ ] Оптимизация запросов с помощью Redis
 
-## Deploy on Vercel
+## 👤 Автор
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [GitHub @Fopi1](https://github.com/Fopi1)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+> Проект находится в активной разработке. Feedback и pull-request'ы приветствуются.
