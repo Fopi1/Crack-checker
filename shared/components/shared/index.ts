@@ -6,5 +6,5 @@ export { Error } from "./error";
 export { GamesGroup } from "./gamesGroup";
 export { VirtualizedGamesGroup } from "./virtualizedGamesGroup";
 export { GameCard } from "./gameCard";
+export { Loader } from "./loader";
 export * from "./formPieces";
-export * from "./panel";

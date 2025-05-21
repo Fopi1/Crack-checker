@@ -1,5 +1,3 @@
-"use client";
-
 import { categories } from "@/prisma/constants";
 import { Container } from "@/shared/components/shared";
 

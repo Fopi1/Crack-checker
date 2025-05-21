@@ -31,7 +31,7 @@ export const PasswordInfo = () => {
   const onSubmit: SubmitHandler<PasswordInfoSchema> = async (data) => {
     try {
       setIsChecking(true);
-      await SiteApi.users.changeUserPassword(data);
+      await SiteApi.user.changeUserPassword(data);
       form.reset();
       toast({ description: "Saved." });
     } catch (error) {

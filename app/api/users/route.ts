@@ -5,12 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { UserInfoSchema, userInfoSchema } from "@/app/(me)/profile/constants";
 import { RateLimiterPrefixes } from "@/constants";
 import { auth, signOut } from "@/lib/nextAuth";
-import { rateLimit } from "@/lib/redis";
+import { rateLimit } from "@/lib/auth";
 import { jsonError, responseApiFormError } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma";
 
 const userApiFormError = (
-  args: Parameters<typeof responseApiFormError<UserInfoSchema>>[0]
+  args: Parameters<typeof responseApiFormError<UserInfoSchema>>[0],
 ) => responseApiFormError<UserInfoSchema>(args);
 export async function PATCH(req: NextRequest) {
   try {

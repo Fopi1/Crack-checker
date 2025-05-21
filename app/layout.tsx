@@ -11,7 +11,6 @@ import { Header } from "@/shared/components/header";
 import { Providers } from "@/shared/components/providers";
 import { Background } from "@/shared/components/shared";
 import { Overlay } from "@/shared/components/shared/overlay";
-import { PanelServer } from "@/shared/components/shared/panel/panelServer";
 
 const Scandia = scandia({
   src: [
@@ -65,7 +64,6 @@ export default async function RootLayout({
           <div>
             <Overlay />
             <Background>
-              {process.env.NODE_ENV === "development" ? <PanelServer /> : <></>}
               <Header />
               <main>{children}</main>
               <Footer />

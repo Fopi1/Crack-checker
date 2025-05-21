@@ -30,8 +30,8 @@ export const TransitionLink = ({
   const commonProps = {
     style: { backgroundColor },
     className: cn(
-      "transition-colors duration-300 flex items-center justify-center gap-3 font-bold py-3 rounded-[15px] text-white z-[1]",
-      className
+      "transition-colors duration-300 flex items-center justify-center gap-3 font-bold py-3 rounded-[15px] text-white z-[1] text-sm sm:text-base",
+      className,
     ),
     onMouseOver: (e: MouseEvent<HTMLElement>) => (
       (e.currentTarget.style.backgroundColor = hoverColor),

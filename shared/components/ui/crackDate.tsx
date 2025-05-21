@@ -9,7 +9,7 @@ interface Props {
 
 export const CrackDate = ({ className, crackDate }: Props) => {
   return (
-    <div className={cn("flex gap-1", className)}>
+    <div className={cn("flex gap-1 text-lg md:text-xl", className)}>
       <p>Crack Date:</p>
       <time className="flex gap-1 items-center text-orange-300 font-bold">
         {crackDate ? (

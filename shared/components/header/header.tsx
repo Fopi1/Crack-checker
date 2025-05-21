@@ -1,7 +1,6 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -12,13 +11,11 @@ import { cn } from "@/shadcn";
 import { searchStore } from "@/shared/store/searchStore";
 
 import { HeaderMenu } from "./headerMenu";
-import { LoginedActionsButton } from "./navigation";
 import { NavLinks } from "./navigation/navLinks";
 import { SearchedGames } from "./searchedGames";
 import { SearchForm } from "./searchForm";
 
 export const Header = observer(() => {
-  const { data } = useSession();
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
 
@@ -41,7 +38,7 @@ export const Header = observer(() => {
     <header
       className={cn(
         "bg-slate-900 sticky top-0 shadow-2xl z-[3] text-wrap transition-transform duration-300",
-        isVisible ? "translate-y-0" : "-translate-y-full"
+        isVisible ? "translate-y-0" : "-translate-y-full",
       )}
     >
       <nav className="relative mx-auto flex justify-between items-center p-2 responsive flex-col lg:flex-row">
@@ -62,9 +59,8 @@ export const Header = observer(() => {
           <HeaderMenu className="lg:hidden" />
         </div>
         <SearchForm id="mobile-search" className="w-full flex lg:hidden" />
-        <div className="leading-[21px] pr-2 hidden gap-5 lg:flex xl:gap-10 uppercase">
+        <div className="leading-[21px] pr-2 hidden gap-5 lg:flex lg:items-center xl:gap-10 uppercase">
           <NavLinks />
-          {data && <LoginedActionsButton user={data.user} />}
         </div>
         {searchStore.isOpened && searchStore.userInput.length > 2 && (
           <SearchedGames />

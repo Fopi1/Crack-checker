@@ -18,8 +18,8 @@ export const CrackLike = observer(({ className, game }: Props) => {
     <button
       onClick={toggleLike}
       className={cn(
-        "bg-blue-600 rounded-2xl px-10 py-[6px] flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]",
-        className
+        "bg-blue-600 rounded-2xl px-10 py-2 flex items-center gap-1 transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[-15deg]",
+        className,
       )}
     >
       <ThumbsUp

@@ -1,6 +1,6 @@
 "use server";
 
-import { getSubscriptions, jsonError, jsonResponse } from '@/lib/utils';
+import { getSubscriptions, jsonError, jsonResponse } from "@/lib/utils";
 
 export async function GET() {
   try {

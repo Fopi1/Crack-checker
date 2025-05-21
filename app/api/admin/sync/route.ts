@@ -1,5 +1,4 @@
-"use server";
-
+"use server"
 import { NextRequest } from "next/server";
 
 import { ApiHeaders } from "@/constants";

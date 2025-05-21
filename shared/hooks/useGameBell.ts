@@ -9,19 +9,19 @@ import { SiteApi } from "@/services/apiClient";
 import { FullGame } from "@/types/api";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { processingActionsStore } from "../store/processingActionsStore";
-import { searchStore } from "../store/searchStore";
-import { subscriptionStore } from "../store/subscriptionsStore";
+import { processingActionsStore } from "../store";
+import { searchStore } from "../store";
+import { subscriptionsStore } from "../store";
 
 export const useGameBell = (game: FullGame) => {
   const queryClient = useQueryClient();
   const { push } = useRouter();
   const { data } = useSession();
   const [isSubscribed, setIsSubscribed] = useState(
-    subscriptionStore.subscriptions.includes(game.id)
+    subscriptionsStore.subscriptions.includes(game.id),
   );
   useEffect(() => {
-    setIsSubscribed(subscriptionStore.subscriptions.includes(game.id));
+    setIsSubscribed(subscriptionsStore.subscriptions.includes(game.id));
   }, [game.id, game.subscriptions.length]);
   const toggleSubscription = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -36,9 +36,9 @@ export const useGameBell = (game: FullGame) => {
     processingActionsStore.addAction(game.id, "subscription");
     try {
       if (isSubscribed) {
-        subscriptionStore.removeSubscription(game.id);
+        subscriptionsStore.removeSubscription(game.id);
       } else {
-        subscriptionStore.addSubscription(game.id);
+        subscriptionsStore.addSubscription(game.id);
       }
       setIsSubscribed((prevIsSubscribed) => !prevIsSubscribed);
       await SiteApi.game.performActionOnGame(game.id, "subscription");
@@ -47,7 +47,7 @@ export const useGameBell = (game: FullGame) => {
       });
       await Promise.all([
         ...game.categories.map((category) =>
-          queryClient.refetchQueries({ queryKey: ["games", category.title] })
+          queryClient.refetchQueries({ queryKey: ["games", category.title] }),
         ),
         queryClient.refetchQueries({ queryKey: ["game", game.id] }),
       ]);

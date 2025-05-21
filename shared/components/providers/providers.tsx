@@ -5,7 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { PropsWithChildren, useRef, useState } from "react";
 
 import { likedGamesStore } from "@/shared/store/likedGamesStore";
-import { subscriptionStore } from "@/shared/store/subscriptionsStore";
+import { subscriptionsStore } from "@/shared/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -33,12 +33,12 @@ export const Providers = ({
             gcTime: 1000 * 60 * 10,
           },
         },
-      })
+      }),
   );
   const isInitialized = useRef(false);
   if (!isInitialized.current) {
     likedGamesStore.setLikedGames(likedGames);
-    subscriptionStore.setSubscriptions(subscriptions);
+    subscriptionsStore.setSubscriptions(subscriptions);
     isInitialized.current = true;
   }
 

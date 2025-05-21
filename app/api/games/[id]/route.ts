@@ -1,11 +1,10 @@
 "use server";
+import { NextRequest } from "next/server";
 
-import { NextRequest } from 'next/server';
-
-import { auth } from '@/lib/nextAuth';
-import { jsonError, jsonResponse } from '@/lib/utils';
-import { prisma } from '@/prisma/prisma';
-import { AddValue } from '@/types/api';
+import { auth } from "@/lib/nextAuth";
+import { jsonError, jsonResponse } from "@/lib/utils";
+import { prisma } from "@/prisma/prisma";
+import { AddValue } from "@/types/api";
 
 interface Params {
   params: Promise<{ id: string }>;
@@ -74,7 +73,7 @@ export async function PUT(req: NextRequest, props: Params) {
           return jsonError({ message: "Liked user not found", status: 404 });
         }
         const alreadyLiked = likedUser?.likes.some(
-          (like) => like.gameId === gameId
+          (like) => like.gameId === gameId,
         );
         if (alreadyLiked) {
           await prisma.like.delete({
@@ -102,7 +101,7 @@ export async function PUT(req: NextRequest, props: Params) {
           include: { subscriptions: { select: { gameId: true } } },
         });
         const alreadySubscribed = subscribedUser?.subscriptions.some(
-          (subscription) => subscription.gameId === gameId
+          (subscription) => subscription.gameId === gameId,
         );
         if (alreadySubscribed) {
           await prisma.subscription.delete({

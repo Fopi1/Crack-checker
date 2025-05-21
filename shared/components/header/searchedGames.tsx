@@ -12,7 +12,7 @@ import { VirtualizedGamesGroup } from "../shared";
 
 export const SearchedGames = observer(() => {
   const { data: games, isLoading } = useSearchGames(
-    searchStore.debouncedUserInput
+    searchStore.debouncedUserInput,
   );
 
   const handleOnClick = () => {
@@ -20,17 +20,17 @@ export const SearchedGames = observer(() => {
   };
 
   return (
-    <div className="absolute top-full mt-5 w-full bg-crack-search h-fit max-h-[500px] xl:max-h-[800px] rounded-lg border-2 border-white overscroll-none">
+    <div className="absolute top-full mt-5 w-full bg-crack-search h-[calc(100dvh - 200px)] rounded-lg border-2 border-white overscroll-none">
       <div className="sticky top-0 w-full z-50 p-5 pb-0">
         <Button className="rounded-sm" onClick={handleOnClick}>
           <X strokeWidth={3} />
         </Button>
       </div>
-      <div className="w-full max-h-[calc(500px-60px)] xl:max-h-[calc(800px-60px)] custom-scrollbar p-5 pt-0 text-center">
+      <div className="w-full custom-scrollbar text-center">
         {isLoading ? (
           "Loading..."
         ) : games?.length ? (
-          <div className="h-[440px] xl:h-[740px]">
+          <div className="h-[calc(100dvh-200px)]">
             <VirtualizedGamesGroup games={games} />
           </div>
         ) : (

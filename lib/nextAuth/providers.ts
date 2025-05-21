@@ -7,7 +7,7 @@ import { loginFormSchema } from "@/app/(me)/login/constants";
 import { RateLimiterPrefixes } from "@/constants";
 import { prisma } from "@/prisma/prisma";
 
-import { rateLimit } from "../redis";
+import { rateLimit } from "../auth/";
 import { comparePassword } from "../utils";
 
 export const authProviders: NextAuthConfig["providers"] = [
@@ -22,7 +22,7 @@ export const authProviders: NextAuthConfig["providers"] = [
         req,
         RateLimiterPrefixes.LOGIN,
         5,
-        120
+        120,
       );
       if (limitError) {
         throw new Error("Too many requests");

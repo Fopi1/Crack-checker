@@ -12,7 +12,7 @@ export const CrackCracker = ({
   crackedBy,
 }: Props) => {
   return (
-    <div className={cn("flex gap-1", className)}>
+    <div className={cn("flex gap-1 text-lg md:text-xl", className)}>
       <p>Cracked by:</p>
       <span className={cn("font-bold uppercase", crackTextColor)}>
         {crackedBy}

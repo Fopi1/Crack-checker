@@ -1,5 +1,4 @@
 "use server";
-
 import { NextRequest, NextResponse } from "next/server";
 
 import {
@@ -8,7 +7,7 @@ import {
 } from "@/app/(me)/profile/constants";
 import { RateLimiterPrefixes } from "@/constants";
 import { auth } from "@/lib/nextAuth";
-import { rateLimit } from "@/lib/redis";
+import { rateLimit } from "@/lib/auth";
 import {
   comparePassword,
   hashPassword,
@@ -18,7 +17,7 @@ import {
 import { prisma } from "@/prisma/prisma";
 
 const passwordApiFormError = (
-  args: Parameters<typeof responseApiFormError<PasswordInfoSchema>>[0]
+  args: Parameters<typeof responseApiFormError<PasswordInfoSchema>>[0],
 ) => responseApiFormError<PasswordInfoSchema>(args);
 
 export async function PATCH(req: NextRequest) {
@@ -39,7 +38,7 @@ export async function PATCH(req: NextRequest) {
     if (!parseResult.success) {
       return NextResponse.json(
         { error: parseResult.error.format() },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const { password, currentPassword } = parseResult.data;

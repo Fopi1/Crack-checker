@@ -23,16 +23,13 @@ export const CrackBell = observer(({ className, game }: Props) => {
   const bellText = isSubscribed
     ? "Turn off notifications"
     : "Turn on notifications";
-  if (game.id === "018f1715-194e-4d8d-8bd4-546efbaf18bd") {
-    console.log(bellText);
-  }
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
         <button
           className={cn(
             "h-full bg-gray-950 rounded-xl px-3 py-1 flex items-center transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform hover:rotate-[15deg]",
-            className
+            className,
           )}
           onClick={toggleSubscription}
         >

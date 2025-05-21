@@ -1,6 +1,7 @@
-import { CalendarDays, Home, LogIn, ReceiptText } from "lucide-react";
+import { CalendarDays, Home, LogIn, ReceiptText, UserLock } from "lucide-react";
 
 import { AppRoutes } from "@/constants/routes";
+import { Session } from "next-auth";
 
 export const navLinksIconProps = {
   size: 20,
@@ -9,6 +10,12 @@ export const navLinksIconProps = {
 };
 
 export const links = [
+  {
+    name: "panel",
+    href: AppRoutes.ADMIN_PANEL,
+    icon: UserLock,
+    visible: (session: Session | null) => session?.user.role === "admin",
+  },
   {
     name: "home",
     href: AppRoutes.MAIN,
@@ -19,6 +26,11 @@ export const links = [
     href: AppRoutes.RELEASE_CALENDAR,
     icon: CalendarDays,
   },
-  { name: "articles", href: AppRoutes.ARTICLES, icon: ReceiptText },
-  { name: "log in", href: AppRoutes.LOGIN, icon: LogIn },
+  // { name: "articles", href: AppRoutes.ARTICLES, icon: ReceiptText },
+  {
+    name: "log in",
+    href: AppRoutes.LOGIN,
+    icon: LogIn,
+    visible: (session: Session | null) => !session,
+  },
 ];

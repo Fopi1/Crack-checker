@@ -1,3 +1,4 @@
+"use server";
 import { NextRequest } from "next/server";
 
 import { getApiParams, jsonError, jsonResponse } from "@/lib/utils";

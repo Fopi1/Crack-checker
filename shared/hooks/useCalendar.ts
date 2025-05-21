@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { monthNames } from '@/app/(root)/release-calendar/constants';
+import { monthNames } from "@/app/(root)/release-calendar/constants";
 
 export const useCalendar = () => {
   const currentDate = new Date();
@@ -72,13 +72,14 @@ export const useCalendar = () => {
     return result;
   };
 
-  const calendar = getCalendarMatrix();
+  const calendarMatrix = getCalendarMatrix();
 
   return {
     currentDate,
     year,
-    calendar,
+    calendarMatrix,
     month,
+    monthIndex,
     goToPreviousMonth,
     goToToday,
     goToNextMonth,

@@ -1,7 +1,7 @@
 import { SiteApi } from "@/services/apiClient";
 import { useQuery } from "@tanstack/react-query";
 
-import { sortStore } from "../store/sortStore";
+import { sortStore } from "@/shared/store";
 
 export const useGamesByCategory = (category: string) => {
   const { takeGames, sortBy, sortOrder, isAAA } =

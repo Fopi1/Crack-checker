@@ -14,9 +14,9 @@ export const CrackStatus = ({
   return (
     <div
       className={cn(
-        `w-fit px-3 py-[2px] rounded-2xl text-sm font-semibold drop-shadow-status`,
+        `w-fit px-3 py-[2px] rounded-2xl text-xs md:text-sm font-semibold drop-shadow-status`,
         className,
-        crackBackgroundColor
+        crackBackgroundColor,
       )}
     >
       <p>{crackStatus}</p>

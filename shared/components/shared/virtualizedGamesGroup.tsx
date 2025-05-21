@@ -10,25 +10,30 @@ interface Props {
   games: FullGame[];
 }
 
-const CARD_WIDTH = 330;
+const CARD_WIDTH = 335;
 const CARD_HEIGHT = 330;
-const GUTTER = 12;
+const GAP_WIDTH = 16;
+const GAP_HEIGHT = 28;
 
 export const VirtualizedGamesGroup = ({ games }: Props) => {
   return (
     <div className="w-full h-full">
       <AutoSizer>
         {({ height, width }) => {
-          const columnCount = Math.floor(width / (CARD_WIDTH + GUTTER));
+          const columnCount = Math.floor(width / (CARD_WIDTH + GAP_WIDTH)) || 1;
           const rowCount = Math.ceil(games.length / columnCount);
 
+          const columnWidth =
+            columnCount === 1 ? width - GAP_WIDTH : CARD_WIDTH + GAP_WIDTH;
+          const rowHeight =
+            columnCount === 1 ? height - GAP_HEIGHT : CARD_HEIGHT + GAP_HEIGHT;
           return (
             <Grid
               columnCount={columnCount}
-              columnWidth={CARD_WIDTH + GUTTER}
+              columnWidth={columnWidth}
               height={height}
               rowCount={rowCount}
-              rowHeight={CARD_HEIGHT + GUTTER}
+              rowHeight={rowHeight}
               width={width}
             >
               {({ columnIndex, rowIndex, style }) => {

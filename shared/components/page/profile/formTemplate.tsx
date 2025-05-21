@@ -8,7 +8,7 @@ import { FieldProps } from "@/types/form";
 
 import { CrackButton } from "../../ui";
 
-interface Props<T extends Record<string, any>> {
+interface Props<T extends Record<string, unknown>> {
   title: ReactNode;
   description: ReactNode;
   form: UseFormReturn<T>;
@@ -18,7 +18,7 @@ interface Props<T extends Record<string, any>> {
   isChecking: boolean;
 }
 
-export const FormTemplate = <T extends Record<string, any>>({
+export const FormTemplate = <T extends Record<string, unknown>>({
   title,
   description,
   form,
@@ -29,7 +29,7 @@ export const FormTemplate = <T extends Record<string, any>>({
 }: Props<T>) => {
   return (
     <div className="w-full bg-crack-profile rounded-md shadow-xl">
-      <div className="flex flex-col gap-3 p-6 w-[40rem]">
+      <div className="flex flex-col gap-3 p-6 w-auto md:w-[40rem]">
         <h2 className="font-medium text-lg">{title}</h2>
         <p className="font-normal text-sm">{description}</p>
         <Form {...form}>

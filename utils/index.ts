@@ -1,2 +1,2 @@
 export { getApiFormError } from "./getApiFormError";
-export { getDaysInMonth } from "./getDaysInMonth";
+export { checkReleaseDay } from "./checkReleaseDay";

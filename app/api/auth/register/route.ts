@@ -1,5 +1,4 @@
 "use server";
-
 import { NextRequest, NextResponse } from "next/server";
 
 import {
@@ -7,7 +6,7 @@ import {
   registerFormSchema,
 } from "@/app/(me)/register/constants";
 import { RateLimiterPrefixes } from "@/constants";
-import { rateLimit } from "@/lib/redis";
+import { rateLimit } from "@/lib/auth";
 import { hashPassword, jsonError, responseApiFormError } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma";
 
@@ -17,7 +16,7 @@ export async function POST(req: NextRequest) {
       req,
       RateLimiterPrefixes.REGISTER,
       10,
-      120
+      120,
     );
     if (limitError) return limitError;
     const body = await req.json();

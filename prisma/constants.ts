@@ -1,6 +1,6 @@
-import z from 'zod';
+import z from "zod";
 
-import { Category } from '@prisma/client';
+import { Category } from "@prisma/client";
 
 export const categories: Category[] = [
   {

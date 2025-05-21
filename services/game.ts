@@ -1,6 +1,6 @@
-import { SiteApiRoutes } from '@/constants/routes';
-import { axiosSiteInstance } from '@/lib/axios';
-import { AddValue, FullGame } from '@/types/api';
+import { SiteApiRoutes } from "@/constants/routes";
+import { axiosSiteInstance } from "@/lib/axios";
+import { AddValue, FullGame, GameWithLikes } from "@/types/api";
 
 import type { SortBy, SortOrder, TakeGames } from "@/types/store";
 
@@ -9,14 +9,14 @@ export const getByParams = async (
   take: TakeGames,
   sortBy: SortBy,
   sortOrder: SortOrder,
-  isAAA: boolean
+  isAAA: boolean,
 ): Promise<FullGame[]> => {
   try {
     const { data } = await axiosSiteInstance.get<{ data: FullGame[] }>(
       SiteApiRoutes.GAMES,
       {
         params: { category, take, sortBy, sortOrder, isAAA },
-      }
+      },
     );
     return data.data;
   } catch (error) {
@@ -27,7 +27,7 @@ export const getByParams = async (
 
 export const performActionOnGame = async (
   gameId: string,
-  addValue: AddValue
+  addValue: AddValue,
 ) => {
   try {
     await axiosSiteInstance.put(SiteApiRoutes.GAME(gameId), {
@@ -42,7 +42,7 @@ export const performActionOnGame = async (
 export const getGameById = async (gameId: string) => {
   try {
     const { data } = await axiosSiteInstance.get<{ data: FullGame }>(
-      SiteApiRoutes.GAME(gameId)
+      SiteApiRoutes.GAME(gameId),
     );
     return data.data;
   } catch (error) {
@@ -54,11 +54,35 @@ export const getGameById = async (gameId: string) => {
 export const searchGame = async (query: string) => {
   try {
     const { data } = await axiosSiteInstance.get<{ data: FullGame[] }>(
-      SiteApiRoutes.SEARCH_GAME(query)
+      SiteApiRoutes.SEARCH_GAME(query),
     );
     return data.data;
   } catch (error) {
     console.error(`Cannot search game by this query ${query}: `, error);
+    throw error;
+  }
+};
+
+export const getGamesByDate = async ({
+  year,
+  monthNumber,
+}: {
+  year: number;
+  monthNumber: number;
+}): Promise<FullGame[]> => {
+  try {
+    const { data } = await axiosSiteInstance.get(
+      SiteApiRoutes.RELEASE_CALENDAR,
+      {
+        params: {
+          year,
+          monthNumber,
+        },
+      },
+    );
+    return data.data;
+  } catch (error) {
+    console.error("Cannot get games by month", error);
     throw error;
   }
 };

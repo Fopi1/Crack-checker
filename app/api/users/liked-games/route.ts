@@ -1,5 +1,4 @@
 "use server";
-
 import { getLikedGames, jsonError, jsonResponse } from "@/lib/utils";
 
 export async function GET() {

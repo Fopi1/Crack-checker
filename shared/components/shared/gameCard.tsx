@@ -7,7 +7,7 @@ import { memo } from "react";
 import { AppRoutes } from "@/constants/routes";
 import { performActionOnGame } from "@/services/game";
 import { useCrackStatus } from "@/shared/hooks";
-import { processingActionsStore } from "@/shared/store/processingActionsStore";
+import { processingActionsStore } from "@/shared/store";
 
 import {
   CrackBell,
@@ -83,7 +83,7 @@ const GameCardComponent = ({ game }: Props) => {
           </figcaption>
           <div className="bg-gray-950/70 backdrop-blur-sm w-full">
             <div className="px-4 py-3 flex justify-between">
-              <h2 className="text-xl w-64 overflow-hidden text-nowrap text-ellipsis">
+              <h2 className="text-lg md:text-xl w-64 overflow-hidden text-nowrap text-ellipsis">
                 {title}
               </h2>
               <div className="flex gap-1">

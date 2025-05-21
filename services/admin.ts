@@ -1,18 +1,22 @@
-import { SiteApiRoutes } from "@/constants";
+import {
+  AdminApiRoutes,
+  TriggerSchemaByPath,
+} from "@/constants";
 import { axiosSiteInstance } from "@/lib";
+import { z } from "zod";
 
-type FetchMethod = "GET" | "POST";
-interface Props {
-  path: string;
-  method: FetchMethod;
-  data?: Record<string, unknown>;
+export interface TriggerProps<P extends keyof typeof AdminApiRoutes> {
+  path: P;
+  data?: z.infer<(typeof TriggerSchemaByPath)[P]>;
 }
 
-export const trigger = async ({ path, method, data }: Props) => {
+export const trigger = async <P extends keyof typeof AdminApiRoutes>({
+  path,
+  data,
+}: TriggerProps<P>) => {
   try {
-    await axiosSiteInstance.post(SiteApiRoutes.TRIGGER, {
+    await axiosSiteInstance.post(AdminApiRoutes.TRIGGER, {
       path,
-      method,
       data,
     });
   } catch (error) {

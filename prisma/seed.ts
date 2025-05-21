@@ -1,28 +1,33 @@
-import pLimit from 'p-limit';
+import pLimit from "p-limit";
 
-import { Game } from '@prisma/client';
+import { Game } from "@prisma/client";
 
-import { GameStatusApi } from '../services/externalApi/apiClient';
-import { AllGameData, AllGameDataSchema, categories, ReleasedGamesData } from './constants';
-import { prisma } from './prisma';
+import {
+  AllGameData,
+  AllGameDataSchema,
+  categories,
+  ReleasedGamesData,
+} from "./constants";
+import { prisma } from "./prisma";
+import { GameStatusApi } from "@/lib/gamestatusAPI";
 
 const limit = pLimit(10);
 
 async function fetchGameData(): Promise<Game[]> {
   try {
-    const releasedGames = await GameStatusApi.games.getReleasedGames();
+    const releasedGames = await GameStatusApi.fetchReleasedGames();
     console.log(`Fetched ${releasedGames.length} games`);
 
     const allGameData = await Promise.allSettled(
       releasedGames.map((game: ReleasedGamesData) =>
-        limit(() => GameStatusApi.games.getGameDetailsByTitle(game.title))
-      )
+        limit(() => GameStatusApi.fetchGameDetailsByTitle(game.title)),
+      ),
     );
 
     const successfulData = allGameData
       .filter(
         (result): result is PromiseFulfilledResult<AllGameData> =>
-          result.status === "fulfilled" && result.value !== null
+          result.status === "fulfilled" && result.value !== null,
       )
       .map((result) => {
         const validation = AllGameDataSchema.safeParse(result.value);
@@ -34,7 +39,7 @@ async function fetchGameData(): Promise<Game[]> {
       })
       .filter(Boolean) as AllGameData[];
     console.log(
-      `Successfully processed ${successfulData.length}/${releasedGames.length} games`
+      `Successfully processed ${successfulData.length}/${releasedGames.length} games`,
     );
 
     return successfulData.map((game) => ({
@@ -55,12 +60,12 @@ async function fetchGameData(): Promise<Game[]> {
   } catch (e) {
     console.error(
       "Error fetching games:",
-      e instanceof Error ? e.message : "Unknown error"
+      e instanceof Error ? e.message : "Unknown error",
     );
     throw new Error(
       `Failed to fetch games: ${
         e instanceof Error ? e.message : "Unknown error"
-      }`
+      }`,
     );
   }
 }
@@ -101,7 +106,7 @@ async function main() {
   } catch (e) {
     console.error(
       "Seeding failed:",
-      e instanceof Error ? e.message : "Unknown error"
+      e instanceof Error ? e.message : "Unknown error",
     );
     process.exit(1);
   }

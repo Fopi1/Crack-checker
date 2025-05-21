@@ -55,6 +55,7 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        "crack-violet": "var(--text-secondary)",
         "crack-green": "var(--crack-green)",
         "crack-light-green": "var(--crack-light-green)",
         "crack-red": "var(--crack-red)",
@@ -83,6 +84,15 @@ const config: Config = {
       },
       borderColor: {
         "crack-theader": "var(--crack-border-theader)",
+      },
+      textColor: {
+        crack: "var(--text-primary)",
+        "crack-secondary": "var(--text-secondary)",
+        "crack-information": "var(--text-information)",
+        "crack-gamestatus": "var(--text-gamestatus)",
+      },
+      screens: {
+        "3xl": "1820px",
       },
     },
   },

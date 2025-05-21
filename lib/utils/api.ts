@@ -9,13 +9,17 @@ export const responseApiFormError = <T extends Record<string, unknown>>({
   status,
 }: ApiFormError<T>) => NextResponse.json({ field, error }, { status });
 
-export const getApiParams = (searchParams: URLSearchParams) => {
+export const getApiParams = <
+  T extends Record<string, string> = Record<string, string>,
+>(
+  searchParams: URLSearchParams,
+): T => {
   const result: Record<string, string> = {};
   for (const [key, value] of searchParams.entries()) {
     result[key] = value;
   }
 
-  return result;
+  return result as T;
 };
 
 export const jsonResponse = <T>({

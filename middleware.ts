@@ -5,8 +5,8 @@ import { auth } from "@/lib/nextAuth";
 import { ApiHeaders, AppRoutes } from "./constants";
 
 export default auth((req) => {
-  const session = req.auth;
-  const path = req.nextUrl.pathname;
+  const { nextUrl, auth: session } = req;
+  const path = nextUrl.pathname;
   const apiKey = req.headers.get(ApiHeaders.API_KEY);
   const isAdmin =
     session?.user.role === "admin" ||
@@ -14,6 +14,9 @@ export default auth((req) => {
 
   if (path.startsWith("/api/admin") && !isAdmin) {
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
+  if (path === AppRoutes.ADMIN_PANEL && !isAdmin) {
+    return NextResponse.redirect(new URL(AppRoutes.MAIN, req.url));
   }
   if (!session && path === AppRoutes.PROFILE) {
     return NextResponse.redirect(new URL(AppRoutes.LOGIN, req.url));
@@ -25,5 +28,5 @@ export default auth((req) => {
   return NextResponse.next();
 });
 export const config = {
-  matcher: ["/profile", "/login", "/api/admin/:path*"],
+  matcher: ["/profile", "/login", "/api/admin/:path*", "/admin-panel"],
 };

@@ -7,6 +7,7 @@ export const AppRoutes = {
   ARTICLES: "/articles",
   FORGOT_PASSWORD: "/forgot-password",
   GAME: (slug: string) => `/game/${slug}`,
+  ADMIN_PANEL: `/admin-panel`,
 } as const;
 
 export const SiteApiRoutes = {
@@ -20,11 +21,15 @@ export const SiteApiRoutes = {
   PASSWORD: "/users/password",
   LIKED_GAMES: "/users/liked-games",
   SUBSCRIPTIONS: "/users/subscriptions",
+  RELEASE_CALENDAR: "/games/calendar",
+} as const;
+
+export const AdminApiRoutes = {
   SYNC: "/admin/sync",
   NOTIFY_CRACKED_GAMES: "/admin/notify-cracked-games",
   STEAM_GAMES: "/admin/steam",
   TRIGGER: "/admin/trigger",
-} as const;
+};
 
 export const ExternalApiRoutes = {
   SEARCH: "/search_title/",

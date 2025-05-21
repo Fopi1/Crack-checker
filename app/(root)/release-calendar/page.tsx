@@ -1,78 +1,77 @@
 "use client";
 
-import { Container } from '@/shared/components/shared';
-import { CrackButton } from '@/shared/components/ui';
-import { useCalendar } from '@/shared/hooks';
-import { useQuery } from '@tanstack/react-query';
+import { Container, Error, Loader } from "@/shared/components/shared";
+import { useCalendar, useGamesByDate } from "@/shared/hooks";
+import { CalendarHeader } from "./calendarHeader";
+import { CalendarTableGrid, CalendarTableHeader } from "./table";
+import { CalendarGrid } from "./calendarGrid";
+import { useEffect, useState } from "react";
 
-import { daysOfWeek, monthNames } from './constants';
-
-// ЧАТ ПРЕДЛОЖИЛ ХОРОШУЮ ИДЕЮ ПАРСИТЬ ИГРЫ ИЗ СВОЕЙ БАЗЫ ДАННЫХ, ВМЕСТО ТОГО ЧТОБЫ ПОЛАГАТЬСЯ НА СТОРОННИЙ API
-// НАПИСАТЬ НАДО ФУНКЦИЮ КОТОРАЯ ОТБИРАЕТ ИГРЫ ПО МЕСЯЦУ И ВОЗВРАЩАЕТ СПИСОК ПО ДНЯМ
 export default function ReleaseCalendar() {
   const {
     currentDate,
     year,
-    calendar,
+    calendarMatrix,
     month,
+    monthIndex,
     goToPreviousMonth,
     goToToday,
     goToNextMonth,
   } = useCalendar();
+  const [debouncedYear, setDebouncedYear] = useState(year);
+  const [debouncedMonthIndex, setDebouncedMonthIndex] = useState(monthIndex);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedYear(year);
+      setDebouncedMonthIndex(monthIndex);
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [year, monthIndex]);
   const isTodayDisabled =
-    year === currentDate.getFullYear() &&
-    month === monthNames[currentDate.getMonth()]
+    year === currentDate.getFullYear() && monthIndex === currentDate.getMonth()
       ? true
       : false;
-  const data = useQuery({queryKey:["calendar",month],queryFn: () => {}})
+  const {
+    data: games,
+    isFetching,
+    isError,
+  } = useGamesByDate(debouncedYear, debouncedMonthIndex + 1);
+  const isGridHidden = isFetching || isError || (games && games.length <= 0);
   return (
     <section className="pt-20 bg-crack-secondary min-h-fit">
       <Container className="bg-[#1e1e2033] backdrop-blur-[10px] rounded-lg">
         <div className="p-8 flex flex-col gap-10">
           <h2 className="font-bold text-2xl">Release Calendar</h2>
-          <div className="flex flex-col items-center justify-center gap-8">
-            <div className="flex items-center justify-center gap-5">
-              <CrackButton onClick={goToPreviousMonth}>{"<"}</CrackButton>
-              <CrackButton disabled={isTodayDisabled} onClick={goToToday}>
-                today
-              </CrackButton>
-              <CrackButton onClick={goToNextMonth}>{">"}</CrackButton>
-            </div>
-            <h2 className="text-2xl font-bold leading-[29px] capitalize">
-              {`${month} ${year}`}
-            </h2>
-          </div>
+          <CalendarHeader
+            month={month}
+            year={year}
+            isTodayDisabled={isTodayDisabled}
+            goToNextMonth={goToNextMonth}
+            goToToday={goToToday}
+            goToPreviousMonth={goToPreviousMonth}
+          />
           <Container className="w-full">
-            <table className="w-full table-fixed">
-              <thead>
-                <tr>
-                  {daysOfWeek.map((day) => (
-                    <th
-                      key={day}
-                      className="capitalize size-20 bg-crack-theader border-b border-r border-crack-theader first:rounded-tl-sm last:border-r-0 last:rounded-tr-sm"
-                    >
-                      {day}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {calendar.map((week, wIndex) => (
-                  <tr key={wIndex}>
-                    {week.map(({ day, from }, dIndex) => (
-                      <td
-                        key={dIndex}
-                        className={`${
-                          from === "current" ? "text-white" : "text-white/40"
-                        } font-bold text-xs text-right p-5 border-b border-r border-crack-theader first:border-l`}
-                      >
-                        {day}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
+            <table
+              className="w-full hidden sm:table-fixed 2xl:table"
+              style={isGridHidden ? { display: "none" } : {}}
+            >
+              <CalendarTableHeader />
+              <CalendarTableGrid
+                calendarMatrix={calendarMatrix}
+                games={games}
+              />
             </table>
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:hidden"
+              style={isGridHidden ? { display: "none" } : {}}
+            >
+              <CalendarGrid calendarMatrix={calendarMatrix} games={games} />
+            </div>
+            <Loader className={`${isFetching && !isError ? "" : "hidden"}`} />
+            <Error
+              className={`${isError || (!isFetching && isGridHidden) ? "" : "hidden"}`}
+            />
           </Container>
         </div>
       </Container>

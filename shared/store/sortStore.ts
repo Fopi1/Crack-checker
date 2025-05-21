@@ -1,6 +1,6 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from "mobx";
 
-import { categories } from '@/prisma/constants';
+import { categories } from "@/prisma/constants";
 
 import type { SortBy, SortOrder, TakeGames } from "@/types/store";
 
@@ -15,7 +15,7 @@ class SortStore {
   categoriesSortOptions: Record<string, SortOptions> = {};
 
   constructor() {
-    makeAutoObservable(this,{},{autoBind:true});
+    makeAutoObservable(this, {}, { autoBind: true });
     categories.forEach(
       (category) =>
         (this.categoriesSortOptions[category.title] = {
@@ -23,7 +23,7 @@ class SortStore {
           sortOrder: "descending",
           takeGames: "25",
           isAAA: false,
-        })
+        }),
     );
   }
 

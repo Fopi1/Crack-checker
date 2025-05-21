@@ -18,7 +18,7 @@ export const authCallbacks: Partial<NextAuthConfig["callbacks"]> = {
         const isAccountLinked = existingUser?.accounts.find(
           (acc) =>
             acc.provider === account.provider &&
-            acc.providerAccountId === account.providerAccountId
+            acc.providerAccountId === account.providerAccountId,
         );
         if (!isAccountLinked) {
           await prisma.account.create({

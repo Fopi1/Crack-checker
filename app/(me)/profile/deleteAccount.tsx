@@ -13,7 +13,7 @@ export const DeleteAccount = () => {
   const { toast } = useToast();
   const handleDeleteUser = async () => {
     try {
-      await SiteApi.users.deleteUser();
+      await SiteApi.user.deleteUser();
       await queryClient.refetchQueries({ queryKey: ["games"] });
       queryClient.invalidateQueries({ queryKey: ["game"] });
       toast({ description: "Successfully deleted account." });

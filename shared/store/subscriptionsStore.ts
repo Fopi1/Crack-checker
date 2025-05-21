@@ -24,4 +24,4 @@ class SubscriptionsStore {
   }
 }
 
-export const subscriptionStore = new SubscriptionsStore();
+export const subscriptionsStore = new SubscriptionsStore();

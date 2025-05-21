@@ -36,8 +36,6 @@ export const UserInfo = () => {
         name: updatedUser.name,
         email: updatedUser.email,
       });
-      console.log(`name: ${name}`);
-      console.log(`email: ${email}`);
       toast({ description: "Saved." });
     } catch (error) {
       const { errorField, errorMessage } = getApiFormError(error);

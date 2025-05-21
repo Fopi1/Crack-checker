@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { usePathname } from "next/navigation";
-import { FC, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { cn } from "@/shadcn";
 import {
@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shadcn/components/ui";
-import { sortStore } from "@/shared/store/sortStore";
+import { sortStore } from "@/shared/store";
 import { SortBy, SortOrder, TakeGames } from "@/types/store";
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
   className?: string;
 }
 
-export const SortOptions: FC<Props> = observer(({ category, className }) => {
+export const SortOptions = observer(({ category, className }: Props) => {
   const pathname = usePathname();
   const sortOptions = useMemo(
     () => [
@@ -43,7 +43,7 @@ export const SortOptions: FC<Props> = observer(({ category, className }) => {
         onChange: (value: TakeGames) => sortStore.setTakeGames(category, value),
       },
     ],
-    [category]
+    [category],
   );
   const handleSetIsAAAOption = () => {
     sortStore.toggleIsAAA(category);
@@ -55,7 +55,7 @@ export const SortOptions: FC<Props> = observer(({ category, className }) => {
     <div
       className={cn(
         "flex items-center justify-center gap-3 flex-wrap",
-        className
+        className,
       )}
     >
       <p className="text-sm">Sort by:</p>

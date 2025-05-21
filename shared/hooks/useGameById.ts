@@ -6,7 +6,7 @@ export const useGameById = (initialData: FullGame) => {
   const id = initialData.id;
   return useQuery({
     queryKey: ["game", id],
-    queryFn: () => SiteApi.games.getGameById(id),
+    queryFn: () => SiteApi.game.getGameById(id),
     initialData: initialData,
   });
 };

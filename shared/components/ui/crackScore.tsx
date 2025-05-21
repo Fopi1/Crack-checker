@@ -10,7 +10,12 @@ interface Props {
 
 export const CrackScore = ({ className, image, score }: Props) => {
   return (
-    <div className={cn("flex items-center gap-1 font-bold", className)}>
+    <div
+      className={cn(
+        "flex items-center gap-1 font-bold text-lg md:text-xl",
+        className,
+      )}
+    >
       {image}
       {score ? (
         <p className="text-blue-500">{score}</p>
